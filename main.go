@@ -30,4 +30,8 @@ func main() {
 		return
 	}
 
+	// step 4: Initialize Database connection
+
+	// step 5: Initialize cache
+
 }
