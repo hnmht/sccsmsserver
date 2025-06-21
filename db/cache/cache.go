@@ -6,11 +6,7 @@ import (
 	"sccsmsserver/db/rediscache"
 	"sccsmsserver/pub"
 	"sccsmsserver/setting"
-	"time"
 )
-
-// cache expiration time
-const durtion = 2 * time.Hour
 
 // Whether to use Redis cache
 var redisEnabled = false
@@ -22,7 +18,7 @@ func Init(enabled bool) (err error) {
 		err = rediscache.Init(setting.Conf.RedisConfig)
 		return
 	}
-	err = localcache.Init(durtion)
+	err = localcache.Init(pub.CacheExpiration)
 	return
 }
 
@@ -39,7 +35,7 @@ func Close() {
 func Set(docType pub.DocType, id int32, v []byte) (err error) {
 	key := fmt.Sprintf("%s%s%d", docType, ":", id)
 	if redisEnabled {
-		err = rediscache.Set(key, v, durtion)
+		err = rediscache.Set(key, v, pub.CacheExpiration)
 		return
 	}
 	err = localcache.Set(key, v)
@@ -71,7 +67,7 @@ func Del(docType pub.DocType, id int32) (err error) {
 // Set Other cache
 func SetOther(key string, v []byte) (err error) {
 	if redisEnabled {
-		err = rediscache.Set(key, v, durtion)
+		err = rediscache.Set(key, v, pub.CacheExpiration)
 		return
 	}
 	err = localcache.Set(key, v)
