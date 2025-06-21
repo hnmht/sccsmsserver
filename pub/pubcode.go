@@ -1,6 +1,6 @@
 package pub
 
-//DocType 基本档案类型
+// Basic Archive Type
 type DocType string
 
 const (
