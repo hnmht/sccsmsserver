@@ -9,26 +9,26 @@ const (
 	Department DocType = "department" // Department Archive
 	SimpDept   DocType = "simpdept"   // Simple Department Profile
 	File       DocType = "file"       // File Archive
-	SIC        DocType = "sic"        // On-Site Archive Category
-	SimpSIC    DocType = "simpsic"    // Simple On-Site Archive Category
-	SI         DocType = "si"         // On-Site Archive
-	UDC        DocType = "udc"        // User-defined Archive Category
-	UDD        DocType = "udd"        // User-defined Archive
-	EIC        DocType = "eic"        // Execution Project Category
-	SimpEIC    DocType = "simpeic"    // Simple Execution Project Category
-	EID        DocType = "eid"        // Execution Project
-	EIT        DocType = "eit"        // Execution Project Template
-	EITHead    DocType = "eithead"    // Execution Project Template Header
-	EITBody    DocType = "eitbody"    // Execution Project Template Body
-	SIO        DocType = "sio"        // Custom Fields for On-site Archive
-	SIOS       DocType = "sios"       // All custom fileds for On-site Archive
-	RL         DocType = "rl"         // Risk Level
+	OSAC       DocType = "osac"       // On-Site Archive Category
+	SimpOSAC   DocType = "simposac"   // Simple On-Site Archive Category
+	OSA        DocType = "osa"        // On-Site Archive
+	UDAC       DocType = "udc"        // User-defined Archive Category
+	UDA        DocType = "uda"        // User-defined Archive
+	EPC        DocType = "epc"        // Execution Project Category
+	SimpEPC    DocType = "simpepc"    // Simple Execution Project Category
+	EPA        DocType = "epa"        // Execution Project Archive
+	EPT        DocType = "ept"        // Execution Project Template
+	EPTHead    DocType = "epthead"    // Execution Project Template Header
+	EPTBody    DocType = "eptbody"    // Execution Project Template Body
+	CFOSA      DocType = "cfosa"      // Custom Fields for On-site Archive
+	ACFOSA     DocType = "acfosa"     // All custom fileds for On-site Archive
+	RLA        DocType = "rla"        // Risk Level Archive
 	DC         DocType = "dc"         // Document Category
 	SimpDC     DocType = "simpdc"     // Simple Document Category
 	Document   DocType = "document"   // Document Archive
-	OP         DocType = "op"         // Job Profile
-	TC         DocType = "tc"         // Training Course
-	LP         DocType = "lp"         // Labor Protection Equipment Archive
+	JPA        DocType = "jpa"        // Job Profile Archive
+	TCA        DocType = "tca"        // Training Course Archive
+	LPEA       DocType = "lp"         // Labor Protection Equipment Archive
 	IPBlack    DocType = "ipblack"    // IP Address Blacklist
 )
 
@@ -107,27 +107,27 @@ const (
 	StatusDeptFatherCircle  ResStatus = 10402
 	StatusDeptLowLevelExist ResStatus = 10403
 	StatusDeptNotExist      ResStatus = 10405
-	// On-Site archive category (10500-10599)
-	StatusSICNameExist     ResStatus = 10500
-	StatusSICFatherSelf    ResStatus = 10501
-	StatusSICFatherCircle  ResStatus = 10502
-	StatusSICLowLevelExist ResStatus = 10503
-	// On-Site archive (10600-10699)
-	StatusSICodeExist ResStatus = 10600
-	// User-defined archive category (10700-10799)
-	StatusUDCNameExist ResStatus = 10700
-	//  User-defined archive (10800-10899)
-	StatusUDDCodeExist ResStatus = 10800
-	// Execution project category (10900-10999)
-	StatusEICNameExist     ResStatus = 10900
-	StatusEICFatherSelf    ResStatus = 10901
-	StatusEICFatherCircle  ResStatus = 10902
-	StatusEICLowLevelExist ResStatus = 10903
-	// Execution project (11000-11099)
-	StatusEIDCodeExist        ResStatus = 11000
-	StatusEIDChangeResultType ResStatus = 11001
-	// Execution project template (11100-11199)
-	StatusEITCodeExist ResStatus = 11100
+	// On-Site Archive Category (10500-10599)
+	StatusOSACNameExist     ResStatus = 10500
+	StatusOSACFatherSelf    ResStatus = 10501
+	StatusOSACFatherCircle  ResStatus = 10502
+	StatusOSACLowLevelExist ResStatus = 10503
+	// On-Site Archive (10600-10699)
+	StatusOSACodeExist ResStatus = 10600
+	// User-Defined Archive Category (10700-10799)
+	StatusUDACNameExist ResStatus = 10700
+	//  User-Defined Archive (10800-10899)
+	StatusUDACodeExist ResStatus = 10800
+	// Execution Project Category (10900-10999)
+	StatusEPCNameExist     ResStatus = 10900
+	StatusEPCFatherSelf    ResStatus = 10901
+	StatusEPCFatherCircle  ResStatus = 10902
+	StatusEPCLowLevelExist ResStatus = 10903
+	// Execution Project Archive (11000-11099)
+	StatusEPACodeExist        ResStatus = 11000
+	StatusEPAChangeResultType ResStatus = 11001
+	// Execution Project Template (11100-11199)
+	StatusEPTCodeExist ResStatus = 11100
 	// File Archive (11200-11299)
 	StatusFileOpenFailed   ResStatus = 11200
 	StatusFileUploadFailed ResStatus = 11201
@@ -136,109 +136,109 @@ const (
 	// Work Order (11300-11399)
 	StatusWOOtherEdit ResStatus = 11300
 	// Execution Order (11400-11499)
-	StatusEDBodyNoConfirm       ResStatus = 11400
-	StatusErrorDisposeCompleted ResStatus = 11401
+	StatusEOBodyNoConfirm       ResStatus = 11400
+	StatusIssueDisposeCompleted ResStatus = 11401
 	// Message (11500-11599)
 	StatusMsgOnlyReadSelf ResStatus = 11500
-	// Risk Level（11600-11699)
-	StatusRLNameExist ResStatus = 11600
+	// Risk Level Archive（11600-11699)
+	StatusRLANameExist ResStatus = 11600
 	// Document Archive Category (11700-11799)
-	StatusDCNameExist     ResStatus = 11700
-	StatusDCLowLevelExist ResStatus = 11701
-	StatusDCFatherSelf    ResStatus = 11702
+	StatusDACNameExist     ResStatus = 11700
+	StatusDACLowLevelExist ResStatus = 11701
+	StatusDACFatherSelf    ResStatus = 11702
 	// Document Archive (11800-11899)
 	StatusDocumentNoFile ResStatus = 11800
-	// Job Profile (11900-11999)
-	StatusOPNameExist ResStatus = 11900
-	// Training Course (12000-12099)
-	StatusTCNameExist ResStatus = 12000
+	// Job Profile Archive(11900-11999)
+	StatusJPANameExist ResStatus = 11900
+	// Training Course Archive (12000-12099)
+	StatusTCANameExist ResStatus = 12000
 	// Labor Protection Equipment Archive (12100-12199)
-	StatusLPCodeExist ResStatus = 12100
+	StatusLPEACodeExist ResStatus = 12100
 	// Labor Protection Supplies Post Quota (12200-12199)
-	StatusOPQuotaExist ResStatus = 12200
+	StatusLPSPQExist ResStatus = 12200
 	// Referenced （80000-89999）
-	StatusUDDUsed            ResStatus = 80000
-	StatusEIDUsed            ResStatus = 80001
-	StatusEIDDefaultUsed     ResStatus = 80002
-	StatusEIDErrorUsed       ResStatus = 80003
-	StatusEITDefaultUsed     ResStatus = 80004
-	StatusEITErrorUsed       ResStatus = 80005
-	StatusEITUsed            ResStatus = 80006
+	StatusUDAUsed            ResStatus = 80000
+	StatusEPAUsed            ResStatus = 80001
+	StatusEPADefaultUsed     ResStatus = 80002
+	StatusEPAErrorUsed       ResStatus = 80003
+	StatusEPTDefaultUsed     ResStatus = 80004
+	StatusEPTErrorUsed       ResStatus = 80005
+	StatusEPTUsed            ResStatus = 80006
 	StatusUserUsed           ResStatus = 80007
 	StatusDeptLeaderUsed     ResStatus = 80008
-	StatusSIUsed             ResStatus = 80009
+	StatusOSAUsed            ResStatus = 80009
 	StatusWOUsed             ResStatus = 80010
-	StatusEDUsed             ResStatus = 80011
-	StatusEDValueUsed        ResStatus = 80012
-	StatusEDErrorUsed        ResStatus = 80013
-	StatusDDUsed             ResStatus = 80014
-	StatusSIRespUsed         ResStatus = 80015
+	StatusEOUsed             ResStatus = 80011
+	StatusEOValueUsed        ResStatus = 80012
+	StatusEOErrorUsed        ResStatus = 80013
+	StatusIHFUsed            ResStatus = 80014 // Issue Handling Form
+	StatusOSARespUsed        ResStatus = 80015
 	StatusWOEpUsed           ResStatus = 80016
-	StatusEDEpUsed           ResStatus = 80017
-	StatusEDDpUsed           ResStatus = 80018
-	StatusEDCommentUsed      ResStatus = 80019
-	StatusEDSendToUsed       ResStatus = 80020
-	StatusEDReviewUsed       ResStatus = 80021
-	StatusDDEpUsed           ResStatus = 80022
-	StatusDDDpUsed           ResStatus = 80023
-	StatusSIOUsed            ResStatus = 80024
+	StatusEOEpUsed           ResStatus = 80017
+	StatusEODpUsed           ResStatus = 80018
+	StatusEOCommentUsed      ResStatus = 80019
+	StatusEOSendToUsed       ResStatus = 80020
+	StatusEOReviewUsed       ResStatus = 80021
+	StatusIHFEpUsed          ResStatus = 80022
+	StatusIHFDpUsed          ResStatus = 80023
+	StatusOSAOUsed           ResStatus = 80024 // On-Site Archive Options
 	StatusDocumentUsed       ResStatus = 80025
-	StatusTRUsed             ResStatus = 80026
+	StatusTRUsed             ResStatus = 80026 // Training Record
 	StatusWOCreateUsed       ResStatus = 80027
 	StatusWOModifyUsed       ResStatus = 80028
 	StatusWOConfirmUsed      ResStatus = 80029
-	StatusEDCreateUsed       ResStatus = 80030
-	StatusEDModifyUsed       ResStatus = 80031
-	StatusEDConfirmUsed      ResStatus = 80032
-	StatusDDCreateUsed       ResStatus = 80033
-	StatusDDModifyUsed       ResStatus = 80034
-	StatusDDConfirmUsed      ResStatus = 80035
+	StatusEOCreateUsed       ResStatus = 80030
+	StatusEOModifyUsed       ResStatus = 80031
+	StatusEOConfirmUsed      ResStatus = 80032
+	StatusIHFCreateUsed      ResStatus = 80033
+	StatusIHFModifyUsed      ResStatus = 80034
+	StatusIHFConfirmUsed     ResStatus = 80035
 	StatusDCCreateUsed       ResStatus = 80036
 	StatusDCModifyUsed       ResStatus = 80037
 	StatusDocumentCreateUsed ResStatus = 80038
 	StatusDocumentModifyUsed ResStatus = 80039
-	StatusTCCreateUsed       ResStatus = 80040
-	StatusTCModifyUsed       ResStatus = 80041
-	StatusTRLecturerUsed     ResStatus = 80042
+	StatusTCACreateUsed      ResStatus = 80040
+	StatusTCAModifyUsed      ResStatus = 80041
+	StatusTRLecturerUsed     ResStatus = 80042 // Training Record
 	StatusTRStudentUsed      ResStatus = 80043
 	StatusTRCreateUsed       ResStatus = 80044
 	StatusTRModifyUsed       ResStatus = 80045
 	StatusTRConfirmUsed      ResStatus = 80046
-	StatusOPQuotaCreateUsed  ResStatus = 80047
-	StatusOPQuotaModifyUsed  ResStatus = 80048
-	StatusOPQuotaConfirmUsed ResStatus = 80049
-	StatusLIDCreateUsed      ResStatus = 80050
-	StatusLIDModifyUsed      ResStatus = 80051
-	StatusLIDConfirmUsed     ResStatus = 80052
-	StatusLIDRecipientUsed   ResStatus = 80053
+	StatusLPSPQCreateUsed    ResStatus = 80047 // Labor Protection Supplies Post Quota (12200-12199)
+	StatusLPSPQModifyUsed    ResStatus = 80048
+	StatusLPSPQConfirmUsed   ResStatus = 80049
+	StatusPPEIFCreateUsed    ResStatus = 80050 // PPE Issuance Form
+	StatusPPEIFModifyUsed    ResStatus = 80051
+	StatusPPEIFConfirmUsed   ResStatus = 80052
+	StatusPPEIFRecipientUsed ResStatus = 80053
 	StatusDeptCreateUsed     ResStatus = 80054
 	StatusDeptModifyUsed     ResStatus = 80055
-	StatusOPCreateUsed       ResStatus = 80056
-	StatusOPModifyUsed       ResStatus = 80057
-	StatusSICCreateUsed      ResStatus = 80058
-	StatusSICModifyUsed      ResStatus = 80059
-	StatusSICreateUsed       ResStatus = 80060
-	StatusSIModifyUsed       ResStatus = 80061
-	StatusUDCCreateUsed      ResStatus = 80062
-	StatusUDCModifyUsed      ResStatus = 80063
-	StatusUDDCreateUsed      ResStatus = 80064
-	StatusUDDModifyUsed      ResStatus = 80065
-	StatusEICCreateUsed      ResStatus = 80066
-	StatusEICModifyUsed      ResStatus = 80067
-	StatusEIDCreateUsed      ResStatus = 80068
-	StatusEIDModifyUsed      ResStatus = 80069
-	StatusRLCreateUsed       ResStatus = 80070
-	StatusRLModifyUsed       ResStatus = 80071
-	StatusLPCreateUsed       ResStatus = 80072
-	StatusLPModifyUsed       ResStatus = 80073
-	StatusEITCreateUsed      ResStatus = 80074
-	StatusEITModifyUsed      ResStatus = 80075
+	StatusJPACreateUsed      ResStatus = 80056
+	StatusJPAModifyUsed      ResStatus = 80057
+	StatusOSACCreateUsed     ResStatus = 80058
+	StatusOSACModifyUsed     ResStatus = 80059
+	StatusOSACreateUsed      ResStatus = 80060
+	StatusOSAModifyUsed      ResStatus = 80061
+	StatusUDACCreateUsed     ResStatus = 80062
+	StatusUDACModifyUsed     ResStatus = 80063
+	StatusUDACreateUsed      ResStatus = 80064
+	StatusUDAModifyUsed      ResStatus = 80065
+	StatusEPCCreateUsed      ResStatus = 80066
+	StatusEPCModifyUsed      ResStatus = 80067
+	StatusEPACreateUsed      ResStatus = 80068
+	StatusEPAModifyUsed      ResStatus = 80069
+	StatusRLACreateUsed      ResStatus = 80070
+	StatusRLAModifyUsed      ResStatus = 80071
+	StatusLPEACreateUsed     ResStatus = 80072
+	StatusLPEAModifyUsed     ResStatus = 80073
+	StatusEPTCreateUsed      ResStatus = 80074
+	StatusEPTModifyUsed      ResStatus = 80075
 	StatusUserCreateUsed     ResStatus = 80076
 	StatusUserModifyUsed     ResStatus = 80077
 	StatusRoleCreateUsed     ResStatus = 80078
 	StatusRoleModifyUsed     ResStatus = 80079
 	StatusTRDeptUsed         ResStatus = 80080
-	StatusLIDDeptUsed        ResStatus = 80081
+	StatusPPEIFDeptUsed      ResStatus = 80081
 	// Other (90000-99999)
 	StatusErrorUnknow              ResStatus = 90900
 	StatusResCodeError             ResStatus = 90901
@@ -282,26 +282,26 @@ var resStatusCodeMsg = map[ResStatus]string{
 	StatusDeptLowLevelExist: "Sub-department exist",
 	StatusDeptNotExist:      "Department does not exist",
 	// On-Site Archive Category (10500-10599)
-	StatusSICNameExist:     "On-Site archive category name exists",
-	StatusSICFatherSelf:    "The parent category cannot be itself",
-	StatusSICFatherCircle:  "Loop detected in parent category hierarchy",
-	StatusSICLowLevelExist: "Sub-category exist",
+	StatusOSACNameExist:     "On-Site archive category name exists",
+	StatusOSACFatherSelf:    "The parent category cannot be itself",
+	StatusOSACFatherCircle:  "Loop detected in parent category hierarchy",
+	StatusOSACLowLevelExist: "Sub-category exist",
 	// On-site Archive (10600-10699)
-	StatusSICodeExist: "On-site archive code already exist",
+	StatusOSACodeExist: "On-site archive code already exist",
 	//User-defined Archive Category (10700-10799)
-	StatusUDCNameExist: "User-defined archive category name already exist",
+	StatusUDACNameExist: "User-defined archive category name already exist",
 	// User-defined Archive (10800-10899)
-	StatusUDDCodeExist: "User-defined archive code already exist",
+	StatusUDACodeExist: "User-defined archive code already exist",
 	// Execution Project Category(10900-10999)
-	StatusEICNameExist:     "Execution project category name already exists",
-	StatusEICFatherSelf:    "The parent category cannot be itself",
-	StatusEICFatherCircle:  "Loop detected in parent category hierarchy",
-	StatusEICLowLevelExist: "Sub-category exists",
-	// Execution Project(11000-11099)
-	StatusEIDCodeExist:        "Execution project code already exists",
-	StatusEIDChangeResultType: "Referenced items cannot have their result type modified",
+	StatusEPCNameExist:     "Execution project category name already exists",
+	StatusEPCFatherSelf:    "The parent category cannot be itself",
+	StatusEPCFatherCircle:  "Loop detected in parent category hierarchy",
+	StatusEPCLowLevelExist: "Sub-category exists",
+	// Execution Project Archive(11000-11099)
+	StatusEPACodeExist:        "Execution project code already exists",
+	StatusEPAChangeResultType: "Referenced items cannot have their result type modified",
 	// Execution Project Template (11100-11199)
-	StatusEITCodeExist: "Execution project template code already exists",
+	StatusEPTCodeExist: "Execution project template code already exists",
 	// File Archive (11200-11299)
 	StatusFileOpenFailed:   "Failed to open file",
 	StatusFileUploadFailed: "File upload failed",
@@ -310,109 +310,109 @@ var resStatusCodeMsg = map[ResStatus]string{
 	// Work Order (11300-11399)
 	StatusWOOtherEdit: "Work Order has been modified by another user",
 	// Execution Order (11400-11499)
-	StatusEDBodyNoConfirm:       "There are unconfirmed row in the execution order body",
-	StatusErrorDisposeCompleted: "The issue has been resolved",
+	StatusEOBodyNoConfirm:       "There are unconfirmed row in the execution order body",
+	StatusIssueDisposeCompleted: "The issue has been resolved",
 	// Message (11500-11599)
 	StatusMsgOnlyReadSelf: "Messages can only be read by the recipient themselves",
-	// Risk Level (11600-11699)
-	StatusRLNameExist: "Resk level name already exists",
+	// Risk Level Archive (11600-11699)
+	StatusRLANameExist: "Resk level name already exists",
 	// Document Archive Category (11700-11799)
-	StatusDCNameExist:     "Document Archive Category name already exists",
-	StatusDCLowLevelExist: "Sub-category exists",
-	StatusDCFatherSelf:    "The parent category cannot be itself",
+	StatusDACNameExist:     "Document Archive Category name already exists",
+	StatusDACLowLevelExist: "Sub-category exists",
+	StatusDACFatherSelf:    "The parent category cannot be itself",
 	// Document Archive (11800-11899)
 	StatusDocumentNoFile: "The Document Archive has no attachments",
-	// Job Profile (11900-11999)(11900-11999)
-	StatusOPNameExist: "Job Profile name already exists",
-	// Training Course (12000-12099)
-	StatusTCNameExist: "Training Course name already exists",
+	// Job Profile Archive (11900-11999)(11900-11999)
+	StatusJPANameExist: "Job Profile name already exists",
+	// Training Course Archive(12000-12099)
+	StatusTCANameExist: "Training Course name already exists",
 	// Labor Protection Equipment Archive (12100-12199)
-	StatusLPCodeExist: "Labor Protection Equipment Archive code already exists",
+	StatusLPEACodeExist: "Labor Protection Equipment Archive code already exists",
 	// Labor Protection Supplies Post Quota (12200-12199)
-	StatusOPQuotaExist: "A labor protection supplies post quota for the same period already exists",
+	StatusLPSPQExist: "A labor protection supplies post quota for the same period already exists",
 	// Referenced （80000-89999）
-	StatusUDDUsed:            "Referenced by User Defined Archive",
-	StatusEIDUsed:            "Referenced by Eexcution Project",
-	StatusEIDDefaultUsed:     "Referenced by Execution Project default value",
-	StatusEIDErrorUsed:       "Referenced by Execution Project error value",
-	StatusEITDefaultUsed:     "Referenced by Execution Project Template default values",
-	StatusEITErrorUsed:       "Referenced by Execution Project Template error values",
-	StatusEITUsed:            "Referenced by Execution Project Template",
+	StatusUDAUsed:            "Referenced by User Defined Archive",
+	StatusEPAUsed:            "Referenced by Eexcution Project Archive",
+	StatusEPADefaultUsed:     "Referenced by Execution Project default value",
+	StatusEPAErrorUsed:       "Referenced by Execution Project error value",
+	StatusEPTDefaultUsed:     "Referenced by Execution Project Template default values",
+	StatusEPTErrorUsed:       "Referenced by Execution Project Template error values",
+	StatusEPTUsed:            "Referenced by Execution Project Template",
 	StatusUserUsed:           "Referenced by User Archive",
 	StatusDeptLeaderUsed:     "Referenced by Department Archive",
-	StatusSIUsed:             "Referenced by On-site Archive",
+	StatusOSAUsed:            "Referenced by On-site Archive",
 	StatusWOUsed:             "Referenced by Work Order",
-	StatusEDUsed:             "Referenced by Execution Order",
-	StatusEDValueUsed:        `Referenced by Execution Order value`,
-	StatusEDErrorUsed:        "Referenced by Execution Order error value",
-	StatusDDUsed:             "Referenced by Issue Handling Form",
-	StatusSIRespUsed:         "Referenced by On-site Archive owner",
+	StatusEOUsed:             "Referenced by Execution Order",
+	StatusEOValueUsed:        `Referenced by Execution Order value`,
+	StatusEOErrorUsed:        "Referenced by Execution Order error value",
+	StatusIHFUsed:            "Referenced by Issue Handling Form",
+	StatusOSARespUsed:        "Referenced by On-site Archive owner",
 	StatusWOEpUsed:           "Referenced by Execution Order executor",
-	StatusEDEpUsed:           "Referenced by Execution order head executor",
-	StatusEDDpUsed:           "Referenced by Execution Order body handler",
-	StatusEDCommentUsed:      "Referenced by Execution Order annotator",
-	StatusEDSendToUsed:       "Referenced by Execution Order annotation message recipient",
-	StatusEDReviewUsed:       "Referenced by Execution Order reviewer",
-	StatusDDEpUsed:           "Referenced by Issue Handling Form executor",
-	StatusDDDpUsed:           "Referenced by Issue Handling Form handler",
-	StatusSIOUsed:            "Referenced by On-site Archive options",
+	StatusEOEpUsed:           "Referenced by Execution order head executor",
+	StatusEODpUsed:           "Referenced by Execution Order body handler",
+	StatusEOCommentUsed:      "Referenced by Execution Order annotator",
+	StatusEOSendToUsed:       "Referenced by Execution Order annotation message recipient",
+	StatusEOReviewUsed:       "Referenced by Execution Order reviewer",
+	StatusIHFEpUsed:          "Referenced by Issue Handling Form executor",
+	StatusIHFDpUsed:          "Referenced by Issue Handling Form handler",
+	StatusOSAOUsed:           "Referenced by On-site Archive options",
 	StatusDocumentUsed:       "Referenced by Document Archive",
 	StatusTRUsed:             "Referenced by Training Record",
 	StatusWOCreateUsed:       "Referenced by Work Order creator",
 	StatusWOModifyUsed:       "Referenced by Work Order editor",
 	StatusWOConfirmUsed:      "Referenced by Work Order confirmer",
-	StatusEDCreateUsed:       "Referenced by Execution Order creator",
-	StatusEDModifyUsed:       "Referenced by Execution Order editor",
-	StatusEDConfirmUsed:      "Referenced by Execution Order confirmer",
-	StatusDDCreateUsed:       "Referenced by Issue Handling Form creator",
-	StatusDDModifyUsed:       "Referenced by Issue Handling Form editor",
-	StatusDDConfirmUsed:      "Referenced by Issue Handling Form confirmer",
+	StatusEOCreateUsed:       "Referenced by Execution Order creator",
+	StatusEOModifyUsed:       "Referenced by Execution Order editor",
+	StatusEOConfirmUsed:      "Referenced by Execution Order confirmer",
+	StatusIHFCreateUsed:      "Referenced by Issue Handling Form creator",
+	StatusIHFModifyUsed:      "Referenced by Issue Handling Form editor",
+	StatusIHFConfirmUsed:     "Referenced by Issue Handling Form confirmer",
 	StatusDCCreateUsed:       "Referenced by Document Archive Category creator",
 	StatusDCModifyUsed:       "Referenced by Document Archive Category editor",
 	StatusDocumentCreateUsed: "Referenced by Document Archive creator",
 	StatusDocumentModifyUsed: "Referenced by Document Archive editor",
-	StatusTCCreateUsed:       "Referenced by Training Course creator",
-	StatusTCModifyUsed:       "Referenced by Training Course editor",
+	StatusTCACreateUsed:      "Referenced by Training Course creator",
+	StatusTCAModifyUsed:      "Referenced by Training Course editor",
 	StatusTRLecturerUsed:     "Referenced by Training Record speaker",
 	StatusTRStudentUsed:      "Referenced by Training Record trainee",
 	StatusTRCreateUsed:       "Referenced by Training Record creator",
 	StatusTRModifyUsed:       "Referenced by Training Record editor",
 	StatusTRConfirmUsed:      "Referenced by Training Record confirmer",
-	StatusOPQuotaCreateUsed:  "Referenced by Labor Protection Equipment Archive creator",
-	StatusOPQuotaModifyUsed:  "Referenced by Labor Protection Equipment Archive editor",
-	StatusOPQuotaConfirmUsed: "Referenced by Labor Protection Equipment Archive confirmer",
-	StatusLIDCreateUsed:      "Referenced by PPE Issuance Form creator",
-	StatusLIDModifyUsed:      "Referenced by PPE Issuance Form editor",
-	StatusLIDConfirmUsed:     "Referenced by PPE Issuance Form confirmer",
-	StatusLIDRecipientUsed:   "Referenced by PPE Issuance Form recipient",
+	StatusLPSPQCreateUsed:    "Referenced by Labor Protection Supplies Post Quota creator",
+	StatusLPSPQModifyUsed:    "Referenced by Labor Protection Supplies Post Quota editor",
+	StatusLPSPQConfirmUsed:   "Referenced by Labor Protection Supplies Post Quota confirmer",
+	StatusPPEIFCreateUsed:    "Referenced by PPE Issuance Form creator",
+	StatusPPEIFModifyUsed:    "Referenced by PPE Issuance Form editor",
+	StatusPPEIFConfirmUsed:   "Referenced by PPE Issuance Form confirmer",
+	StatusPPEIFRecipientUsed: "Referenced by PPE Issuance Form recipient",
 	StatusDeptCreateUsed:     "Referenced by Department Arctive creator",
 	StatusDeptModifyUsed:     "Referenced by Department Arctive editor",
-	StatusOPCreateUsed:       "Referenced by Job Profile creator",
-	StatusOPModifyUsed:       "Referenced by Job Profile editor",
-	StatusSICCreateUsed:      "Referenced by On-site Archive Category creator",
-	StatusSICModifyUsed:      "Referenced by On-site Archive Category editor",
-	StatusSICreateUsed:       "Referenced by On-site Archive creator",
-	StatusSIModifyUsed:       "Referenced by On-site Archive editor",
-	StatusUDCCreateUsed:      "Referenced by User-defined Archive Category creator",
-	StatusUDCModifyUsed:      "Referenced by User-defined Archive Category editor",
-	StatusUDDCreateUsed:      "Referenced by User-defined Archive creator",
-	StatusUDDModifyUsed:      "Referenced by User-defined Archive editor",
-	StatusEICCreateUsed:      "Referenced by Execution Project Category creator",
-	StatusEICModifyUsed:      "Referenced by Execution Project Category editor",
-	StatusEIDCreateUsed:      "Referenced by Execution Project creator",
-	StatusEIDModifyUsed:      "Referenced by Execution Project editor",
-	StatusRLCreateUsed:       "Referenced by Risk Level creator",
-	StatusRLModifyUsed:       "Referenced by Risk Level editor",
-	StatusLPCreateUsed:       "Referenced by Labor Protection Equipment Archive creator",
-	StatusLPModifyUsed:       "Referenced by Labor Protection Equipment Archive editor",
-	StatusEITCreateUsed:      "Referenced by Execution Project Template creator",
-	StatusEITModifyUsed:      "Referenced by Execution Project Template editor",
+	StatusJPACreateUsed:      "Referenced by Job Profile Archive creator",
+	StatusJPAModifyUsed:      "Referenced by Job Profile Archive editor",
+	StatusOSACCreateUsed:     "Referenced by On-site Archive Category creator",
+	StatusOSACModifyUsed:     "Referenced by On-site Archive Category editor",
+	StatusOSACreateUsed:      "Referenced by On-site Archive creator",
+	StatusOSAModifyUsed:      "Referenced by On-site Archive editor",
+	StatusUDACCreateUsed:     "Referenced by User-defined Archive Category creator",
+	StatusUDACModifyUsed:     "Referenced by User-defined Archive Category editor",
+	StatusUDACreateUsed:      "Referenced by User-defined Archive creator",
+	StatusUDAModifyUsed:      "Referenced by User-defined Archive editor",
+	StatusEPCCreateUsed:      "Referenced by Execution Project Category creator",
+	StatusEPCModifyUsed:      "Referenced by Execution Project Category editor",
+	StatusEPACreateUsed:      "Referenced by Execution Project Archive creator",
+	StatusEPAModifyUsed:      "Referenced by Execution Project Archive editor",
+	StatusRLACreateUsed:      "Referenced by Risk Level Archive creator",
+	StatusRLAModifyUsed:      "Referenced by Risk Level editor",
+	StatusLPEACreateUsed:     "Referenced by Labor Protection Equipment Archive creator",
+	StatusLPEAModifyUsed:     "Referenced by Labor Protection Equipment Archive editor",
+	StatusEPTCreateUsed:      "Referenced by Execution Project Template creator",
+	StatusEPTModifyUsed:      "Referenced by Execution Project Template editor",
 	StatusUserCreateUsed:     "Referenced by User Archive creator",
 	StatusUserModifyUsed:     "Referenced by User Archive editor",
 	StatusRoleCreateUsed:     "Referenced by Role Archive creator",
 	StatusRoleModifyUsed:     "Referenced by Role Archive editor",
 	StatusTRDeptUsed:         "Referenced by Training Records head department",
-	StatusLIDDeptUsed:        "Referenced by the issuing department in the PPE Issuance Form",
+	StatusPPEIFDeptUsed:      "Referenced by the issuing department in the PPE Issuance Form",
 	// Other(90000-99999)
 	StatusErrorUnknow:              "Unknown error",
 	StatusResCodeError:             "Response error",
