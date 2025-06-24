@@ -32,7 +32,7 @@ func Close() {
 }
 
 // Set Archive cache
-func Set(docType pub.DocType, id int32, v []byte) (err error) {
+func Set(docType pub.DataType, id int32, v []byte) (err error) {
 	key := fmt.Sprintf("%s%s%d", docType, ":", id)
 	if redisEnabled {
 		err = rediscache.Set(key, v, pub.CacheExpiration)
@@ -43,7 +43,7 @@ func Set(docType pub.DocType, id int32, v []byte) (err error) {
 }
 
 // Get Archive cache
-func Get(docType pub.DocType, id int32) (exist int32, v []byte, err error) {
+func Get(docType pub.DataType, id int32) (exist int32, v []byte, err error) {
 	key := fmt.Sprintf("%s%s%d", docType, ":", id)
 	if redisEnabled {
 		exist, v, err = rediscache.Get(key)
@@ -54,7 +54,7 @@ func Get(docType pub.DocType, id int32) (exist int32, v []byte, err error) {
 }
 
 // Del Archive cache
-func Del(docType pub.DocType, id int32) (err error) {
+func Del(docType pub.DataType, id int32) (err error) {
 	key := fmt.Sprintf("%s%s%d", docType, ":", id)
 	if redisEnabled {
 		err = rediscache.Del(key)

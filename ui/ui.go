@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// go:embed build
+//go:embed build
 var staticFS embed.FS
 
 func AddRoutes(router gin.IRouter) {

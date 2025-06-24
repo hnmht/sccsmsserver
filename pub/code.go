@@ -1,39 +1,7 @@
 package pub
 
-// Basic Archive Type
-type DocType string
-
-const (
-	User       DocType = "user"       // User Archive
-	Person     DocType = "person"     // Simple User Archive
-	Department DocType = "department" // Department Archive
-	SimpDept   DocType = "simpdept"   // Simple Department Profile
-	File       DocType = "file"       // File Archive
-	OSAC       DocType = "osac"       // On-Site Archive Category
-	SimpOSAC   DocType = "simposac"   // Simple On-Site Archive Category
-	OSA        DocType = "osa"        // On-Site Archive
-	UDAC       DocType = "udc"        // User-defined Archive Category
-	UDA        DocType = "uda"        // User-defined Archive
-	EPC        DocType = "epc"        // Execution Project Category
-	SimpEPC    DocType = "simpepc"    // Simple Execution Project Category
-	EPA        DocType = "epa"        // Execution Project Archive
-	EPT        DocType = "ept"        // Execution Project Template
-	EPTHead    DocType = "epthead"    // Execution Project Template Header
-	EPTBody    DocType = "eptbody"    // Execution Project Template Body
-	CFOSA      DocType = "cfosa"      // Custom Fields for On-site Archive
-	ACFOSA     DocType = "acfosa"     // All custom fileds for On-site Archive
-	RLA        DocType = "rla"        // Risk Level Archive
-	DC         DocType = "dc"         // Document Category
-	SimpDC     DocType = "simpdc"     // Simple Document Category
-	Document   DocType = "document"   // Document Archive
-	JPA        DocType = "jpa"        // Job Profile Archive
-	TCA        DocType = "tca"        // Training Course Archive
-	LPEA       DocType = "lp"         // Labor Protection Equipment Archive
-	IPBlack    DocType = "ipblack"    // IP Address Blacklist
-)
-
-// Server Resopnse Message Type
-type ResCode int64
+// Response System Messages
+type ResCode int32
 
 const (
 	CodeSuccess ResCode = 1000
@@ -51,8 +19,7 @@ const (
 )
 
 var codeMsgMap = map[ResCode]string{
-	CodeSuccess: "Success",
-
+	CodeSuccess:       "Success",
 	CodeInvalidParm:   "Request Parameter Error",
 	CodeServerBusy:    "Server is Busy",
 	CodeInternalError: "Internal Server Error",
@@ -75,12 +42,12 @@ func (c ResCode) Msg() string {
 	return msg
 }
 
-// Message type returned by bussiness logic
-type ResStatus int64
+// Response Business Logic Messages
+type ResStatus int32
 
 const (
 	// success
-	StatusOK ResStatus = 0
+	StatusOK ResStatus = 10000
 	// Concurrency issue（10001-10099）
 	StatusOtherEdit   ResStatus = 10001
 	StatusDataDeleted ResStatus = 10002
