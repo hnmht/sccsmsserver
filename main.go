@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sccsmsserver/db/cache"
+	"sccsmsserver/db/pg"
 	"sccsmsserver/logger"
 	"sccsmsserver/pkg/minio"
 	"sccsmsserver/pkg/mysf"
@@ -32,7 +33,11 @@ func main() {
 		return
 	}
 	// step 4: Initialize Database connection
-
+	if err := pg.Init(setting.Conf.PqConfig); err != nil {
+		zap.L().Error("init postgresql failed:", zap.Error(err))
+		return
+	}
+	defer pg.Close()
 	// step 5: Initialize cache
 	if err := cache.Init(setting.Conf.RedisConfig.Enabled); err != nil {
 		zap.L().Error("cache Init failed:", zap.Error(err))

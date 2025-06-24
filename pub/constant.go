@@ -5,6 +5,24 @@ import "time"
 // Master Data Type
 type DataType string
 
+// Sea&Cloud Construction Site management System Software info
+type ServerSoftInfo struct {
+	ScSoftName      string `json:"scsoftname"`
+	ScServerVersion string `json:"scserverversion"`
+	ScServerState   string `json:"scserverstate"`
+	MaxUserNumber   int32  `json:"maxusernumber"`
+	Author          string `json:"author"`
+}
+
+// Software Information
+var SoftInfo ServerSoftInfo = ServerSoftInfo{
+	ScSoftName:      "Sea&Cloud Construction Site management System Backend",
+	ScServerVersion: "1.0.0",
+	ScServerState:   "Standard",
+	MaxUserNumber:   100000,
+	Author:          "Haitao Meng",
+}
+
 // Cache expiration time
 const CacheExpiration = 2 * time.Hour
 
@@ -15,7 +33,10 @@ const DefaultPassword = "sc@123"
 const DbVersion = "1.0.0"
 
 // Md5 secret
-const Secret = "Sea&Cloud"
+const Secret = "Sea&Cloud comes from a character in both my wife's and my names."
+
+// Default Language
+const DefaultLanguage = "en_us"
 
 // Master Data Type
 const (

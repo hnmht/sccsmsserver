@@ -1,7 +1,7 @@
 package pg
 
-// 定义数据库表数据结构
-type Table struct {
+// Database table schema description struct
+type table struct {
 	TableName      string
 	Description    string
 	CreateSQL      string
@@ -10,11 +10,11 @@ type Table struct {
 	InitFunc       func() (bool, error)
 }
 
-// 数据库表信息
-var Tables []Table = []Table{
-	{ //系统信息表
+// All database table information
+var tables []table = []table{
+	{
 		TableName:   "sysinfo",
-		Description: "系统信息表",
+		Description: "system information",
 		CreateSQL: `create table sysinfo (			
 		dbid bigint,
 		serialnumber varchar(64) default '',
@@ -25,19 +25,10 @@ var Tables []Table = []Table{
 		starttime timestamp with time zone,
 		endtime timestamp  with time zone,
 		dbversion varchar(16),
-		isFinish boolean DEFAULT false,
-		registerflag smallint default 0,
-		organizationid bigint default 0,
-		organizationcode varchar(64) default '',
-		organizationname varchar(2048) default '',
-		contactperson varchar(32) default '',
-		jobrole varchar(32) default '',
-		phone varchar(32) default '',
-		email varchar(32) default '',
-		registertime varchar(20) default ''
+		isFinish boolean DEFAULT false
 		);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       simpleInitTable,
+		InitFunc:       initSysInfo,
 	},
 	{
 		TableName:   "sysmsg",
@@ -56,7 +47,7 @@ var Tables []Table = []Table{
 	{
 		TableName:   "sysmsg_t",
 		Description: "System Message Translations",
-		CreateSQL: `create table sys_msg (
+		CreateSQL: `create table sysmsg_t (
 			id serial NOT NULL,
 			code int default 0,
 			language varchar(10) default '',
@@ -71,7 +62,7 @@ var Tables []Table = []Table{
 	{
 		TableName:   "logicmsg",
 		Description: "Business Logic Message",
-		CreateSQL: `create table sysmsg (
+		CreateSQL: `create table logicmsg (
 			id serial NOT NULL,
 			code int default 0,
 			content varchar(2048) default '',
@@ -85,7 +76,7 @@ var Tables []Table = []Table{
 	{
 		TableName:   "logicmsg_t",
 		Description: "Business Logic Message",
-		CreateSQL: `create table sysmsg (
+		CreateSQL: `create table logicmsg_t (
 			id serial NOT NULL,
 			code int default 0,
 			language varchar(10) default '',

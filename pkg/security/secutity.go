@@ -19,7 +19,7 @@ type Rsa struct {
 
 var ScRsa *Rsa
 
-// 初始化rsa
+// Initialize RSA
 func NewRsa(publicKey, privateKey string) *Rsa {
 	ScRsa = &Rsa{
 		privateKey: privateKey,

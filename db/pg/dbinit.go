@@ -1,5 +1,7 @@
 package pg
 
+import "go.uber.org/zap"
+
 // System functionality list
 var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 1, FatherID: 0, Title: "首页", Path: "/private/dashboard", Icon: "Home", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
@@ -54,11 +56,99 @@ var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 9920, FatherID: 0, Title: "关于", Path: "/private/my/about", Icon: "Info", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 }
 
-// 公共用户权限列表
+// Default User Permissions List
 var PublicFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 1, FatherID: 0, Title: "首页", Path: "/private/dashboard", Icon: "Home", Component: "", Selected: true, Indeterminate: false},
 	SystemMenu{ID: 10, FatherID: 0, Title: "日程", Path: "/private/calendar", Icon: "CalendarMonth", Component: "", Selected: false, Indeterminate: false},
 	SystemMenu{ID: 15, FatherID: 0, Title: "消息", Path: "/private/message", Icon: "Message", Component: "", Selected: false, Indeterminate: false},
 	SystemMenu{ID: 9910, FatherID: 0, Title: "个人中心", Path: "/private/my/profile", Icon: "ManageAccounts", Component: "", Selected: true, Indeterminate: false},
 	SystemMenu{ID: 9920, FatherID: 0, Title: "关于", Path: "/private/my/about", Icon: "Info", Component: "", Selected: true, Indeterminate: false},
+}
+
+// Create database table
+func createTable() (isFinish bool, err error) {
+	var rowNum int
+	var sqlStr string
+	isFinish = true
+	// Step 1: create table
+	for _, table := range tables {
+		// Check if table exists
+		sqlStr = "select count(tablename) from pg_tables where tablename=$1"
+		err = db.QueryRow(sqlStr, table.TableName).Scan(&rowNum)
+		if err != nil {
+			isFinish = false
+			zap.L().Error("createTable check table "+table.TableName+" exist failed", zap.Error(err))
+			return
+		}
+
+		if rowNum <= 0 {
+			_, err = db.Exec(table.CreateSQL)
+			if err != nil {
+				isFinish = false
+				zap.L().Error(" createTable Create table "+table.TableName+" failed", zap.Error(err))
+				return
+			}
+			zap.L().Info("Create table " + table.TableName + " success")
+		} else {
+			zap.L().Warn("Table " + table.TableName + "has already exists.")
+		}
+	}
+
+	//Setp 2: Initialize table record
+	for _, table := range tables {
+		isFinish, err = table.InitFunc()
+		if err != nil {
+			return
+		}
+		zap.L().Info(table.TableName + " init success")
+	}
+	// Step 3: Modify the isfinish value in the sysinfo tableW
+	sqlStr = "update sysinfo set endtime=now(), isfinish=TRUE"
+	_, err = db.Exec(sqlStr)
+	if err != nil {
+		isFinish = false
+		zap.L().Error("createTable db.Exec update the isfinish failed:", zap.Error(err))
+		return isFinish, err
+	}
+	zap.L().Info("db table init success...")
+	return
+}
+
+// Check if the database initialization is complete
+func checkDbInit() (isFinish bool, err error) {
+	var rowNum int
+	// Check if the sysinfo table exists
+	sqlStr := "select count(tablename) as rownum from pg_tables where tablename='sysinfo'"
+	err = db.QueryRow(sqlStr).Scan(&rowNum)
+
+	// If an error occurs, return incomplete
+	if err != nil {
+		zap.L().Error("checkDbInit db.QueryRow check sysinfo table exists failed:", zap.Error(err))
+		return false, err
+	}
+
+	// If the sysinfo table does not exist, return incomplete
+	if rowNum <= 0 {
+		return false, nil
+	}
+
+	// if the sysinfo table exist, proceed to check if it contains any data
+	sqlStr = "select count(isFinish) from sysinfo"
+	err = db.QueryRow(sqlStr).Scan(&rowNum)
+	if err != nil {
+		zap.L().Error("checkDbInit db.QueryRow check sysinfo row count failed:", zap.Error(err))
+		return false, err
+	}
+	// If the sysinfo tablse has less than or equal to zero rows,or more than one row,return incomplete
+	if rowNum <= 0 || rowNum > 1 {
+		return false, nil
+	}
+	// If the sysinfo table has exactly one row, the proceed to check the content of the isfinish field
+	sqlStr = "select isfinish from sysinfo"
+	err = db.QueryRow(sqlStr).Scan(&isFinish)
+	if err != nil {
+		zap.L().Error("checkDbInit db.QueryRow query sysinfo table isfinish field failed:", zap.Error(err))
+		return false, err
+	}
+	return isFinish, nil
 }
