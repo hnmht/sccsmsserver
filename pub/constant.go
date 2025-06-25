@@ -27,6 +27,18 @@ type OrganizationInfo struct {
 	RegisterTime     string `db:"registertime" json:"registertime"`
 }
 
+// Localization Struct
+type Localization struct {
+	Language        string `json:"language"`
+	WeekFirstDay    string `json:"weekfirstday"`
+	ShortDateFormat string `json:"shortdateformat"`
+	LongDateFormat  string `json:"longdateformat"`
+	ShortTimeFormat string `json:"shorttimeformat"`
+	LongTimeFormat  string `json:"longtimeformat"`
+	TimeZone        string `json:"timezone"`
+	Description     string `json:"description"`
+}
+
 // Default Organization  Information
 var DefaultOrg OrganizationInfo = OrganizationInfo{
 	RegisterFlag:     0,
@@ -61,8 +73,17 @@ const DbVersion = "1.0.0"
 // Md5 secret
 const Secret = "Sea&Cloud comes from a character in both my wife's and my names."
 
-// Default Language
-const DefaultLanguage = "en_us"
+// Default locale
+var DefaultLocale = Localization{
+	Language:        "en_us",
+	WeekFirstDay:    "Sunday",
+	ShortDateFormat: "MM/DD/YY",
+	LongDateFormat:  "MM/DD/YYYY",
+	ShortTimeFormat: "HH:MM AM/PM",
+	LongTimeFormat:  "HH:MM:SS AM/PM",
+	TimeZone:        "UTC-5",
+	Description:     "System default locale",
+}
 
 // Master Data Type
 const (
