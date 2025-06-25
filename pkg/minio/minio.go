@@ -25,7 +25,7 @@ var currentBucket string
 func Init(endpoint string, accessKeyID string, secretAccessKey string, secure bool, selfSigned bool, defaultBucket string) (err error) {
 	minioClient, err = minio.New(endpoint, accessKeyID, secretAccessKey, secure)
 	if err != nil {
-		zap.L().Error("minio Init failed:", zap.Error(err))
+		zap.L().Error("minio Init minio.New failed:", zap.Error(err))
 		return
 	}
 
@@ -37,7 +37,7 @@ func Init(endpoint string, accessKeyID string, secretAccessKey string, secure bo
 	// Check if the default bucket exists
 	found, err := minioClient.BucketExists(defaultBucket)
 	if err != nil {
-		zap.L().Error("minio BucketExists failed:", zap.Error(err))
+		zap.L().Error("minio Init minioClient.BucketExists failed:", zap.Error(err))
 		return
 	}
 
@@ -45,13 +45,13 @@ func Init(endpoint string, accessKeyID string, secretAccessKey string, secure bo
 	if !found {
 		err = minioClient.MakeBucket(defaultBucket, location)
 		if err != nil {
-			zap.L().Error("minio MakeBucket failed:", zap.Error(err))
+			zap.L().Error("minio Init  minioClient.MakeBucket failed:", zap.Error(err))
 			return
 		}
 	}
 	// Assign a value to currentBucket
 	currentBucket = defaultBucket
-	zap.L().Info("minio Init success...")
+	zap.L().Info("Minio client initialized successfully.")
 	return nil
 }
 
@@ -59,7 +59,7 @@ func Init(endpoint string, accessKeyID string, secretAccessKey string, secure bo
 func UploadFile(objectName string, reader io.Reader, objectSize int64) (ok bool, err error) {
 	_, err = minioClient.PutObject(currentBucket, objectName, reader, objectSize, minio.PutObjectOptions{ContentType: "application/octet-stream"})
 	if err != nil {
-		zap.L().Error("minio UploadFile failed:", zap.Error(err))
+		zap.L().Error("minio UploadFile minioClient.PutObject failed:", zap.Error(err))
 		return false, err
 	}
 
@@ -71,7 +71,7 @@ func GetFileUrl(fileName string, expirs time.Duration) (fileurl string, err erro
 	reqParams := make(url.Values)
 	presignedURL, err := minioClient.PresignedGetObject(currentBucket, fileName, expirs, reqParams)
 	if err != nil {
-		zap.L().Error("minio GetFileUrl failed:", zap.Error(err))
+		zap.L().Error("minio GetFileUrl minioClient.PresignedGetObject failed:", zap.Error(err))
 		return "", err
 	}
 	fileurl = presignedURL.String()

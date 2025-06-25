@@ -25,7 +25,16 @@ var tables []table = []table{
 		starttime timestamp with time zone,
 		endtime timestamp  with time zone,
 		dbversion varchar(16),
-		isFinish boolean DEFAULT false
+		isFinish boolean DEFAULT false,
+		registerflag smallint default 0,
+		organizationid bigint default 0,
+		organizationcode varchar(64) default '',
+		organizationname varchar(2048) default '',
+		contactperson varchar(32) default '',
+		contacttitle varchar(32) default '',
+		phone varchar(32) default '',
+		email varchar(32) default '',
+		registertime varchar(20) default ''
 		);`,
 		AddFromVersion: "1.0.0",
 		InitFunc:       initSysInfo,

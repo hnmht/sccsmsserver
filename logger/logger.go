@@ -48,6 +48,8 @@ func Init(cfg *setting.LogConfig, mode string) (err error) {
 
 	zap.ReplaceGlobals(lg)
 
+	zap.L().Info("logger component initialized successfully.")
+
 	return
 }
 

@@ -18,7 +18,7 @@ func Init(durtion time.Duration) (err error) {
 	if err != nil {
 		return
 	}
-	zap.L().Info("local cache init success...")
+	zap.L().Info("Local cache component initialized successfully.")
 	return
 }
 
@@ -31,7 +31,7 @@ func Close() {
 func Set(key string, v []byte) (err error) {
 	err = localCache.Set(key, v)
 	if err != nil {
-		msg := fmt.Sprintf("%s%s", key, " Set LocalCache.set falied: ")
+		msg := fmt.Sprintf("%s%s", key, " Set LocalCache.set falied:")
 		zap.L().Error(msg, zap.Error(err))
 	}
 	return

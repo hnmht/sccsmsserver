@@ -14,8 +14,7 @@ func initSysInfo() (isFinish bool, err error) {
 	var rowNum int
 	var sqlStr string
 	isFinish = true
-	// Step 1: Query the row count from sysinfo table.
-	// There should be exactly one row in this table
+	// Step 1: Query the row count from sysinfo table. There should be exactly one row in this table.
 	sqlStr = "select count(isfinish) from sysinfo"
 	err = db.QueryRow(sqlStr).Scan(&rowNum)
 	if err != nil {
@@ -79,13 +78,21 @@ func initSysInfo() (isFinish bool, err error) {
 	dbID := mysf.GenID()
 
 	// Step 4.6: Insert data into the sysinfo table.
-	sqlInsert := `insert into sysinfo(dbid,serialnumber,macarray,machinehash,privatekey,publickey,dbversion,starttime) values($1,$2,$3,$4,$5,$6,$7,now())`
-	_, err = db.Exec(sqlInsert, dbID, serialNumber, macArray, machineHash, privateKey, publicKey, pub.DbVersion)
+	sqlInsert := `insert into sysinfo(dbid,serialnumber,macarray,machinehash,privatekey,
+		publickey,starttime,dbversion,registerflag,organizationid,organizationcode,
+		organizationname,contactperson,contacttitle,phone,email,
+		registertime) values($1,$2,$3,$4,$5,
+		$6,now(),$7,$8,$9,$10,
+		$11,$12,$13,$14,$15,
+		$16)`
+	_, err = db.Exec(sqlInsert, dbID, serialNumber, macArray, machineHash, privateKey,
+		publicKey, pub.DbVersion, pub.DefaultOrg.RegisterFlag, pub.DefaultOrg.OrganizationID, pub.DefaultOrg.OrganizationCode,
+		pub.DefaultOrg.OrganizationName, pub.DefaultOrg.ContactPerson, pub.DefaultOrg.ContactTitle, pub.DefaultOrg.Phone, pub.DefaultOrg.Email,
+		pub.DefaultOrg.RegisterTime)
 	if err != nil {
 		isFinish = false
-		zap.L().Error("initSysInfo db.Exec insert data failed:", zap.Error(err))
+		zap.L().Error("initSysInfo db.Exec(sqlInsert) insert data failed:", zap.Error(err))
 		return
 	}
-
 	return
 }

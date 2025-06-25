@@ -88,19 +88,19 @@ func createTable() (isFinish bool, err error) {
 				zap.L().Error(" createTable Create table "+table.TableName+" failed", zap.Error(err))
 				return
 			}
-			zap.L().Info("Create table " + table.TableName + " success")
+			zap.L().Info("Table " + table.TableName + "created successfully.")
 		} else {
-			zap.L().Warn("Table " + table.TableName + "has already exists.")
+			zap.L().Warn("Table " + table.TableName + "already exists.")
 		}
 	}
-
+	zap.L().Info("All database tables created successfully.")
 	//Setp 2: Initialize table record
 	for _, table := range tables {
 		isFinish, err = table.InitFunc()
 		if err != nil {
 			return
 		}
-		zap.L().Info(table.TableName + " init success")
+		zap.L().Info("Table " + table.TableName + " initialized successfully.")
 	}
 	// Step 3: Modify the isfinish value in the sysinfo tableW
 	sqlStr = "update sysinfo set endtime=now(), isfinish=TRUE"
@@ -110,7 +110,7 @@ func createTable() (isFinish bool, err error) {
 		zap.L().Error("createTable db.Exec update the isfinish failed:", zap.Error(err))
 		return isFinish, err
 	}
-	zap.L().Info("db table init success...")
+	zap.L().Info("All database tables initialized successfully.")
 	return
 }
 

@@ -46,7 +46,7 @@ func (thisRsa *Rsa) init() {
 		publickKey, _ := x509.ParsePKIXPublicKey(block.Bytes)
 		thisRsa.rsaPublicKey = publickKey.(*rsa.PublicKey)
 	}
-	zap.L().Info("RSA init success...")
+	zap.L().Info("RSA component initialized successfully.")
 }
 
 /**

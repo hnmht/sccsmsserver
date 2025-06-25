@@ -28,7 +28,7 @@ func Init(cfg *setting.RedisConfig) (err error) {
 		zap.L().Error("redis ping failed", zap.Error(err))
 		return
 	}
-	zap.L().Info("redis connect success...")
+	zap.L().Info("redis cache connected successful.")
 	return
 }
 

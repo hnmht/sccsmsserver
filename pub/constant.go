@@ -14,6 +14,32 @@ type ServerSoftInfo struct {
 	Author          string `json:"author"`
 }
 
+// User Organization Information struct
+type OrganizationInfo struct {
+	RegisterFlag     int16  `db:"registerflag" json:"registerflag"`
+	OrganizationID   int64  `db:"organizationid" json:"organizationid,string"`
+	OrganizationCode string `db:"organizationcode" json:"organizationcode"`
+	OrganizationName string `db:"organizationname" json:"organizationname"`
+	ContactPerson    string `db:"contactperson" json:"contactperson"`
+	ContactTitle     string `db:"contacttitle" json:"contacttitle"`
+	Phone            string `db:"phone" json:"phone"`
+	Email            string `db:"email" json:"email"`
+	RegisterTime     string `db:"registertime" json:"registertime"`
+}
+
+// Default Organization  Information
+var DefaultOrg OrganizationInfo = OrganizationInfo{
+	RegisterFlag:     0,
+	OrganizationID:   1,
+	OrganizationCode: "Unknown Code",
+	OrganizationName: "Unknown Company",
+	ContactPerson:    "Unknow",
+	ContactTitle:     "Unknown",
+	Phone:            "Unknown Phone",
+	Email:            "unknown@email.com",
+	RegisterTime:     "20060102150405",
+}
+
 // Software Information
 var SoftInfo ServerSoftInfo = ServerSoftInfo{
 	ScSoftName:      "Sea&Cloud Construction Site management System Backend",

@@ -70,7 +70,7 @@ type RedisConfig struct {
 	PoolSize int    `mapstructure:"pool_size" json:"pool_size"`
 }
 
-// Global variable initialization
+// Read global configuration
 func Init() (err error) {
 	viper.SetConfigFile("config.yaml")
 	viper.AddConfigPath(".")
@@ -86,6 +86,6 @@ func Init() (err error) {
 		fmt.Println("Init viper.Unmarshal(Conf) failed:", err)
 		return
 	}
-
+	fmt.Println("Global configuration read successfully.")
 	return
 }
