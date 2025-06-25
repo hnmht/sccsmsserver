@@ -48,7 +48,7 @@ func Init(cfg *setting.PqConfig) (err error) {
 	if !ok {
 		_, err = createTable()
 		if err != nil {
-			zap.L().Error("postgresql database Init checkDbInit failed:", zap.Error(err))
+			zap.L().Error("postgresql database Init createTable failed:", zap.Error(err))
 			return
 		}
 	}
@@ -56,11 +56,25 @@ func Init(cfg *setting.PqConfig) (err error) {
 	// Setp 7: Initialize RSA
 	_, err = initRsa()
 	if err != nil {
-		zap.L().Error("初始化rsa时出错,程序无法启动", zap.Error(err))
+		zap.L().Error("postgresql database Init initRsa failed:", zap.Error(err))
 		return
 	}
 
-	// Step 8:
+	// Step 8: Initialize Current Server public information
+	err = ServerPubInfo.Init()
+	if err != nil {
+		zap.L().Error("postgresql database Init ServerPubInfo.Init failed:", zap.Error(err))
+		return
+	}
+
+	// Step 9: Upgrade database schema version
+	_, err = upgradeDb()
+	if err != nil {
+		zap.L().Error("postgresql database Init upgradeDb failed", zap.Error(err))
+		return
+	}
+
+	zap.L().Info("Database connection initialized successfully.")
 
 	return
 }
