@@ -18,7 +18,7 @@ const (
 	CodeLoginOther    ResCode = 1105
 )
 
-var codeMsgMap = map[ResCode]string{
+var ResCodeMsg = map[ResCode]string{
 	CodeSuccess:       "Success",
 	CodeInvalidParm:   "Request Parameter Error",
 	CodeServerBusy:    "Server is Busy",
@@ -33,10 +33,10 @@ var codeMsgMap = map[ResCode]string{
 }
 
 func (c ResCode) Msg() string {
-	msg, ok := codeMsgMap[c]
+	msg, ok := ResCodeMsg[c]
 
 	if !ok {
-		msg = codeMsgMap[CodeServerBusy]
+		msg = ResCodeMsg[CodeServerBusy]
 	}
 
 	return msg
@@ -220,7 +220,7 @@ const (
 	StatusVoucherCancelConfirmSelf ResStatus = 90910
 )
 
-var resStatusCodeMsg = map[ResStatus]string{
+var ResStatusCodeMsg = map[ResStatus]string{
 	StatusOK: "success",
 	// Concurrency issue（10001-10099）
 	StatusOtherEdit:   "The data is being modified by another user",
@@ -395,9 +395,9 @@ var resStatusCodeMsg = map[ResStatus]string{
 }
 
 func (r ResStatus) Msg() string {
-	msg, ok := resStatusCodeMsg[r]
+	msg, ok := ResStatusCodeMsg[r]
 	if !ok {
-		msg = resStatusCodeMsg[StatusErrorUnknow]
+		msg = ResStatusCodeMsg[StatusErrorUnknow]
 	}
 	return msg
 }

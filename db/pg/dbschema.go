@@ -1,5 +1,7 @@
 package pg
 
+import "go.uber.org/zap"
+
 // Database table schema description struct
 type table struct {
 	TableName      string
@@ -51,7 +53,7 @@ var tables []table = []table{
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       simpleInitTable,
+		InitFunc:       initSysMsg,
 	},
 	{
 		TableName:   "sysmsg_t",
@@ -66,7 +68,7 @@ var tables []table = []table{
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       simpleInitTable,
+		InitFunc:       genericInitTable,
 	},
 	{
 		TableName:   "logicmsg",
@@ -80,7 +82,7 @@ var tables []table = []table{
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       simpleInitTable,
+		InitFunc:       genericInitTable,
 	},
 	{
 		TableName:   "logicmsg_t",
@@ -95,11 +97,30 @@ var tables []table = []table{
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       simpleInitTable,
+		InitFunc:       genericInitTable,
 	},
 }
 
-// 通用初始化函数
-func simpleInitTable() (isFinish bool, err error) {
+// Generic database table initialization function. Tables that don't require initializaiton use this funciton.
+func genericInitTable() (isFinish bool, err error) {
 	return true, nil
+}
+
+// Generic database table record check function
+func genericCheckRecord(tableName, sqlStr string) (hasRecord, isFinish bool, err error) {
+	var rowNum int
+	isFinish = true
+	hasRecord = false
+	err = db.QueryRow(sqlStr).Scan(&rowNum)
+	if err != nil {
+		isFinish = false
+		zap.L().Error("genericCheckRecord checking "+tableName+" failed", zap.Error(err))
+		return
+	}
+	if rowNum > 0 {
+		hasRecord = true
+		zap.L().Warn(tableName + " table has already exist data")
+		return
+	}
+	return
 }

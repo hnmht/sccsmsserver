@@ -5,7 +5,6 @@ go 1.24.4
 require (
 	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/denisbrodbeck/machineid v1.0.1
 	github.com/gin-gonic/contrib v0.0.0-20250521004450-2b1292699c15
 	github.com/gin-gonic/gin v1.10.1
 	github.com/jaypipes/ghw v0.17.0
