@@ -101,7 +101,7 @@ var tables []table = []table{
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       genericInitTable,
+		InitFunc:       initSysMsgTranslate,
 	},
 	{
 		TableName:   "logicmsg",

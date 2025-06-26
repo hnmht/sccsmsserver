@@ -8,6 +8,7 @@ import (
 
 // Initialize the i18n table
 func initI18n() (isFinish bool, err error) {
+	isFinish = true
 	// Step 1: Check if data already exists in the i18n table
 	sqlStr := `select count(id) as rownum from i18n where dr=0`
 	hasRecord, isFinish, err := genericCheckRecord("sysmsg", sqlStr)
