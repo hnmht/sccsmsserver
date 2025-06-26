@@ -29,7 +29,9 @@ type OrganizationInfo struct {
 
 // Localization Struct
 type Localization struct {
+	ID              int32  `json:"id"`
 	Language        string `json:"language"`
+	Name            string `json:"name"`
 	WeekFirstDay    string `json:"weekfirstday"`
 	ShortDateFormat string `json:"shortdateformat"`
 	LongDateFormat  string `json:"longdateformat"`
@@ -75,7 +77,9 @@ const Secret = "Sea&Cloud comes from a character in both my wife's and my names.
 
 // Default locale
 var DefaultLocale = Localization{
+	ID:              1,
 	Language:        "en_us",
+	Name:            "English United States",
 	WeekFirstDay:    "Sunday",
 	ShortDateFormat: "MM/DD/YY",
 	LongDateFormat:  "MM/DD/YYYY",

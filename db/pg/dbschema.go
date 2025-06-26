@@ -42,6 +42,32 @@ var tables []table = []table{
 		InitFunc:       initSysInfo,
 	},
 	{
+		TableName:   "i18n",
+		Description: "Internationalization",
+		CreateSQL: `create table i18n (
+			id serial NOT NULL,
+			language varchar(16) default '',
+			name varchar(128) default '',
+			weekfirstday varchar(10) default '',
+			shortdateformat varchar(20) default '',
+			longdateformat varchar(20) default '',
+			shorttimeformat varchar(20) default '',
+			longtimeformat varchar(20) default '',
+			timezone varchar(20) default 'UTC',
+			createtime timestamp with time zone default current_timestamp,
+			createuserid int DEFAULT 0,
+			confirmtime timestamp with time zone default current_timestamp,
+			confirmuserid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifyuserid int DEFAULT 0,
+			dr smallint  DEFAULT 0,
+			ts timestamp with time zone default CURRENT_TIMESTAMP,
+			PRIMARY KEY (id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       initI18n,
+	},
+	{
 		TableName:   "sysmsg",
 		Description: "System Message",
 		CreateSQL: `create table sysmsg (
@@ -61,8 +87,15 @@ var tables []table = []table{
 		CreateSQL: `create table sysmsg_t (
 			id serial NOT NULL,
 			code int default 0,
+			defaultcontent varchar(2048) default '',
 			language varchar(10) default '',
 			content varchar(2048) default '',
+			createtime timestamp with time zone default current_timestamp,
+			createuserid int DEFAULT 0,
+			confirmtime timestamp with time zone default current_timestamp,
+			confirmuserid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifyuserid int DEFAULT 0,
 			dr smallint  DEFAULT 0,
 			ts timestamp with time zone default CURRENT_TIMESTAMP,
 			PRIMARY KEY (id)
