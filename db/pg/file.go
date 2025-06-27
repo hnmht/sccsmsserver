@@ -4,7 +4,7 @@ import "time"
 
 //File 文件详情
 type File struct {
-	FileId           int32     `db:"id" json:"fileid"`
+	FileId           int32     `db:"id" json:"fileID"`
 	FileHash         string    `db:"filehash" json:"filehash"`
 	MinioFileName    string    `db:"miniofilename" json:"miniofilename"`
 	OriginFileName   string    `db:"originfilename" json:"originfilename"`

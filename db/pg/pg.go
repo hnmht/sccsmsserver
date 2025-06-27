@@ -82,7 +82,6 @@ func Init(cfg *setting.PqConfig) (err error) {
 	}
 
 	zap.L().Info("Database connection initialized successfully.")
-
 	return
 }
 

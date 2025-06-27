@@ -15,27 +15,27 @@ type DataReferenceCheck struct {
 
 // Data query conditions
 type QueryParams struct {
-	QueryString string `json:"querystring"`
+	QueryString string `json:"queryString"`
 }
 
 // Data query pagination
 type PagingQueryParams struct {
-	QueryString string `json:"querystring"`
+	QueryString string `json:"queryString"`
 	Page        int32  `json:"page"`
-	PerPage     int32  `json:"perpage"`
+	PerPage     int32  `json:"perPage"`
 }
 
 // Server information struct
 type ServerInfo struct {
-	DbID         int64                `db:"dbid" json:"dbid,string"`          //数据库id
-	SerialNumber string               `db:"serialnumber" json:"serialnumber"` //服务器主板序列号
-	MacArray     string               `db:"macarray" json:"macarray"`         //服务器网卡mac地址
-	MachineHash  string               `db:"machinehash" json:"machinehash"`   //服务器硬件Hash
-	MachineID    string               `db:"machineid" json:"machineid"`       //服务器ID
-	PublicKey    string               `db:"publickey" json:"publickey"`       //服务器公钥
-	DbVersion    string               `db:"dbversion" json:"dbversion"`       //数据结构版本
+	DbID         int64                `db:"dbid" json:"dbID,string"`          //数据库id
+	SerialNumber string               `db:"serialnumber" json:"serialNumber"` //服务器主板序列号
+	MacArray     string               `db:"macarray" json:"macArray"`         //服务器网卡mac地址
+	MachineHash  string               `db:"machinehash" json:"machineHash"`   //服务器硬件Hash
+	MachineID    string               `db:"machineid" json:"machineID"`       //服务器ID
+	PublicKey    string               `db:"publickey" json:"publicKey"`       //服务器公钥
+	DbVersion    string               `db:"dbversion" json:"dbVersion"`       //数据结构版本
 	Organization pub.OrganizationInfo `json:"organization"`                   //组织信息
-	ServerSoft   pub.ServerSoftInfo   `json:"serversoft"`                     //服务器软件信息
+	ServerSoft   pub.ServerSoftInfo   `json:"serverSoft"`                     //服务器软件信息
 }
 
 // Server public information

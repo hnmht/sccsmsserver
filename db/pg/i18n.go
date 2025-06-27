@@ -8,23 +8,23 @@ import (
 
 // Localization Struct
 type Localization struct {
-	ID              int32     `json:"id"`
-	Language        string    `json:"language"`
-	Name            string    `json:"name"`
-	WeekFirstDay    string    `json:"weekfirstday"`
-	ShortDateFormat string    `json:"shortdateformat"`
-	LongDateFormat  string    `json:"longdateformat"`
-	ShortTimeFormat string    `json:"shorttimeformat"`
-	LongTimeFormat  string    `json:"longtimeformat"`
-	TimeZone        string    `json:"timezone"`
-	Description     string    `json:"description"`
-	SystemFlag      int16     `json:"systemflag"`
-	CreateTime      time.Time `db:"createtime" json:"createtime"`
-	Creator         Person    `db:"creatorid" json:"creator"`
-	ModifyTime      time.Time `db:"modifytime" json:"modifytime"`
-	Modifier        Person    `db:"modifierid" json:"modifier"`
-	Ts              time.Time `db:"ts" json:"ts"`
-	Dr              int16     `db:"dr" json:"dr"`
+	ID              int32     `db:"id" json:"ID"`
+	Language        string    `db:"language" json:"Language"`
+	Name            string    `db:"name" json:"Name"`
+	WeekFirstDay    string    `db:"weekfirstday" json:"WeekFirstDay"`
+	ShortDateFormat string    `db:"shortdateformat" json:"ShortDateFormat"`
+	LongDateFormat  string    `db:"longdateformat" json:"LongDateFormat"`
+	ShortTimeFormat string    `db:"shorttimeformat" json:"ShortTimeFormat"`
+	LongTimeFormat  string    `db:"longtimeformat" json:"LongTimeFormat"`
+	TimeZone        string    `db:"timezone" json:"TimeZone"`
+	Description     string    `db:"description" json:"Description"`
+	SystemFlag      int16     `db:"systemflag" json:"SystemFlag"`
+	CreateTime      time.Time `db:"createtime" json:"CreateTime"`
+	Creator         Person    `db:"creatorid" json:"Creator"`
+	ModifyTime      time.Time `db:"modifytime" json:"ModifyTime"`
+	Modifier        Person    `db:"modifierid" json:"Modifier"`
+	Ts              time.Time `db:"ts" json:"Ts"`
+	Dr              int16     `db:"dr" json:"Dr"`
 }
 
 // Default locale

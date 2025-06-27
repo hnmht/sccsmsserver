@@ -4,15 +4,15 @@ import "go.uber.org/zap"
 
 // System menu struct
 type SystemMenu struct {
-	ID             int32  `json:"id"`
-	FatherID       int32  `json:"fatherid"`
+	ID             int32  `json:"ID"`
+	FatherID       int32  `json:"fatherID"`
 	Title          string `json:"title"`
 	Path           string `json:"path"`
 	Icon           string `json:"icon"`
 	Component      string `json:"component"`
 	Selected       bool   `json:"selected"`
 	Indeterminate  bool   `json:"indeterminate"`
-	AddFromVersion string
+	AddFromVersion string `json:"addFromVersion"`
 }
 
 // Menu object slice

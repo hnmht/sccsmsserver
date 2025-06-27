@@ -7,24 +7,24 @@ type DataType string
 
 // Sea&Cloud Construction Site management System Software info
 type ServerSoftInfo struct {
-	ScSoftName      string `json:"scsoftname"`
-	ScServerVersion string `json:"scserverversion"`
-	ScServerState   string `json:"scserverstate"`
-	MaxUserNumber   int32  `json:"maxusernumber"`
+	ScSoftName      string `json:"scSoftName"`
+	ScServerVersion string `json:"scServerVersion"`
+	ScServerState   string `json:"scServerState"`
+	MaxUserNumber   int32  `json:"maxUserNumber"`
 	Author          string `json:"author"`
 }
 
 // User Organization Information struct
 type OrganizationInfo struct {
-	RegisterFlag     int16  `db:"registerflag" json:"registerflag"`
-	OrganizationID   int64  `db:"organizationid" json:"organizationid,string"`
-	OrganizationCode string `db:"organizationcode" json:"organizationcode"`
-	OrganizationName string `db:"organizationname" json:"organizationname"`
-	ContactPerson    string `db:"contactperson" json:"contactperson"`
-	ContactTitle     string `db:"contacttitle" json:"contacttitle"`
+	RegisterFlag     int16  `db:"registerflag" json:"registerFlag"`
+	OrganizationID   int64  `db:"organizationid" json:"organizationID,string"`
+	OrganizationCode string `db:"organizationcode" json:"organizationCode"`
+	OrganizationName string `db:"organizationname" json:"organizationName"`
+	ContactPerson    string `db:"contactperson" json:"contactPerson"`
+	ContactTitle     string `db:"contacttitle" json:"contactTitle"`
 	Phone            string `db:"phone" json:"phone"`
 	Email            string `db:"email" json:"email"`
-	RegisterTime     string `db:"registertime" json:"registertime"`
+	RegisterTime     string `db:"registertime" json:"registerTime"`
 }
 
 // Default Organization  Information
