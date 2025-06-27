@@ -108,14 +108,14 @@ var tables []table = []table{
 		Description: "Business Logic Message",
 		CreateSQL: `create table logicmsg (
 			id serial NOT NULL,
-			code int default 0,
+			code int default 0,			
 			content varchar(2048) default '',
 			dr smallint  DEFAULT 0,
 			ts timestamp with time zone default CURRENT_TIMESTAMP,
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       genericInitTable,
+		InitFunc:       initLogicMsg,
 	},
 	{
 		TableName:   "logicmsg_t",
@@ -123,14 +123,21 @@ var tables []table = []table{
 		CreateSQL: `create table logicmsg_t (
 			id serial NOT NULL,
 			code int default 0,
+			defaultcontent varchar(2048) default '',
 			language varchar(10) default '',
 			content varchar(2048) default '',
+			createtime timestamp with time zone default current_timestamp,
+			createuserid int DEFAULT 0,
+			confirmtime timestamp with time zone default current_timestamp,
+			confirmuserid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifyuserid int DEFAULT 0,
 			dr smallint  DEFAULT 0,
 			ts timestamp with time zone default CURRENT_TIMESTAMP,
 			PRIMARY KEY (id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       genericInitTable,
+		InitFunc:       initLogicMsgTranslate,
 	},
 }
 
