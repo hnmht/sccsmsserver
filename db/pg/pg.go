@@ -67,7 +67,14 @@ func Init(cfg *setting.PqConfig) (err error) {
 		return
 	}
 
-	// Step 9: Upgrade database schema version
+	// Step 9: Initialize Current Server locale list
+	err = initSysLocalList()
+	if err != nil {
+		zap.L().Error("postgresql database Init initSysLocalList failed:", zap.Error(err))
+		return
+	}
+
+	// Step 12: Upgrade database schema version
 	_, err = upgradeDb()
 	if err != nil {
 		zap.L().Error("postgresql database Init upgradeDb failed", zap.Error(err))

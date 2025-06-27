@@ -57,7 +57,7 @@ func initLogicMsgTranslate() (isFinish bool, err error) {
 	defer stmt.Close()
 	// Extract system prompt messages from system constants
 	for code, content := range pub.ResStatusCodeMsg {
-		_, err = stmt.Exec(code, content, pub.DefaultLocale.Language, content)
+		_, err = stmt.Exec(code, content, DefaultLocale.Language, content)
 		if err != nil {
 			isFinish = false
 			zap.L().Error("initLogicMsgTranslate stmt.Exec failed:", zap.Error(err))
