@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var MultilingualSysMsg map[string]map[pub.ResCode]string
+
 // Initialize the sysmsg table
 func initSysMsg() (isFinish bool, err error) {
 	isFinish = true
@@ -66,5 +68,49 @@ func initSysMsgTranslate() (isFinish bool, err error) {
 			return
 		}
 	}
+	return
+}
+
+// Load multilingual system messages
+func LoadMultilingualSysMsg() (isFinish bool, err error) {
+	isFinish = true
+	// Step 1: Initialize map values
+	MultilingualSysMsg = make(map[string]map[pub.ResCode]string, 0)
+	// Step 2: Check if the SysLocaleList variable content is empty.
+	if len(SysLocaleList) < 1 {
+		isFinish = false
+		zap.L().Info("LoadMultilingualSysMsg SysLocaleList is empty.")
+		return
+	}
+	// Step 3: Preparing to read data from the sysmsg_t table in the database.
+	sqlStr := `select code,content from sysmsg_t where language=$1 and dr=0`
+	// Step 4: Get language from SysLocaleList
+	for _, v := range SysLocaleList {
+		lang := v.Language
+		// Get data from sysmsg_t table
+		rows, err := db.Query(sqlStr, lang)
+		if err != nil {
+			isFinish = false
+			zap.L().Error("LoadMultilingualSysMsg db.Query failed:", zap.Error(err))
+			return isFinish, err
+		}
+		langMsgMap := make(map[pub.ResCode]string)
+		for rows.Next() {
+			var code pub.ResCode
+			var content string
+			err = rows.Scan(&code, &content)
+			if err != nil {
+				isFinish = false
+				zap.L().Error("LoadMultilingualSysMsg rows.Next() failed:", zap.Error(err))
+				return isFinish, err
+			}
+			langMsgMap[code] = content
+		}
+		// Assign to the MutilingualSysMsg variable
+		MultilingualSysMsg[lang] = langMsgMap
+		// Close Rows
+		rows.Close()
+	}
+	zap.L().Info("Multilingual system messages loaded successfully.")
 	return
 }
