@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// multilingual system messages
 var MultilingualSysMsg map[string]map[pub.ResCode]string
 
 // Initialize the sysmsg table
