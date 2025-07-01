@@ -68,24 +68,6 @@ func Init(cfg *setting.PqConfig) (err error) {
 	}
 
 	// Step 9: Initialize Current Server locale list
-	err = initSysLocalList()
-	if err != nil {
-		zap.L().Error("postgresql database Init initSysLocalList failed:", zap.Error(err))
-		return
-	}
-
-	// Setp 10: Load multilingual system messages
-	ok, err = LoadMultilingualSysMsg()
-	if err != nil || !ok {
-		zap.L().Error("postgresql database Init initSysLocalList failed:", zap.Error(err))
-		return
-	}
-	// Setp 11: Load multilingual logic messages
-	ok, err = LoadMultilingualLogicMsg()
-	if err != nil || !ok {
-		zap.L().Error("postgresql database Init LoadMultilingualLogicMsg failed:", zap.Error(err))
-		return
-	}
 
 	// Step 12: Upgrade database schema version
 	_, err = upgradeDb()

@@ -88,9 +88,9 @@ func createTable() (isFinish bool, err error) {
 				zap.L().Error(" createTable Create table "+table.TableName+" failed", zap.Error(err))
 				return
 			}
-			zap.L().Info("Table " + table.TableName + "created successfully.")
+			zap.L().Info("Table " + table.TableName + " created successfully.")
 		} else {
-			zap.L().Warn("Table " + table.TableName + "already exists.")
+			zap.L().Warn("Table " + table.TableName + " already exists.")
 		}
 	}
 	zap.L().Info("All database tables created successfully.")
