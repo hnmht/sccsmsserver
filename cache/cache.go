@@ -2,8 +2,8 @@ package cache
 
 import (
 	"fmt"
-	"sccsmsserver/db/localcache"
-	"sccsmsserver/db/rediscache"
+	"sccsmsserver/cache/localcache"
+	"sccsmsserver/cache/rediscache"
 	"sccsmsserver/pub"
 	"sccsmsserver/setting"
 )

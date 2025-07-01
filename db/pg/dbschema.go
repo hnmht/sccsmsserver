@@ -129,9 +129,9 @@ var tables []table = []table{
 			createtime timestamp with time zone default current_timestamp,
 			creatorid int DEFAULT 0,
 			confirmtime timestamp with time zone default current_timestamp,
-			confirmer int DEFAULT 0,
+			confirmerid int DEFAULT 0,
 			modifytime timestamp with time zone default current_timestamp,
-			modifier int DEFAULT 0,
+			modifierid int DEFAULT 0,
 			dr smallint  DEFAULT 0,
 			ts timestamp with time zone default CURRENT_TIMESTAMP,
 			PRIMARY KEY (id)
@@ -139,9 +139,33 @@ var tables []table = []table{
 		AddFromVersion: "1.0.0",
 		InitFunc:       initLogicMsgTranslate,
 	},
+	{
+		TableName:   "sysrole",
+		Description: "角色表",
+		CreateSQL: `
+			create table sysrole (
+			id serial NOT NULL,
+			rolename varchar(64) not null,
+			description varchar(256),
+			systemflag smallint DEFAULT 0,
+			alluserflag smallint DEFAULT 0,
+			createtime timestamp with time zone default current_timestamp,
+			creatorid int DEFAULT 0,
+			confirmtime timestamp with time zone default current_timestamp,
+			confirmerid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifierid int DEFAULT 0,
+			dr smallint  DEFAULT 0,
+			ts timestamp with time zone default current_timestamp,
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       initSysrole,
+	},
 }
 
-// Generic database table initialization function. Tables that don't require initializaiton use this funciton.
+// Generic database table initialization function.
+// Tables that don't require initializaiton use this funciton.
 func genericInitTable() (isFinish bool, err error) {
 	return true, nil
 }

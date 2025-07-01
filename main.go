@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sccsmsserver/db/cache"
+	"sccsmsserver/cache"
 	"sccsmsserver/db/pg"
 	"sccsmsserver/logger"
 	"sccsmsserver/pkg/minio"
