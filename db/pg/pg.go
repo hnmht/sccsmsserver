@@ -3,6 +3,7 @@ package pg
 import (
 	"database/sql"
 	"fmt"
+	"sccsmsserver/i18n"
 	"sccsmsserver/setting"
 
 	_ "github.com/lib/pq"
@@ -68,7 +69,11 @@ func Init(cfg *setting.PqConfig) (err error) {
 	}
 
 	// Step 9: Initialize Current Server locale list
-
+	err = i18n.InitTranslators()
+	if err != nil {
+		zap.L().Error("postgresql database InitTranslator failed", zap.Error(err))
+		return
+	}
 	// Step 12: Upgrade database schema version
 	_, err = upgradeDb()
 	if err != nil {

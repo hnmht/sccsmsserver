@@ -1,0 +1,37 @@
+{
+    "language": "en-US",
+    "messages": [
+        {
+            "key": "Hello World",
+            "type": "string",
+            "message": "Hello World!m,m,m"
+        },
+        {
+            "key": "Welcome",
+            "type": "string",
+            "message": "%s,Welcome!"
+        },
+        {
+            "key": "system is busy",
+            "type": "string",
+            "message": "system is busy."
+        },
+        {
+            "key": "hasApple",
+            "type": "plural",
+            "message": "I have d% apple.",
+            "selectorf": {
+                "arg": 1,
+                "format": "%d",
+                "cases": [
+                    "=1",
+                    "I have an apple.",
+                    "=2",
+                    "I have Two apples",
+                    "other",
+                    "I have %[1]d apples."
+                ]
+            }
+        }
+    ]
+}
