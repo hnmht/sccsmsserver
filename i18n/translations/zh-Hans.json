@@ -1,55 +1,55 @@
 {
-    "language": "en-US",
+    "language": "zh-Hans",
     "messages": [
         {
             "key": "CodeSuccess",
             "type": "string",
-            "message": "Success."
+            "message": "成功."
         },
         {
             "key": "CodeInvalidParm",
             "type": "string",
-            "message": "Request Parameter Error."
+            "message": "请求参数错误."
         },
         {
             "key": "CodeServerBusy",
             "type": "string",
-            "message": "Server is Busy."
+            "message": "服务繁忙."
         },
         {
             "key": "CodeInternalError",
             "type": "string",
-            "message": "Internal Server Error."
+            "message": "服务器内部错误."
         },
         {
             "key": "CodeInvalidToken",
             "type": "string",
-            "message": "Login credentials have expired."
+            "message": "登录凭据已经过期."
         },
         {
             "key": "CodeNeedLogin",
             "type": "string",
-            "message": "Login required."
+            "message": "需要登录."
         },
         {
             "key": "CodeClientUnknown",
             "type": "string",
-            "message": "Unknown Client."
+            "message": "未知客户端."
         },
         {
             "key": "CodeClientEmpty",
             "type": "string",
-            "message": "Client type is empty."
+            "message": "客户端类型为空."
         },
         {
             "key": "CodeTokenDestroy",
             "type": "string",
-            "message": "Login credentials have been revoked by the administrator."
+            "message": "登录凭据已经被管理员销毁."
         },
         {
             "key": "CodeLoginOther",
             "type": "string",
-            "message": "Login credentials are invalid, the user has logged in on another client."
+            "message": "登录凭据无效,用户已经在其他终端登录."
         },
         {
             "key": "hasApple",
