@@ -71,8 +71,8 @@ const (
 	CSC        DataType = "csc"        // Construction site Category
 	SimpOSAC   DataType = "simposac"   // Simple Construction site Category
 	CS         DataType = "cs"         // Construction Site Master Data
-	UDDT       DataType = "uddt"       // User-defined Data Type
-	UDD        DataType = "udd"        // User-defined Data
+	UDDT       DataType = "udc"        // User-defined Data Category
+	UDD        DataType = "ud"         // User-defined Data
 	EPC        DataType = "epc"        // Execution Project Category
 	SimpEPC    DataType = "simpepc"    // Simple Execution Project Category
 	EP         DataType = "ep"         // Execution Project Master Data
@@ -85,7 +85,7 @@ const (
 	DC         DataType = "dc"         // Document Category
 	SimpDC     DataType = "simpdc"     // Simple Document Category
 	Document   DataType = "document"   // Document Archive
-	Pos        DataType = "pos"        // Position Master Data
+	Position   DataType = "position"   // Position Master Data
 	TC         DataType = "tc"         // Training Course Master Data
 	PPE        DataType = "ppe"        // Personal Protective Equipment
 	IPBlack    DataType = "ipblack"    // IP Address Blacklist

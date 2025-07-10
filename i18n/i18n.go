@@ -69,9 +69,58 @@ const (
 	CodeClientEmpty   ResKey = "CodeClientEmpty"
 	CodeTokenDestroy  ResKey = "CodeTokenDestroy"
 	CodeLoginOther    ResKey = "CodeLoginOther"
-	// Logic Message
-
 	// Menu Name
+	MenuDashboard      ResKey = "MenuDashboard"
+	MenuCalendar       ResKey = "MenuCalendar"
+	MenuMessage        ResKey = "MenuMessage"
+	MenuAddressBook    ResKey = "MenuAddressBook"
+	MenuCSM            ResKey = "MenuCSM"
+	MenuWO             ResKey = "MenuWO"
+	MenuEO             ResKey = "MenuEO"
+	MenuEOReview       ResKey = "MenuEOReview"
+	MenuIRF            ResKey = "MenuIRF"
+	MenuWOStatus       ResKey = "MenuWOStatus"
+	MenuEOStatus       ResKey = "MenuEOStatus"
+	MenuIRFStatus      ResKey = "MenuIRFStatus"
+	MenuDM             ResKey = "MenuDM"
+	MenuDC             ResKey = "MenuDC"
+	MenuDocumentUpload ResKey = "MenuDocumentUpload"
+	MenuDocumentFind   ResKey = "MenuDocumentFind"
+	MenuTM             ResKey = "MenuTM"
+	MenuTC             ResKey = "MenuTC"
+	MenuTR             ResKey = "MenuTR"
+	MenuTS             ResKey = "MenuTS"
+	MenuTPS            ResKey = "MenuTPS"
+	MenuLPPEM          ResKey = "MenuLPPEM"
+	MenuPQ             ResKey = "MenuPQ"
+	MenuPPEWizard      ResKey = "MenuPPEWizard"
+	MenuPPEIF          ResKey = "MenuPPEIF"
+	MenuPPES           ResKey = "MenuPPES"
+	MenuMD             ResKey = "MenuMD"
+	MenuDepartment     ResKey = "MenuDepartment"
+	MenuPosition       ResKey = "MenuPosition"
+	MenuCSC            ResKey = "MenuCSC"
+	MenuCS             ResKey = "MenuCS"
+	MenuUDC            ResKey = "MenuUDC"
+	MenuUD             ResKey = "MenuUD"
+	MenuEPC            ResKey = "MenuEPC"
+	MenuEP             ResKey = "MenuEP"
+	MenuRL             ResKey = "MenuRL"
+	MenuPPE            ResKey = "MenuPPE"
+	MenuTemplate       ResKey = "MenuTemplate"
+	MenuEPT            ResKey = "MenuEPT"
+	MenuPermission     ResKey = "MenuPermission"
+	MenuRole           ResKey = "MenuRole"
+	MenuUser           ResKey = "MenuUser"
+	MenuPA             ResKey = "MenuPA"
+	MenuOU             ResKey = "MenuOU"
+	MenuSettings       ResKey = "MenuSettings"
+	MenuCSO            ResKey = "MenuCSO"
+	MenuLPS            ResKey = "MenuLPS"
+	MenuProfile        ResKey = "MenuProfile"
+	MenuAbout          ResKey = "MenuAbout"
+
+	// Logic Message
 
 )
 
@@ -122,7 +171,8 @@ func InitTranslators() (err error) {
 		file.Close()
 	}
 
-	fmt.Println(CodeSuccess.Msg("zh-Hans", "张三"))
+	fmt.Println(MenuEPC.Msg("zh-Hans"))
+	fmt.Println(MenuEPC.Msg("en-US"))
 
 	return
 }

@@ -52,6 +52,255 @@
             "message": "登录凭据无效,用户已经在其他终端登录."
         },
         {
+            "key": "MenuDashboard",
+            "type": "string",
+            "message": "首页"
+        },
+        {
+            "key": "MenuCalendar",
+            "type": "string",
+            "message": "日程"
+        },
+        {
+            "key": "MenuMessage",
+            "type": "string",
+            "message": "消息"
+        },
+        {
+            "key": "MenuAddressBook",
+            "type": "string",
+            "message": "通讯录"
+        },
+        {
+            "key": "MenuCSM",
+            "type": "string",
+            "message": "现场管理"
+        },
+        {
+            "key": "MenuWO",
+            "type": "string",
+            "message": "指令单"
+        },
+        {
+            "key": "MenuEO",
+            "type": "string",
+            "message": "执行单"
+        },
+        {
+            "key": "MenuEOReview",
+            "type": "string",
+            "message": "执行单审阅"
+        },
+        {
+            "key": "MenuIRF",
+            "type": "string",
+            "message": "问题处理单"
+        },
+        {
+            "key": "MenuWOStatus",
+            "type": "string",
+            "message": "指令单执行统计"
+        },
+        {
+            "key": "MenuEOStatus",
+            "type": "string",
+            "message": "执行单统计"
+        },
+        {
+            "key": "MenuIRFStatus",
+            "type": "string",
+            "message": "问题处理单统计"
+        },
+        {
+            "key": "MenuDM",
+            "type": "string",
+            "message": "文档管理"
+        },
+        {
+            "key": "MenuDC",
+            "type": "string",
+            "message": "文档类别"
+        },
+
+        {
+            "key": "MenuDocumentUpload",
+            "type": "string",
+            "message": "上传文档"
+        },
+        {
+            "key": "MenuDocumentFind",
+            "type": "string",
+            "message": "查阅文档"
+        },
+        {
+            "key": "MenuTM",
+            "type": "string",
+            "message": "培训管理"
+        },
+        {
+            "key": "MenuTC",
+            "type": "string",
+            "message": "培训课程"
+        },
+        {
+            "key": "MenuTR",
+            "type": "string",
+            "message": "培训记录"
+        },
+        {
+            "key": "MenuTS",
+            "type": "string",
+            "message": "授课查询"
+        },
+        {
+            "key": "MenuTPS",
+            "type": "string",
+            "message": "受训查询"
+        },
+        {
+            "key": "MenuLPPEM",
+            "type": "string",
+            "message": "劳保管理"
+        },
+        {
+            "key": "MenuPQ",
+            "type": "string",
+            "message": "岗位定额"
+        },
+        {
+            "key": "MenuPPEWizard",
+            "type": "string",
+            "message": "发放向导"
+        },
+        {
+            "key": "MenuPPEIF",
+            "type": "string",
+            "message": "发放单"
+        },
+        {
+            "key": "MenuPPES",
+            "type": "string",
+            "message": "发放查询"
+        },
+        {
+            "key": "MenuMD",
+            "type": "string",
+            "message": "档案"
+        },
+        {
+            "key": "MenuDepartment",
+            "type": "string",
+            "message": "部门档案"
+        },
+
+        {
+            "key": "MenuPosition",
+            "type": "string",
+            "message": "岗位档案"
+        },
+        {
+            "key": "MenuCSC",
+            "type": "string",
+            "message": "现场档案类别"
+        },
+        {
+            "key": "MenuCS",
+            "type": "string",
+            "message": "现场档案"
+        },
+        {
+            "key": "MenuUDC",
+            "type": "string",
+            "message": "自定义档案类别"
+        },
+        {
+            "key": "MenuUD",
+            "type": "string",
+            "message": "自定义档案"
+        },
+        {
+            "key": "MenuEPC",
+            "type": "string",
+            "message": "执行项目类别"
+        },
+        {
+            "key": "MenuEP",
+            "type": "string",
+            "message": "执行项目"
+        },
+        {
+            "key": "MenuRL",
+            "type": "string",
+            "message": "风险等级"
+        },
+        {
+            "key": "MenuPPE",
+            "type": "string",
+            "message": "劳保用品档案"
+        },
+        {
+            "key": "MenuTemplate",
+            "type": "string",
+            "message": "模板"
+        },
+        {
+            "key": "MenuEPT",
+            "type": "string",
+            "message": "执行模板"
+        },
+        {
+            "key": "MenuPermission",
+            "type": "string",
+            "message": "权限"
+        },
+
+        {
+            "key": "MenuRole",
+            "type": "string",
+            "message": "角色管理"
+        },
+        {
+            "key": "MenuUser",
+            "type": "string",
+            "message": "用户管理"
+        },
+        {
+            "key": "MenuPA",
+            "type": "string",
+            "message": "权限分配"
+        },
+        {
+            "key": "MenuOU",
+            "type": "string",
+            "message": "在线用户"
+        },
+        {
+            "key": "MenuSettings",
+            "type": "string",
+            "message": "设置"
+        },
+        {
+            "key": "MenuCSO",
+            "type": "string",
+            "message": "现场档案自定义项"
+        },
+        {
+            "key": "MenuLPS",
+            "type": "string",
+            "message": "首页定义"
+        },
+        {
+            "key": "MenuProfile",
+            "type": "string",
+            "message": "个人中心"
+        },
+        {
+            "key": "MenuAbout",
+            "type": "string",
+            "message": "关于"
+        },
+
+        {
             "key": "hasApple",
             "type": "plural",
             "message": "I have d% apple.",

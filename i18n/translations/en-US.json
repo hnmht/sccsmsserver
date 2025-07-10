@@ -52,6 +52,251 @@
             "message": "Login credentials are invalid, the user has logged in on another client."
         },
         {
+            "key": "MenuDashboard",
+            "type": "string",
+            "message": "Dashboard"
+        },
+        {
+            "key": "MenuCalendar",
+            "type": "string",
+            "message": "Calendar"
+        },
+        {
+            "key": "MenuMessage",
+            "type": "string",
+            "message": "Message"
+        },
+        {
+            "key": "MenuAddressBook",
+            "type": "string",
+            "message": "Address Book"
+        },
+        {
+            "key": "MenuCSM",
+            "type": "string",
+            "message": "Construction Site Management"
+        },
+        {
+            "key": "MenuWO",
+            "type": "string",
+            "message": "Work Order"
+        },
+        {
+            "key": "MenuEO",
+            "type": "string",
+            "message": "Execution Order"
+        },
+        {
+            "key": "MenuEOReview",
+            "type": "string",
+            "message": "Execution Order Review"
+        },
+        {
+            "key": "MenuIRF",
+            "type": "string",
+            "message": "Issue Resolution Form"
+        },
+        {
+            "key": "MenuWOStatus",
+            "type": "string",
+            "message": "Work Order Status"
+        },
+        {
+            "key": "MenuEOStatus",
+            "type": "string",
+            "message": "Execution Order Status"
+        },
+        {
+            "key": "MenuIRFStatus",
+            "type": "string",
+            "message": "Issue Resolution Form Status"
+        },
+        {
+            "key": "MenuDM",
+            "type": "string",
+            "message": "Document Management"
+        },
+        {
+            "key": "MenuDC",
+            "type": "string",
+            "message": "Document Category"
+        },
+        {
+            "key": "MenuDocumentUpload",
+            "type": "string",
+            "message": "Document Upload"
+        },
+        {
+            "key": "MenuDocumentFind",
+            "type": "string",
+            "message": "Document Find"
+        },
+        {
+            "key": "MenuTM",
+            "type": "string",
+            "message": "Training Management"
+        },
+        {
+            "key": "MenuTC",
+            "type": "string",
+            "message": "Training Course"
+        },
+        {
+            "key": "MenuTR",
+            "type": "string",
+            "message": "Training Record"
+        },
+        {
+            "key": "MenuTS",
+            "type": "string",
+            "message": "Teaching Statistics"
+        },
+        {
+            "key": "MenuTPS",
+            "type": "string",
+            "message": "Training Participation Statistics"
+        },
+        {
+            "key": "MenuLPPEM",
+            "type": "string",
+            "message": "PPE Management"
+        },
+        {
+            "key": "MenuPQ",
+            "type": "string",
+            "message": "Position Quota"
+        },
+        {
+            "key": "MenuPPEWizard",
+            "type": "string",
+            "message": "Issuance Wizard"
+        },
+        {
+            "key": "MenuPPEIF",
+            "type": "string",
+            "message": "Issuance Form"
+        },
+        {
+            "key": "MenuPPES",
+            "type": "string",
+            "message": "Issuance Statistics"
+        },
+        {
+            "key": "MenuMD",
+            "type": "string",
+            "message": "Master Data"
+        },
+        {
+            "key": "MenuDepartment",
+            "type": "string",
+            "message": "Department"
+        },
+        {
+            "key": "MenuPosition",
+            "type": "string",
+            "message": "Position"
+        },
+        {
+            "key": "MenuCSC",
+            "type": "string",
+            "message": "Construction Site Category"
+        },
+        {
+            "key": "MenuCS",
+            "type": "string",
+            "message": "Construction Site"
+        },
+        {
+            "key": "MenuUDC",
+            "type": "string",
+            "message": "User defined Category"
+        },
+        {
+            "key": "MenuUD",
+            "type": "string",
+            "message": "User Defined"
+        },
+        {
+            "key": "MenuEPC",
+            "type": "string",
+            "message": "Execution Project Category"
+        },
+        {
+            "key": "MenuEP",
+            "type": "string",
+            "message": "Execution Project"
+        },
+        {
+            "key": "MenuRL",
+            "type": "string",
+            "message": "Risk Level"
+        },
+        {
+            "key": "MenuPPE",
+            "type": "string",
+            "message": "Personal Protection Equipment"
+        },
+        {
+            "key": "MenuTemplate",
+            "type": "string",
+            "message": "Template"
+        },
+        {
+            "key": "MenuEPT",
+            "type": "string",
+            "message": "Execution Project Template"
+        },
+        {
+            "key": "MenuPermission",
+            "type": "string",
+            "message": "Permission"
+        },
+        {
+            "key": "MenuRole",
+            "type": "string",
+            "message": "Role"
+        },
+        {
+            "key": "MenuUser",
+            "type": "string",
+            "message": "User"
+        },
+        {
+            "key": "MenuPA",
+            "type": "string",
+            "message": "Permission Assignment"
+        },
+        {
+            "key": "MenuOU",
+            "type": "string",
+            "message": "Online User"
+        },
+        {
+            "key": "MenuSettings",
+            "type": "string",
+            "message": "Settings"
+        },
+        {
+            "key": "MenuCSO",
+            "type": "string",
+            "message": "Construction Site Options"
+        },
+        {
+            "key": "MenuLPS",
+            "type": "string",
+            "message": "Landing Page Setup"
+        },
+        {
+            "key": "MenuProfile",
+            "type": "string",
+            "message": "Profile"
+        },
+        {
+            "key": "MenuAbout",
+            "type": "string",
+            "message": "About"
+        },
+        {
             "key": "hasApple",
             "type": "plural",
             "message": "I have d% apple.",
