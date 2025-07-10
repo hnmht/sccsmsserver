@@ -3,6 +3,7 @@ package i18n
 import (
 	"embed"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"go.uber.org/zap"
@@ -75,8 +76,9 @@ const (
 )
 
 func InitTranslators() (err error) {
+	// Step 1: Initialize map
 	printers = make(map[string]*message.Printer, len(SupportLanguages))
-	// Step 1:
+	// Step 2: Read translation file content
 	for _, lang := range SupportLanguages {
 		file, err := transFile.Open("translations/" + lang.FileName)
 		if err != nil {
@@ -84,6 +86,7 @@ func InitTranslators() (err error) {
 			return err
 		}
 
+		// Parse JSON file
 		decoder := json.NewDecoder(file)
 		var ltf LangTransFile
 		err = decoder.Decode(&ltf)
@@ -91,15 +94,25 @@ func InitTranslators() (err error) {
 			zap.L().Error("InitTranslators  decoder.Decode failed:", zap.Error(err))
 			return err
 		}
-
-		// 写入messages
+		// Write messages
 		for _, msg := range ltf.Messages {
 			switch msg.Type {
 			case "string":
-				message.SetString(lang.Tag, msg.Key, msg.Message)
+				err = message.SetString(lang.Tag, msg.Key, msg.Message)
+				if err != nil {
+					zap.L().Error("InitTranslators message.SetString failed:", zap.Error(err))
+					return err
+				}
 			case "plural":
 				cm := plural.Selectf(msg.SelectfParms.Arg, msg.SelectfParms.Format, msg.SelectfParms.Cases...)
-				message.Set(lang.Tag, msg.Key, cm)
+				err = message.Set(lang.Tag, msg.Key, cm)
+				if err != nil {
+					zap.L().Error("InitTranslators message.Set failed:", zap.Error(err))
+					return err
+				}
+			default:
+				zap.L().Error("InitTranslators msg.Type undefined")
+				return errors.New("InitTranslators TransItem type undefined")
 			}
 		}
 
@@ -109,16 +122,22 @@ func InitTranslators() (err error) {
 		file.Close()
 	}
 
-	fmt.Println("完成多语言初始化:", printers)
-	pv, ok := printers["en-US"]
-	if ok {
-		fmt.Println("ok")
-		pv.Printf(CodeClientUnknown)
-	}
-	pv1, ok := printers["zh-Hans"]
-	if ok {
-		pv1.Printf(CodeClientUnknown)
-	}
+	fmt.Println(CodeSuccess.Msg("zh-Hans", "张三"))
 
 	return
+}
+
+// Type Reskey to string
+func (r ResKey) String() string {
+	return string(r)
+}
+
+// Type Reskey to Msg
+func (r ResKey) Msg(language string, params ...interface{}) string {
+	p, ok := printers[language]
+	if !ok {
+		return r.String()
+	}
+
+	return p.Sprintf(r.String(), params...)
 }

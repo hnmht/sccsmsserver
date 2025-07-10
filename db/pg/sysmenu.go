@@ -1,18 +1,22 @@
 package pg
 
-import "go.uber.org/zap"
+import (
+	"sccsmsserver/i18n"
+
+	"go.uber.org/zap"
+)
 
 // System menu struct
 type SystemMenu struct {
-	ID             int32  `json:"ID"`
-	FatherID       int32  `json:"fatherID"`
-	Title          string `json:"title"`
-	Path           string `json:"path"`
-	Icon           string `json:"icon"`
-	Component      string `json:"component"`
-	Selected       bool   `json:"selected"`
-	Indeterminate  bool   `json:"indeterminate"`
-	AddFromVersion string `json:"addFromVersion"`
+	ID             int32       `json:"ID"`
+	FatherID       int32       `json:"fatherID"`
+	Title          i18n.ResKey `json:"title"`
+	Path           string      `json:"path"`
+	Icon           string      `json:"icon"`
+	Component      string      `json:"component"`
+	Selected       bool        `json:"selected"`
+	Indeterminate  bool        `json:"indeterminate"`
+	AddFromVersion string      `json:"addFromVersion"`
 }
 
 // Menu object slice
@@ -24,7 +28,7 @@ type MenuItem struct {
 	Children []MenuItem `json:"children"`
 }
 
-//Generate Menu Tree
+// Generate Menu Tree
 func (m *SystemMenus) ProcessToTree(pid int32, level int32) []MenuItem {
 	var menuTree []MenuItem
 	if level == 10 {

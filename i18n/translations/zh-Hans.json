@@ -4,7 +4,7 @@
         {
             "key": "CodeSuccess",
             "type": "string",
-            "message": "成功."
+            "message": "%s,成功."
         },
         {
             "key": "CodeInvalidParm",

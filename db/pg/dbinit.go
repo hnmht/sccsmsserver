@@ -4,10 +4,10 @@ import "go.uber.org/zap"
 
 // System functionality list
 var SysFunctionList SystemMenus = SystemMenus{
-	SystemMenu{ID: 1, FatherID: 0, Title: "首页", Path: "/private/dashboard", Icon: "Home", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
-	SystemMenu{ID: 10, FatherID: 0, Title: "日程", Path: "/private/calendar", Icon: "CalendarMonth", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
-	SystemMenu{ID: 15, FatherID: 0, Title: "消息", Path: "/private/message", Icon: "Message", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
-	SystemMenu{ID: 20, FatherID: 0, Title: "通讯录", Path: "/private/addressBook", Icon: "ContactPhone", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 1, FatherID: 0, Title: "MenuDashboard", Path: "/private/dashboard", Icon: "Home", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 10, FatherID: 0, Title: "MenuCalendar", Path: "/private/calendar", Icon: "CalendarMonth", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 15, FatherID: 0, Title: "MenuMessage", Path: "/private/message", Icon: "Message", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 20, FatherID: 0, Title: "MenuAddressBook", Path: "/private/addressBook", Icon: "ContactPhone", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 30, FatherID: 0, Title: "现场管理", Path: "/private/scene", Icon: "Streetview", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.2.0"},
 	SystemMenu{ID: 110, FatherID: 30, Title: "指令单", Path: "/private/workOrder/workOrderDoc", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 210, FatherID: 30, Title: "执行单", Path: "/private/execute/executeDoc", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
