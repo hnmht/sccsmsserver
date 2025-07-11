@@ -34,7 +34,7 @@ const (
 	MenuTR             ResKey = "MenuTR"
 	MenuTS             ResKey = "MenuTS"
 	MenuTPS            ResKey = "MenuTPS"
-	MenuLPPEM          ResKey = "MenuLPPEM"
+	MenuPPEM           ResKey = "MenuPPEM"
 	MenuPQ             ResKey = "MenuPQ"
 	MenuPPEWizard      ResKey = "MenuPPEWizard"
 	MenuPPEIF          ResKey = "MenuPPEIF"

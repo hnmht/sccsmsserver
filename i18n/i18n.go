@@ -48,20 +48,18 @@ type SystemLanguage struct {
 // List of languages the system wil support
 var SupportLanguages []SystemLanguage = []SystemLanguage{
 	{Language: "en-US", Tag: language.AmericanEnglish, FileName: "en-US.json", Default: true},
-	// {Language: "es-ES", Tag: language.EuropeanSpanish, FileName: "es-ES.json", Default: false},
-	// {Language: "pt-PT", Tag: language.EuropeanSpanish, FileName: "pt-PT.json", Default: false},
-	// {Language: "fr", Tag: language.EuropeanSpanish, FileName: "fr.json", Default: false},
+	{Language: "es-ES", Tag: language.EuropeanSpanish, FileName: "es-ES.json", Default: false},
+	{Language: "pt-PT", Tag: language.EuropeanPortuguese, FileName: "pt-PT.json", Default: false},
+	{Language: "fr", Tag: language.French, FileName: "fr.json", Default: false},
 	{Language: "zh-Hans", Tag: language.SimplifiedChinese, FileName: "zh-Hans.json", Default: false},
 }
 
-// Message Printers
-var printers map[string]*message.Printer
+// Default language message printer
+var defaultPrinter *message.Printer
 
 func InitTranslators() (err error) {
-	// Step 1: Initialize map
-	printers = make(map[string]*message.Printer, len(SupportLanguages))
-	// Step 2: Read translation file content
 	for _, lang := range SupportLanguages {
+		// Read translation file content
 		file, err := transFile.Open("translations/" + lang.FileName)
 		if err != nil {
 			zap.L().Error("InitTranslators  transFile.Open failed:", zap.Error(err))
@@ -99,13 +97,18 @@ func InitTranslators() (err error) {
 		}
 
 		p := message.NewPrinter(lang.Tag)
-		printers[lang.Language] = p
+		if lang.Default {
+			defaultPrinter = p
+		}
 		// Close the file
 		file.Close()
 	}
 
-	fmt.Println(MenuEPC.Msg("zh-Hans"))
-	fmt.Println(MenuEPC.Msg("en-US"))
+	fmt.Println(StatusCSCNameExist.Msg("en-US"))
+	fmt.Println(StatusCSCNameExist.Msg("zh-Hans"))
+	fmt.Println(StatusCSCNameExist.Msg("fr"))
+	fmt.Println(StatusCSCNameExist.Msg("es-ES"))
+	fmt.Println(StatusCSCNameExist.Msg("pt-PT"))
 
 	return
 }
@@ -116,11 +119,12 @@ func (r ResKey) String() string {
 }
 
 // Type Reskey to Msg
-func (r ResKey) Msg(language string, params ...interface{}) string {
-	p, ok := printers[language]
-	if !ok {
-		return r.String()
+func (r ResKey) Msg(lang string, params ...interface{}) (result string) {
+	tag := language.MustParse(lang)
+	p1 := message.NewPrinter(tag)
+	result = p1.Sprintf(r.String(), params...)
+	if result == "" {
+		result = defaultPrinter.Sprintf(r.String(), params...)
 	}
-
-	return p.Sprintf(r.String(), params...)
+	return
 }

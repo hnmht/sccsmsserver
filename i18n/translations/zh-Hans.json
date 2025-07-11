@@ -121,7 +121,6 @@
             "type": "string",
             "message": "文档类别"
         },
-
         {
             "key": "MenuDocumentUpload",
             "type": "string",
@@ -192,7 +191,6 @@
             "type": "string",
             "message": "部门档案"
         },
-
         {
             "key": "MenuPosition",
             "type": "string",
@@ -253,7 +251,6 @@
             "type": "string",
             "message": "权限"
         },
-
         {
             "key": "MenuRole",
             "type": "string",
@@ -299,7 +296,736 @@
             "type": "string",
             "message": "关于"
         },
-
+        {
+            "key": "StatusOK",
+            "type": "string",
+            "message": "成功."
+        },
+        {
+            "key": "StatusOtherEdit",
+            "type": "string",
+            "message": "其他用户正在修改数据."
+        },
+        {
+            "key": "StatusDataDeleted",
+            "type": "string",
+            "message": "数据已经删除."
+        },
+        {
+            "key": "StatusUserNotExist",
+            "type": "string",
+            "message": "用户不存在."
+        },
+        {
+            "key": "StatusInvalidPassword",
+            "type": "string",
+            "message": "密码错误."
+        },
+        {
+            "key": "StatusPasswordDisaccord",
+            "type": "string",
+            "message": "两次输入的密码不一致."
+        },
+        {
+            "key": "StatusUserDisabled",
+            "type": "string",
+            "message": "用户已停用."
+        },
+        {
+            "key": "StatusUserLocked",
+            "type": "string",
+            "message": "用户已经锁定."
+        },
+        {
+            "key": "StatusOverAuthorization",
+            "type": "string",
+            "message": "用户数量超过最大授权数."
+        },
+        {
+            "key": "StatusRoleNameExist",
+            "type": "string",
+            "message": "角色名称已经存在."
+        },
+        {
+            "key": "StatusRoleUserExist",
+            "type": "string",
+            "message": "角色和用户对照关系已经存在."
+        },
+        {
+            "key": "StatusRoleAuthExist",
+            "type": "string",
+            "message": "该角色已经分配权限."
+        },
+        {
+            "key": "StatusUserCodeExist",
+            "type": "string",
+            "message": "用户编码已经存在."
+        },
+        {
+            "key": "StatusUserNameExist",
+            "type": "string",
+            "message": "用户名称已经存在."
+        },
+        {
+            "key": "StatusUserMobileExist",
+            "type": "string",
+            "message": "用户手机号码已经存在."
+        },
+        {
+            "key": "StatusUserEmailExist",
+            "type": "string",
+            "message": "用户电子邮件已经存在."
+        },
+        {
+            "key": "StatusProfileOnlySelf",
+            "type": "string",
+            "message": "用户只能修改自己的信息."
+        },
+        {
+            "key": "StatusDeptCodeExist",
+            "type": "string",
+            "message": "部门编码已经存在."
+        },
+        {
+            "key": "StatusDeptFatherSelf",
+            "type": "string",
+            "message": "上级部门不能为部门自身."
+        },
+        {
+            "key": "StatusDeptFatherCircle",
+            "type": "string",
+            "message": "上级部门循环."
+        },
+        {
+            "key": "StatusDeptLowLevelExist",
+            "type": "string",
+            "message": "存在下级部门."
+        },
+        {
+            "key": "StatusDeptNotExist",
+            "type": "string",
+            "message": "部门不存在."
+        },
+        {
+            "key": "StatusCSCNameExist",
+            "type": "string",
+            "message": "现场档案类别名称已存在."
+        },
+        {
+            "key": "StatusCSCFatherSelf",
+            "type": "string",
+            "message": "上级类别不能为类别自身."
+        },
+        {
+            "key": "StatusCSCFatherCircle",
+            "type": "string",
+            "message": "上级类别循环."
+        },
+        {
+            "key": "StatusCSCLowLevelExist",
+            "type": "string",
+            "message": "存在下级类别."
+        },
+        {
+            "key": "StatusCSCodeExist",
+            "type": "string",
+            "message": "现场档案编码已存在."
+        },
+        {
+            "key": "StatusUDCNameExist",
+            "type": "string",
+            "message": "自定义档案类别名称已经存在."
+        },
+        {
+            "key": "StatusUDCodeExist",
+            "type": "string",
+            "message": "自定义档案编码已经存在."
+        },
+        {
+            "key": "StatusEPCNameExist",
+            "type": "string",
+            "message": "执行项目档案类别名称已经存在."
+        },
+        {
+            "key": "StatusEPCFatherSelf",
+            "type": "string",
+            "message": "上级类别不能为类别自身."
+        },
+        {
+            "key": "StatusEPCFatherCircle",
+            "type": "string",
+            "message": "上级类别循环."
+        },
+        {
+            "key": "StatusEPCLowLevelExist",
+            "type": "string",
+            "message": "存在下级类别."
+        },
+        {
+            "key": "StatusEPCodeExist",
+            "type": "string",
+            "message": "执行项目档案编码已经存在."
+        },
+        {
+            "key": "StatusEPChangeResultType",
+            "type": "string",
+            "message": "被引用的项目不能修改结果类型."
+        },
+        {
+            "key": "StatusEPTCodeExist",
+            "type": "string",
+            "message": "执行模板编码已经存在."
+        },
+        {
+            "key": "StatusFileOpenFailed",
+            "type": "string",
+            "message": "文件打开失败."
+        },
+        {
+            "key": "StatusFileUploadFailed",
+            "type": "string",
+            "message": "文件上传失败."
+        },
+        {
+            "key": "StatusFileGetUrlFailed",
+            "type": "string",
+            "message": "获取文件url失败."
+        },
+        {
+            "key": "StatusFileNotExist",
+            "type": "string",
+            "message": "文件不存在."
+        },
+        {
+            "key": "StatusWOOtherEdit",
+            "type": "string",
+            "message": "指令单被他人修改."
+        },
+        {
+            "key": "StatusEOBodyNoConfirm",
+            "type": "string",
+            "message": "执行单表体存在非确认状态行."
+        },
+        {
+            "key": "StatusIssueResolved",
+            "type": "string",
+            "message": "问题已处理完成."
+        },
+        {
+            "key": "StatusMsgOnlyReadSelf",
+            "type": "string",
+            "message": "消息只能由本人读取."
+        },
+        {
+            "key": "StatusRLNameExist",
+            "type": "string",
+            "message": "风险等级名称已经存在."
+        },
+        {
+            "key": "StatusDCNameExist",
+            "type": "string",
+            "message": "文档类别名称已存在."
+        },
+        {
+            "key": "StatusDCLowLevelExist",
+            "type": "string",
+            "message": "存在下级类别."
+        },
+        {
+            "key": "StatusDCFatherSelf",
+            "type": "string",
+            "message": "上级类别不能为类别自身."
+        },
+        {
+            "key": "StatusDocumentNoFile",
+            "type": "string",
+            "message": "文档没有附件."
+        },
+        {
+            "key": "StatusPositionNameExist",
+            "type": "string",
+            "message": "岗位档案名称已经存在."
+        },
+        {
+            "key": "StatusTCNameExist",
+            "type": "string",
+            "message": "培训课程名称已经存在."
+        },
+        {
+            "key": "StatusLPPECodeExist",
+            "type": "string",
+            "message": "劳保用品编码已经存在."
+        },
+        {
+            "key": "StatusPQExist",
+            "type": "string",
+            "message": "已存在同样期间的岗位定额."
+        },
+        {
+            "key": "StatusUDUsed",
+            "type": "string",
+            "message": "被自定义档案引用."
+        },
+        {
+            "key": "StatusEPUsed",
+            "type": "string",
+            "message": "被执行项目引用."
+        },
+        {
+            "key": "StatusEPDefaultUsed",
+            "type": "string",
+            "message": "被执行项目默认值引用."
+        },
+        {
+            "key": "StatusEPErrorUsed",
+            "type": "string",
+            "message": "被执行项目错误值引用."
+        },
+        {
+            "key": "StatusEPTDefaultUsed",
+            "type": "string",
+            "message": "被执行模板默认值引用."
+        },
+        {
+            "key": "StatusEPTErrorUsed",
+            "type": "string",
+            "message": "被执行模板错误值引用."
+        },
+        {
+            "key": "StatusEPTUsed",
+            "type": "string",
+            "message": "被执行模板引用."
+        },
+        {
+            "key": "StatusUserUsed",
+            "type": "string",
+            "message": "被用户档案引用."
+        },
+        {
+            "key": "StatusDeptLeaderUsed",
+            "type": "string",
+            "message": "被部门档案引用."
+        },
+        {
+            "key": "StatusCSUsed",
+            "type": "string",
+            "message": "被现场档案引用."
+        },
+        {
+            "key": "StatusWOUsed",
+            "type": "string",
+            "message": "被指令单引用."
+        },
+        {
+            "key": "StatusEOUsed",
+            "type": "string",
+            "message": "被执行单引用."
+        },
+        {
+            "key": "StatusEOValueUsed",
+            "type": "string",
+            "message": "被执行单执行值引用."
+        },
+        {
+            "key": "StatusEOErrorUsed",
+            "type": "string",
+            "message": "被执行单错误值引用."
+        },
+        {
+            "key": "StatusIRFUsed",
+            "type": "string",
+            "message": "被问题处理单引用."
+        },
+        {
+            "key": "StatusCSRespUsed",
+            "type": "string",
+            "message": "被现场档案负责人引用."
+        },
+        {
+            "key": "StatusWOEpUsed",
+            "type": "string",
+            "message": "R被指令单执行人引用."
+        },
+        {
+            "key": "StatusEOEpUsed",
+            "type": "string",
+            "message": "被执行单表头执行人引用."
+        },
+        {
+            "key": "StatusEODpUsed",
+            "type": "string",
+            "message": "被执行单表体处理人引用."
+        },
+        {
+            "key": "StatusEOCommentUsed",
+            "type": "string",
+            "message": "被执行单批注人引用."
+        },
+        {
+            "key": "StatusEOSendToUsed",
+            "type": "string",
+            "message": "被执行单批注接收人引用."
+        },
+        {
+            "key": "StatusEOReviewUsed",
+            "type": "string",
+            "message": "被执行单审阅人引用."
+        },
+        {
+            "key": "StatusIRFEpUsed",
+            "type": "string",
+            "message": "被问题处理单执行人引用."
+        },
+        {
+            "key": "StatusIRFDpUsed",
+            "type": "string",
+            "message": "被问题处理单处理人引用."
+        },
+        {
+            "key": "StatusCSOUsed",
+            "type": "string",
+            "message": "被现场档案选项引用."
+        },
+        {
+            "key": "StatusDocumentUsed",
+            "type": "string",
+            "message": "被文档引用."
+        },
+        {
+            "key": "StatusTRUsed",
+            "type": "string",
+            "message": "被培训记录引用."
+        },
+        {
+            "key": "StatusWOCreateUsed",
+            "type": "string",
+            "message": "被指令单创建人引用."
+        },
+        {
+            "key": "StatusWOModifyUsed",
+            "type": "string",
+            "message": "被指令单修改人引用."
+        },
+        {
+            "key": "StatusWOConfirmUsed",
+            "type": "string",
+            "message": "被指令单确认人引用."
+        },
+        {
+            "key": "StatusEOCreateUsed",
+            "type": "string",
+            "message": "被执行单创建人引用."
+        },
+        {
+            "key": "StatusEOModifyUsed",
+            "type": "string",
+            "message": "被执行单修改人引用."
+        },
+        {
+            "key": "StatusEOConfirmUsed",
+            "type": "string",
+            "message": "被执行单确认人引用."
+        },
+        {
+            "key": "StatusIRFCreateUsed",
+            "type": "string",
+            "message": "被问题处理单创建人引用."
+        },
+        {
+            "key": "StatusIRFModifyUsed",
+            "type": "string",
+            "message": "被问题处理单修改人引用."
+        },
+        {
+            "key": "StatusIRFConfirmUsed",
+            "type": "string",
+            "message": "被问题处理单确认人引用."
+        },
+        {
+            "key": "StatusDCCreateUsed",
+            "type": "string",
+            "message": "被文档类别创建人引用."
+        },
+        {
+            "key": "StatusDCModifyUsed",
+            "type": "string",
+            "message": "被文档类别修改人引用."
+        },
+        {
+            "key": "StatusDocumentCreateUsed",
+            "type": "string",
+            "message": "被文档创建人引用."
+        },
+        {
+            "key": "StatusDocumentModifyUsed",
+            "type": "string",
+            "message": "被文档修改人引用."
+        },
+        {
+            "key": "StatusTCCreateUsed",
+            "type": "string",
+            "message": "被培训课程创建人引用."
+        },
+        {
+            "key": "StatusTCModifyUsed",
+            "type": "string",
+            "message": "被培训课程修改人引用."
+        },
+        {
+            "key": "StatusTRLecturerUsed",
+            "type": "string",
+            "message": "被培训记录主讲人引用."
+        },
+        {
+            "key": "StatusTRStudentUsed",
+            "type": "string",
+            "message": "被培训记录学员引用."
+        },
+        {
+            "key": "StatusTRCreateUsed",
+            "type": "string",
+            "message": "被培训记录创建人引用."
+        },
+        {
+            "key": "StatusTRModifyUsed",
+            "type": "string",
+            "message": "被培训记录修改人引用."
+        },
+        {
+            "key": "StatusTRConfirmUsed",
+            "type": "string",
+            "message": "被培训记录确认人引用."
+        },
+        {
+            "key": "StatusPQCreateUsed",
+            "type": "string",
+            "message": "被岗位定额创建人引用."
+        },
+        {
+            "key": "StatusPQModifyUsed",
+            "type": "string",
+            "message": "被岗位定额修改人引用."
+        },
+        {
+            "key": "StatusPQConfirmUsed",
+            "type": "string",
+            "message": "被岗位定额确认人引用."
+        },
+        {
+            "key": "StatusPPEIFCreateUsed",
+            "type": "string",
+            "message": "被劳保用品发放单创建人引用."
+        },
+        {
+            "key": "StatusPPEIFModifyUsed",
+            "type": "string",
+            "message": "被劳保用品发放单修改人引用."
+        },
+        {
+            "key": "StatusPPEIFConfirmUsed",
+            "type": "string",
+            "message": "被劳保用品发放单确认人引用."
+        },
+        {
+            "key": "StatusPPEIFRecipientUsed",
+            "type": "string",
+            "message": "被劳保用品发放单领用人引用."
+        },
+        {
+            "key": "StatusDeptCreateUsed",
+            "type": "string",
+            "message": "被部门档案创建人引用."
+        },
+        {
+            "key": "StatusDeptModifyUsed",
+            "type": "string",
+            "message": "被部门档案修改人引用."
+        },
+        {
+            "key": "StatusPositionCreateUsed",
+            "type": "string",
+            "message": "被岗位档案创建人引用."
+        },
+        {
+            "key": "StatusPositionModifyUsed",
+            "type": "string",
+            "message": "被岗位档案修改人引用."
+        },
+        {
+            "key": "StatusCSCCreateUsed",
+            "type": "string",
+            "message": "被现场档案类别创建人引用."
+        },
+        {
+            "key": "StatusCSCModifyUsed",
+            "type": "string",
+            "message": "被现场档案类别修改人引用."
+        },
+        {
+            "key": "StatusCSCreateUsed",
+            "type": "string",
+            "message": "被现场档案创建人引用."
+        },
+        {
+            "key": "StatusCSModifyUsed",
+            "type": "string",
+            "message": "被现场档案修改人引用."
+        },
+        {
+            "key": "StatusUDCCreateUsed",
+            "type": "string",
+            "message": "被自定义档案类别创建人引用."
+        },
+        {
+            "key": "StatusUDCModifyUsed",
+            "type": "string",
+            "message": "被自定义档案类别修改人引用."
+        },
+        {
+            "key": "StatusUDCreateUsed",
+            "type": "string",
+            "message": "被自定义档案创建人引用."
+        },
+        {
+            "key": "StatusUDModifyUsed",
+            "type": "string",
+            "message": "被自定义档案修改人引用."
+        },
+        {
+            "key": "StatusEPCCreateUsed",
+            "type": "string",
+            "message": "被执行项目类别创建人引用."
+        },
+        {
+            "key": "StatusEPCModifyUsed",
+            "type": "string",
+            "message": "被执行项目类别修改人引用."
+        },
+        {
+            "key": "StatusEPCreateUsed",
+            "type": "string",
+            "message": "被执行项目创建人引用."
+        },
+        {
+            "key": "StatusEPModifyUsed",
+            "type": "string",
+            "message": "被执行项目修改人引用."
+        },
+        {
+            "key": "StatusRLCreateUsed",
+            "type": "string",
+            "message": "被风险等级创建人引用."
+        },
+        {
+            "key": "StatusRLModifyUsed",
+            "type": "string",
+            "message": "被风险等级修改人引用."
+        },
+        {
+            "key": "StatusPPECreateUsed",
+            "type": "string",
+            "message": "被劳保用品创建人引用."
+        },
+        {
+            "key": "StatusPPEModifyUsed",
+            "type": "string",
+            "message": "被劳保用品修改人引用."
+        },
+        {
+            "key": "StatusEPTCreateUsed",
+            "type": "string",
+            "message": "被执行模板创建人引用."
+        },
+        {
+            "key": "StatusEPTModifyUsed",
+            "type": "string",
+            "message": "被执行模板修改人引用."
+        },
+        {
+            "key": "StatusUserCreateUsed",
+            "type": "string",
+            "message": "被用户档案创建人引用."
+        },
+        {
+            "key": "StatusUserModifyUsed",
+            "type": "string",
+            "message": "被用户档案修改人引用."
+        },
+        {
+            "key": "StatusRoleCreateUsed",
+            "type": "string",
+            "message": "被角色档案创建人引用."
+        },
+        {
+            "key": "StatusRoleModifyUsed",
+            "type": "string",
+            "message": "被角色档案修改人引用."
+        },
+        {
+            "key": "StatusTRDeptUsed",
+            "type": "string",
+            "message": "被培训记录表头部门引用."
+        },
+        {
+            "key": "StatusPPEIFDeptUsed",
+            "type": "string",
+            "message": "被劳保用品发放单发放部门引用."
+        },
+        {
+            "key": "StatusErrorUnknown",
+            "type": "string",
+            "message": "不明原因错误."
+        },
+        {
+            "key": "StatusResCodeError",
+            "type": "string",
+            "message": "响应错误."
+        },
+        {
+            "key": "StatusInternalError",
+            "type": "string",
+            "message": "服务器内部错误."
+        },
+        {
+            "key": "StatusResReject",
+            "type": "string",
+            "message": "服务器拒绝."
+        },
+        {
+            "key": "StatusResNoData",
+            "type": "string",
+            "message": "没有数据."
+        },
+        {
+            "key": "StatusOverRecord",
+            "type": "string",
+            "message": "记录数量超过最大允许数量."
+        },
+        {
+            "key": "StatusVoucherNoBody",
+            "type": "string",
+            "message": "单据表体为空."
+        },
+        {
+            "key": "StatusVoucherNoFree",
+            "type": "string",
+            "message": "单据非自由态."
+        },
+        {
+            "key": "StatusVoucherOnlyCreateEdit",
+            "type": "string",
+            "message": "只有创建人能修改单据."
+        },
+        {
+            "key": "StatusVoucherNoConfirm",
+            "type": "string",
+            "message": "单据非确认态."
+        },
+        {
+            "key": "StatusVoucherCancelConfirmSelf",
+            "type": "string",
+            "message": "只有确认人才能取消确认."
+        },
         {
             "key": "hasApple",
             "type": "plural",

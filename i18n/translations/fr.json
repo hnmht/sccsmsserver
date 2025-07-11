@@ -1,65 +1,65 @@
 {
-    "language": "en-US",
+    "language": "fr",
     "messages": [
         {
             "key": "CodeSuccess",
             "type": "string",
-            "message": "Success."
+            "message": "Succès."
         },
         {
             "key": "CodeInvalidParm",
             "type": "string",
-            "message": "Invalid request parameter."
+            "message": "Paramètre de requête invalide."
         },
         {
             "key": "CodeServerBusy",
             "type": "string",
-            "message": "Server is Busy."
+            "message": "Serveur Occupé."
         },
         {
             "key": "CodeInternalError",
             "type": "string",
-            "message": "Internal Server Error."
+            "message": "Erreur Interne du Serveur."
         },
         {
             "key": "CodeInvalidToken",
             "type": "string",
-            "message": "Login credentials have expired."
+            "message": "Les identifiants de connexion ont expiré."
         },
         {
             "key": "CodeNeedLogin",
             "type": "string",
-            "message": "Login required."
+            "message": "Connexion requise."
         },
         {
             "key": "CodeClientUnknown",
             "type": "string",
-            "message": "Unknown Client."
+            "message": "Client Inconnu."
         },
         {
             "key": "CodeClientEmpty",
             "type": "string",
-            "message": "Client type is empty."
+            "message": "Le type de client est vide."
         },
         {
             "key": "CodeTokenDestroy",
             "type": "string",
-            "message": "Login credentials have been revoked by the administrator."
+            "message": "Les identifiants de connexion ont été révoqués par l'administrateur."
         },
         {
             "key": "CodeLoginOther",
             "type": "string",
-            "message": "Login credentials are invalid, the user has logged in on another client."
+            "message": "Les identifiants de connexion sont invalides, l'utilisateur s'est connecté sur un autre client."
         },
         {
             "key": "MenuDashboard",
             "type": "string",
-            "message": "Dashboard"
+            "message": "Tableau de bord"
         },
         {
             "key": "MenuCalendar",
             "type": "string",
-            "message": "Calendar"
+            "message": "Calendrier"
         },
         {
             "key": "MenuMessage",
@@ -69,182 +69,182 @@
         {
             "key": "MenuAddressBook",
             "type": "string",
-            "message": "Address Book"
+            "message": "Carnet d'adresses"
         },
         {
             "key": "MenuCSM",
             "type": "string",
-            "message": "Construction Site Management"
+            "message": "Gestion de chantier"
         },
         {
             "key": "MenuWO",
             "type": "string",
-            "message": "Work Order"
+            "message": "Ordre de travail"
         },
         {
             "key": "MenuEO",
             "type": "string",
-            "message": "Execution Order"
+            "message": "Ordre d'exécution"
         },
         {
             "key": "MenuEOReview",
             "type": "string",
-            "message": "Execution Order Review"
+            "message": "Révision de l'ordre d'exécution"
         },
         {
             "key": "MenuIRF",
             "type": "string",
-            "message": "Issue Resolution Form"
+            "message": "Formulaire de résolution de problèmes"
         },
         {
             "key": "MenuWOStatus",
             "type": "string",
-            "message": "Work Order Status"
+            "message": "Statut de l'ordre de travail"
         },
         {
             "key": "MenuEOStatus",
             "type": "string",
-            "message": "Execution Order Status"
+            "message": "Statut de l'ordre d'exécution"
         },
         {
             "key": "MenuIRFStatus",
             "type": "string",
-            "message": "Issue Resolution Form Status"
+            "message": "Statut du formulaire de résolution de problèmes"
         },
         {
             "key": "MenuDM",
             "type": "string",
-            "message": "Document Management"
+            "message": "Gestion de documents"
         },
         {
             "key": "MenuDC",
             "type": "string",
-            "message": "Document Category"
+            "message": "Catégorie de document"
         },
         {
             "key": "MenuDocumentUpload",
             "type": "string",
-            "message": "Document Upload"
+            "message": "Téléchargement de document"
         },
         {
             "key": "MenuDocumentFind",
             "type": "string",
-            "message": "Document Find"
+            "message": "Rechercher un document"
         },
         {
             "key": "MenuTM",
             "type": "string",
-            "message": "Training Management"
+            "message": "Gestion de la formation"
         },
         {
             "key": "MenuTC",
             "type": "string",
-            "message": "Training Course"
+            "message": "Cours de formation"
         },
         {
             "key": "MenuTR",
             "type": "string",
-            "message": "Training Record"
+            "message": "Registre de formation"
         },
         {
             "key": "MenuTS",
             "type": "string",
-            "message": "Teaching Statistics"
+            "message": "Statistiques d'enseignement"
         },
         {
             "key": "MenuTPS",
             "type": "string",
-            "message": "Training Participation Statistics"
+            "message": "Statistiques de participation à la formation"
         },
         {
             "key": "MenuPPEM",
             "type": "string",
-            "message": "PPE Management"
+            "message": "Gestion des EPI"
         },
         {
             "key": "MenuPQ",
             "type": "string",
-            "message": "Position Quota"
+            "message": "Quota de poste"
         },
         {
             "key": "MenuPPEWizard",
             "type": "string",
-            "message": "Issuance Wizard"
+            "message": "Assistant d'émission"
         },
         {
             "key": "MenuPPEIF",
             "type": "string",
-            "message": "Issuance Form"
+            "message": "Formulaire d'émission"
         },
         {
             "key": "MenuPPES",
             "type": "string",
-            "message": "Issuance Statistics"
+            "message": "Statistiques d'émission"
         },
         {
             "key": "MenuMD",
             "type": "string",
-            "message": "Master Data"
+            "message": "Données de base"
         },
         {
             "key": "MenuDepartment",
             "type": "string",
-            "message": "Department"
+            "message": "Département"
         },
         {
             "key": "MenuPosition",
             "type": "string",
-            "message": "Position"
+            "message": "Poste"
         },
         {
             "key": "MenuCSC",
             "type": "string",
-            "message": "Construction Site Category"
+            "message": "Catégorie de chantier"
         },
         {
             "key": "MenuCS",
             "type": "string",
-            "message": "Construction Site"
+            "message": "Chantier"
         },
         {
             "key": "MenuUDC",
             "type": "string",
-            "message": "User-defined Category"
+            "message": "Catégorie définie par l'utilisateur"
         },
         {
             "key": "MenuUD",
             "type": "string",
-            "message": "User Defined"
+            "message": "Défini par l'utilisateur"
         },
         {
             "key": "MenuEPC",
             "type": "string",
-            "message": "Execution Project Category"
+            "message": "Catégorie de projet d'exécution"
         },
         {
             "key": "MenuEP",
             "type": "string",
-            "message": "Execution Project"
+            "message": "Projet d'exécution"
         },
         {
             "key": "MenuRL",
             "type": "string",
-            "message": "Risk Level"
+            "message": "Niveau de risque"
         },
         {
             "key": "MenuPPE",
             "type": "string",
-            "message": "Personal Protection Equipment"
+            "message": "Équipement de protection individuelle"
         },
         {
             "key": "MenuTemplate",
             "type": "string",
-            "message": "Template"
+            "message": "Modèle"
         },
         {
             "key": "MenuEPT",
             "type": "string",
-            "message": "Execution Project Template"
+            "message": "Modèle de projet d'exécution"
         },
         {
             "key": "MenuPermission",
@@ -254,792 +254,792 @@
         {
             "key": "MenuRole",
             "type": "string",
-            "message": "Role"
+            "message": "Rôle"
         },
         {
             "key": "MenuUser",
             "type": "string",
-            "message": "User"
+            "message": "Utilisateur"
         },
         {
             "key": "MenuPA",
             "type": "string",
-            "message": "Permission Assignment"
+            "message": "Attribution des permissions"
         },
         {
             "key": "MenuOU",
             "type": "string",
-            "message": "Online User"
+            "message": "Utilisateur en ligne"
         },
         {
             "key": "MenuSettings",
             "type": "string",
-            "message": "Settings"
+            "message": "Paramètres"
         },
         {
             "key": "MenuCSO",
             "type": "string",
-            "message": "Construction Site Options"
+            "message": "Options du chantier"
         },
         {
             "key": "MenuLPS",
             "type": "string",
-            "message": "Landing Page Setup"
+            "message": "Configuration de la page d'accueil"
         },
         {
             "key": "MenuProfile",
             "type": "string",
-            "message": "Profile"
+            "message": "Profil"
         },
         {
             "key": "MenuAbout",
             "type": "string",
-            "message": "About"
+            "message": "À propos"
         },
         {
             "key": "StatusOK",
             "type": "string",
-            "message": "success."
+            "message": "Succès."
         },
         {
             "key": "StatusOtherEdit",
             "type": "string",
-            "message": "The data is being modified by another user."
+            "message": "Les données sont en cours de modification par un autre utilisateur."
         },
         {
             "key": "StatusDataDeleted",
             "type": "string",
-            "message": "The data has been deleted."
+            "message": "Les données ont été supprimées."
         },
         {
             "key": "StatusUserNotExist",
             "type": "string",
-            "message": "User does not exist."
+            "message": "L'utilisateur n'existe pas."
         },
         {
             "key": "StatusInvalidPassword",
             "type": "string",
-            "message": "Incorrect password."
+            "message": "Mot de passe incorrect."
         },
         {
             "key": "StatusPasswordDisaccord",
             "type": "string",
-            "message": "The two entered passwords do not match."
+            "message": "Les deux mots de passe saisis ne correspondent pas."
         },
         {
             "key": "StatusUserDisabled",
             "type": "string",
-            "message": "User account has been disabled."
+            "message": "Le compte utilisateur a été désactivé."
         },
         {
             "key": "StatusUserLocked",
             "type": "string",
-            "message": "User account has been locked."
+            "message": "Le compte utilisateur a été verrouillé."
         },
         {
             "key": "StatusOverAuthorization",
             "type": "string",
-            "message": "The number of users exceeds the authorized limit."
+            "message": "Le nombre d'utilisateurs dépasse la limite autorisée."
         },
         {
             "key": "StatusRoleNameExist",
             "type": "string",
-            "message": "Role name already exists."
+            "message": "Le nom de rôle existe déjà."
         },
         {
             "key": "StatusRoleUserExist",
             "type": "string",
-            "message": "The relationship between the role and the user already exists."
+            "message": "La relation entre le rôle et l'utilisateur existe déjà."
         },
         {
             "key": "StatusRoleAuthExist",
             "type": "string",
-            "message": "This role has already been assigned permissions."
+            "message": "Ce rôle a déjà été attribué des permissions."
         },
         {
             "key": "StatusUserCodeExist",
             "type": "string",
-            "message": "User code already exists."
+            "message": "Le code utilisateur existe déjà."
         },
         {
             "key": "StatusUserNameExist",
             "type": "string",
-            "message": "User name already exists."
+            "message": "Le nom d'utilisateur existe déjà."
         },
         {
             "key": "StatusUserMobileExist",
             "type": "string",
-            "message": "User phone number already exists."
+            "message": "Le numéro de téléphone de l'utilisateur existe déjà."
         },
         {
             "key": "StatusUserEmailExist",
             "type": "string",
-            "message": "User email already exists."
+            "message": "L'e-mail de l'utilisateur existe déjà."
         },
         {
             "key": "StatusProfileOnlySelf",
             "type": "string",
-            "message": "User can only modify their own information."
+            "message": "L'utilisateur ne peut modifier que ses propres informations."
         },
         {
             "key": "StatusDeptCodeExist",
             "type": "string",
-            "message": "Department Code already exists."
+            "message": "Le code de département existe déjà."
         },
         {
             "key": "StatusDeptFatherSelf",
             "type": "string",
-            "message": "The parent department cannot be the department itself."
+            "message": "Le département parent ne peut pas être le département lui-même."
         },
         {
             "key": "StatusDeptFatherCircle",
             "type": "string",
-            "message": "Loop detected in parent department hierarchy."
+            "message": "Boucle détectée dans la hiérarchie des départements parents."
         },
         {
             "key": "StatusDeptLowLevelExist",
             "type": "string",
-            "message": "Sub-department exists."
+            "message": "Le sous-département existe."
         },
         {
             "key": "StatusDeptNotExist",
             "type": "string",
-            "message": "Department does not exist."
+            "message": "Le département n'existe pas."
         },
         {
             "key": "StatusCSCNameExist",
             "type": "string",
-            "message": "Construction site category name exists."
+            "message": "Le nom de la catégorie de chantier existe."
         },
         {
             "key": "StatusCSCFatherSelf",
             "type": "string",
-            "message": "The parent category cannot be itself."
+            "message": "La catégorie parente ne peut pas être elle-même."
         },
         {
             "key": "StatusCSCFatherCircle",
             "type": "string",
-            "message": "Loop detected in parent category hierarchy."
+            "message": "Boucle détectée dans la hiérarchie de la catégorie parente."
         },
         {
             "key": "StatusCSCLowLevelExist",
             "type": "string",
-            "message": "Sub-category exist."
+            "message": "La sous-catégorie existe."
         },
         {
             "key": "StatusCSCodeExist",
             "type": "string",
-            "message": "Construction site code already exists."
+            "message": "Le code du chantier existe déjà."
         },
         {
             "key": "StatusUDCNameExist",
             "type": "string",
-            "message": "User-defined category name already exists."
+            "message": "Le nom de la catégorie définie par l'utilisateur existe déjà."
         },
         {
             "key": "StatusUDCodeExist",
             "type": "string",
-            "message": "User-defined master data code already exists."
+            "message": "Le code de données de base défini par l'utilisateur existe déjà."
         },
         {
             "key": "StatusEPCNameExist",
             "type": "string",
-            "message": "Execution project category name already exists."
+            "message": "Le nom de la catégorie de projet d'exécution existe déjà."
         },
         {
             "key": "StatusEPCFatherSelf",
             "type": "string",
-            "message": "The parent category cannot be itself."
+            "message": "La catégorie parente ne peut pas être elle-même."
         },
         {
             "key": "StatusEPCFatherCircle",
             "type": "string",
-            "message": "Loop detected in parent category hierarchy."
+            "message": "Boucle détectée dans la hiérarchie de la catégorie parente."
         },
         {
             "key": "StatusEPCLowLevelExist",
             "type": "string",
-            "message": "Sub-category exists."
+            "message": "La sous-catégorie existe."
         },
         {
             "key": "StatusEPCodeExist",
             "type": "string",
-            "message": "Execution project code already exists."
+            "message": "Le code du projet d'exécution existe déjà."
         },
         {
             "key": "StatusEPChangeResultType",
             "type": "string",
-            "message": "Referenced items cannot have their result type modified."
+            "message": "Les éléments référencés ne peuvent pas avoir leur type de résultat modifié."
         },
         {
             "key": "StatusEPTCodeExist",
             "type": "string",
-            "message": "Execution project template code already exists."
+            "message": "Le code du modèle de projet d'exécution existe déjà."
         },
         {
             "key": "StatusFileOpenFailed",
             "type": "string",
-            "message": "Failed to open file."
+            "message": "Échec de l'ouverture du fichier."
         },
         {
             "key": "StatusFileUploadFailed",
             "type": "string",
-            "message": "File upload failed."
+            "message": "Échec du téléchargement du fichier."
         },
         {
             "key": "StatusFileGetUrlFailed",
             "type": "string",
-            "message": "Failed to get file URL."
+            "message": "Échec de l'obtention de l'URL du fichier."
         },
         {
             "key": "StatusFileNotExist",
             "type": "string",
-            "message": "File does not exist."
+            "message": "Le fichier n'existe pas."
         },
         {
             "key": "StatusWOOtherEdit",
             "type": "string",
-            "message": "Work Order has been modified by another user."
+            "message": "L'ordre de travail a été modifié par un autre utilisateur."
         },
         {
             "key": "StatusEOBodyNoConfirm",
             "type": "string",
-            "message": "There are unconfirmed rows in the execution order body."
+            "message": "Il y a des lignes non confirmées dans le corps de l'ordre d'exécution."
         },
         {
             "key": "StatusIssueResolved",
             "type": "string",
-            "message": "The issue has been resolved."
+            "message": "Le problème a été résolu."
         },
         {
             "key": "StatusMsgOnlyReadSelf",
             "type": "string",
-            "message": "Messages can only be read by the recipient themselves."
+            "message": "Les messages ne peuvent être lus que par le destinataire lui-même."
         },
         {
             "key": "StatusRLNameExist",
             "type": "string",
-            "message": "Risk level name already exists."
+            "message": "Le nom du niveau de risque existe déjà."
         },
         {
             "key": "StatusDCNameExist",
             "type": "string",
-            "message": "Document Category name already exists."
+            "message": "Le nom de la catégorie de document existe déjà."
         },
         {
             "key": "StatusDCLowLevelExist",
             "type": "string",
-            "message": "Sub-category exists."
+            "message": "La sous-catégorie existe."
         },
         {
             "key": "StatusDCFatherSelf",
             "type": "string",
-            "message": "The parent category cannot be itself."
+            "message": "La catégorie parente ne peut pas être elle-même."
         },
         {
             "key": "StatusDocumentNoFile",
             "type": "string",
-            "message": "The Document has no attachments."
+            "message": "Le document n'a pas de pièces jointes."
         },
         {
             "key": "StatusPositionNameExist",
             "type": "string",
-            "message": "Position name already exists."
+            "message": "Le nom du poste existe déjà."
         },
         {
             "key": "StatusTCNameExist",
             "type": "string",
-            "message": "Training Course name already exists."
+            "message": "Le nom du cours de formation existe déjà."
         },
         {
             "key": "StatusLPPECodeExist",
             "type": "string",
-            "message": "Personal Protection Equipment code already exists."
+            "message": "Le code de l'équipement de protection individuelle existe déjà."
         },
         {
             "key": "StatusPQExist",
             "type": "string",
-            "message": "A labor protection supplies post quota for the same period already exists."
+            "message": "Un quota de poste de fournitures de protection du travail pour la même période existe déjà."
         },
         {
             "key": "StatusUDUsed",
             "type": "string",
-            "message": "Referenced by User Defined master data."
+            "message": "Référencé par les données de base définies par l'utilisateur."
         },
         {
             "key": "StatusEPUsed",
             "type": "string",
-            "message": "Referenced by Execution Project master data."
+            "message": "Référencé par les données de base du projet d'exécution."
         },
         {
             "key": "StatusEPDefaultUsed",
             "type": "string",
-            "message": "Referenced by Execution Project default value."
+            "message": "Référencé par la valeur par défaut du projet d'exécution."
         },
         {
             "key": "StatusEPErrorUsed",
             "type": "string",
-            "message": "Referenced by Execution Project error value."
+            "message": "Référencé par la valeur d'erreur du projet d'exécution."
         },
         {
             "key": "StatusEPTDefaultUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Template default values."
+            "message": "Référencé par les valeurs par défaut du modèle de projet d'exécution."
         },
         {
             "key": "StatusEPTErrorUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Template error values."
+            "message": "Référencé par les valeurs d'erreur du modèle de projet d'exécution."
         },
         {
             "key": "StatusEPTUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Template."
+            "message": "Référencé par le modèle de projet d'exécution."
         },
         {
             "key": "StatusUserUsed",
             "type": "string",
-            "message": "Referenced by User."
+            "message": "Référencé par l'utilisateur."
         },
         {
             "key": "StatusDeptLeaderUsed",
             "type": "string",
-            "message": "Referenced by Department."
+            "message": "Référencé par le département."
         },
         {
             "key": "StatusCSUsed",
             "type": "string",
-            "message": "Referenced by Construction Site."
+            "message": "Référencé par le chantier."
         },
         {
             "key": "StatusWOUsed",
             "type": "string",
-            "message": "Referenced by Work Order."
+            "message": "Référencé par l'ordre de travail."
         },
         {
             "key": "StatusEOUsed",
             "type": "string",
-            "message": "Referenced by Execution Order."
+            "message": "Référencé par l'ordre d'exécution."
         },
         {
             "key": "StatusEOValueUsed",
             "type": "string",
-            "message": "Referenced by Execution Order values."
+            "message": "Référencé par les valeurs de l'ordre d'exécution."
         },
         {
             "key": "StatusEOErrorUsed",
             "type": "string",
-            "message": "Referenced by Execution Order error values."
+            "message": "Référencé par les valeurs d'erreur de l'ordre d'exécution."
         },
         {
             "key": "StatusIRFUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form."
+            "message": "Référencé par le formulaire de résolution de problèmes."
         },
         {
             "key": "StatusCSRespUsed",
             "type": "string",
-            "message": "Referenced by Construction Site owner."
+            "message": "Référencé par le propriétaire du chantier."
         },
         {
             "key": "StatusWOEpUsed",
             "type": "string",
-            "message": "Referenced by Execution Order executor."
+            "message": "Référencé par l'exécuteur de l'ordre d'exécution."
         },
         {
             "key": "StatusEOEpUsed",
             "type": "string",
-            "message": "Referenced by Execution order head executor."
+            "message": "Référencé par l'exécuteur en chef de l'ordre d'exécution."
         },
         {
             "key": "StatusEODpUsed",
             "type": "string",
-            "message": "Referenced by Execution Order body handler."
+            "message": "Référencé par le gestionnaire du corps de l'ordre d'exécution."
         },
         {
             "key": "StatusEOCommentUsed",
             "type": "string",
-            "message": "Referenced by Execution Order annotator."
+            "message": "Référencé par l'annotateur de l'ordre d'exécution."
         },
         {
             "key": "StatusEOSendToUsed",
             "type": "string",
-            "message": "Referenced by Execution Order annotation message recipient."
+            "message": "Référencé par le destinataire du message d'annotation de l'ordre d'exécution."
         },
         {
             "key": "StatusEOReviewUsed",
             "type": "string",
-            "message": "Referenced by Execution Order reviewer."
+            "message": "Référencé par le réviseur de l'ordre d'exécution."
         },
         {
             "key": "StatusIRFEpUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form executor."
+            "message": "Référencé par l'exécuteur du formulaire de résolution de problèmes."
         },
         {
             "key": "StatusIRFDpUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form handler."
+            "message": "Référencé par le gestionnaire du formulaire de résolution de problèmes."
         },
         {
             "key": "StatusCSOUsed",
             "type": "string",
-            "message": "Referenced by Construction Site Options."
+            "message": "Référencé par les options du chantier."
         },
         {
             "key": "StatusDocumentUsed",
             "type": "string",
-            "message": "Referenced by Document."
+            "message": "Référencé par le document."
         },
         {
             "key": "StatusTRUsed",
             "type": "string",
-            "message": "Referenced by Training Record."
+            "message": "Référencé par le registre de formation."
         },
         {
             "key": "StatusWOCreateUsed",
             "type": "string",
-            "message": "Referenced by Work Order creator."
+            "message": "Référencé par le créateur de l'ordre de travail."
         },
         {
             "key": "StatusWOModifyUsed",
             "type": "string",
-            "message": "Referenced by Work Order editor."
+            "message": "Référencé par l'éditeur de l'ordre de travail."
         },
         {
             "key": "StatusWOConfirmUsed",
             "type": "string",
-            "message": "Referenced by Work Order confirmer."
+            "message": "Référencé par le confirmateur de l'ordre de travail."
         },
         {
             "key": "StatusEOCreateUsed",
             "type": "string",
-            "message": "Referenced by Execution Order creator."
+            "message": "Référencé par le créateur de l'ordre d'exécution."
         },
         {
             "key": "StatusEOModifyUsed",
             "type": "string",
-            "message": "Referenced by Execution Order editor."
+            "message": "Référencé par l'éditeur de l'ordre d'exécution."
         },
         {
             "key": "StatusEOConfirmUsed",
             "type": "string",
-            "message": "Referenced by Execution Order confirmer."
+            "message": "Référencé par le confirmateur de l'ordre d'exécution."
         },
         {
             "key": "StatusIRFCreateUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form creator."
+            "message": "Référencé par le créateur du formulaire de résolution de problèmes."
         },
         {
             "key": "StatusIRFModifyUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form editor."
+            "message": "Référencé par l'éditeur du formulaire de résolution de problèmes."
         },
         {
             "key": "StatusIRFConfirmUsed",
             "type": "string",
-            "message": "Referenced by Issue Resolution Form confirmer."
+            "message": "Référencé par le confirmateur du formulaire de résolution de problèmes."
         },
         {
             "key": "StatusDCCreateUsed",
             "type": "string",
-            "message": "Referenced by Document Category creator."
+            "message": "Référencé par le créateur de la catégorie de document."
         },
         {
             "key": "StatusDCModifyUsed",
             "type": "string",
-            "message": "Referenced by Document Category editor."
+            "message": "Référencé par l'éditeur de la catégorie de document."
         },
         {
             "key": "StatusDocumentCreateUsed",
             "type": "string",
-            "message": "Referenced by Document creator."
+            "message": "Référencé par le créateur du document."
         },
         {
             "key": "StatusDocumentModifyUsed",
             "type": "string",
-            "message": "Referenced by Document editor."
+            "message": "Référencé par l'éditeur du document."
         },
         {
             "key": "StatusTCCreateUsed",
             "type": "string",
-            "message": "Referenced by Training Course creator."
+            "message": "Référencé par le créateur du cours de formation."
         },
         {
             "key": "StatusTCModifyUsed",
             "type": "string",
-            "message": "Referenced by Training Course editor."
+            "message": "Référencé par l'éditeur du cours de formation."
         },
         {
             "key": "StatusTRLecturerUsed",
             "type": "string",
-            "message": "Referenced by Training Record speaker."
+            "message": "Référencé par l'intervenant du registre de formation."
         },
         {
             "key": "StatusTRStudentUsed",
             "type": "string",
-            "message": "Referenced by Training Record trainee."
+            "message": "Référencé par le stagiaire du registre de formation."
         },
         {
             "key": "StatusTRCreateUsed",
             "type": "string",
-            "message": "Referenced by Training Record creator."
+            "message": "Référencé par le créateur du registre de formation."
         },
         {
             "key": "StatusTRModifyUsed",
             "type": "string",
-            "message": "Referenced by Training Record editor."
+            "message": "Référencé par l'éditeur du registre de formation."
         },
         {
             "key": "StatusTRConfirmUsed",
             "type": "string",
-            "message": "Referenced by Training Record confirmer."
+            "message": "Référencé par le confirmateur du registre de formation."
         },
         {
             "key": "StatusPQCreateUsed",
             "type": "string",
-            "message": "Referenced by PPE Quota creator."
+            "message": "Référencé par le créateur du quota d'EPI."
         },
         {
             "key": "StatusPQModifyUsed",
             "type": "string",
-            "message": "Referenced by PPE Quota editor."
+            "message": "Référencé par l'éditeur du quota d'EPI."
         },
         {
             "key": "StatusPQConfirmUsed",
             "type": "string",
-            "message": "Referenced by PPE Quota confirmer."
+            "message": "Référencé par le confirmateur du quota d'EPI."
         },
         {
             "key": "StatusPPEIFCreateUsed",
             "type": "string",
-            "message": "Referenced by PPE Issuance Form creator."
+            "message": "Référencé par le créateur du formulaire d'émission d'EPI."
         },
         {
             "key": "StatusPPEIFModifyUsed",
             "type": "string",
-            "message": "Referenced by PPE Issuance Form editor."
+            "message": "Référencé par l'éditeur du formulaire d'émission d'EPI."
         },
         {
             "key": "StatusPPEIFConfirmUsed",
             "type": "string",
-            "message": "Referenced by PPE Issuance Form confirmer."
+            "message": "Référencé par le confirmateur du formulaire d'émission d'EPI."
         },
         {
             "key": "StatusPPEIFRecipientUsed",
             "type": "string",
-            "message": "Referenced by PPE Issuance Form recipient."
+            "message": "Référencé par le destinataire du formulaire d'émission d'EPI."
         },
         {
             "key": "StatusDeptCreateUsed",
             "type": "string",
-            "message": "Referenced by Department creator."
+            "message": "Référencé par le créateur du département."
         },
         {
             "key": "StatusDeptModifyUsed",
             "type": "string",
-            "message": "Referenced by Department editor."
+            "message": "Référencé par l'éditeur du département."
         },
         {
             "key": "StatusPositionCreateUsed",
             "type": "string",
-            "message": "Referenced by Position creator."
+            "message": "Référencé par le créateur du poste."
         },
         {
             "key": "StatusPositionModifyUsed",
             "type": "string",
-            "message": "Referenced by Position editor."
+            "message": "Référencé par l'éditeur du poste."
         },
         {
             "key": "StatusCSCCreateUsed",
             "type": "string",
-            "message": "Referenced by Construction Site Category creator."
+            "message": "Référencé par le créateur de la catégorie de chantier."
         },
         {
             "key": "StatusCSCModifyUsed",
             "type": "string",
-            "message": "Referenced by Construction Site Category editor."
+            "message": "Référencé par l'éditeur de la catégorie de chantier."
         },
         {
             "key": "StatusCSCreateUsed",
             "type": "string",
-            "message": "Referenced by Construction Site creator."
+            "message": "Référencé par le créateur du chantier."
         },
         {
             "key": "StatusCSModifyUsed",
             "type": "string",
-            "message": "Referenced by Construction Site editor."
+            "message": "Référencé par l'éditeur du chantier."
         },
         {
             "key": "StatusUDCCreateUsed",
             "type": "string",
-            "message": "Referenced by User-defined Category creator."
+            "message": "Référencé par le créateur de la catégorie définie par l'utilisateur."
         },
         {
             "key": "StatusUDCModifyUsed",
             "type": "string",
-            "message": "Referenced by User-defined Category editor."
+            "message": "Référencé par l'éditeur de la catégorie définie par l'utilisateur."
         },
         {
             "key": "StatusUDCreateUsed",
             "type": "string",
-            "message": "Referenced by User Defined creator."
+            "message": "Référencé par le créateur défini par l'utilisateur."
         },
         {
             "key": "StatusUDModifyUsed",
             "type": "string",
-            "message": "Referenced by User Defined editor."
+            "message": "Référencé par l'éditeur défini par l'utilisateur."
         },
         {
             "key": "StatusEPCCreateUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Category creator."
+            "message": "Référencé par le créateur de la catégorie de projet d'exécution."
         },
         {
             "key": "StatusEPCModifyUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Category editor."
+            "message": "Référencé par l'éditeur de la catégorie de projet d'exécution."
         },
         {
             "key": "StatusEPCreateUsed",
             "type": "string",
-            "message": "Referenced by Execution Project creator."
+            "message": "Référencé par le créateur du projet d'exécution."
         },
         {
             "key": "StatusEPModifyUsed",
             "type": "string",
-            "message": "Referenced by Execution Project editor."
+            "message": "Référencé par l'éditeur du projet d'exécution."
         },
         {
             "key": "StatusRLCreateUsed",
             "type": "string",
-            "message": "Referenced by Risk Level creator."
+            "message": "Référencé par le créateur du niveau de risque."
         },
         {
             "key": "StatusRLModifyUsed",
             "type": "string",
-            "message": "Referenced by Risk Level editor."
+            "message": "Référencé par l'éditeur du niveau de risque."
         },
         {
             "key": "StatusPPECreateUsed",
             "type": "string",
-            "message": "Referenced by Personal Protection Equipment creator."
+            "message": "Référencé par le créateur de l'équipement de protection individuelle."
         },
         {
             "key": "StatusPPEModifyUsed",
             "type": "string",
-            "message": "Referenced by Personal Protection Equipment editor."
+            "message": "Référencé par l'éditeur de l'équipement de protection individuelle."
         },
         {
             "key": "StatusEPTCreateUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Template creator."
+            "message": "Référencé par le créateur du modèle de projet d'exécution."
         },
         {
             "key": "StatusEPTModifyUsed",
             "type": "string",
-            "message": "Referenced by Execution Project Template editor."
+            "message": "Référencé par l'éditeur du modèle de projet d'exécution."
         },
         {
             "key": "StatusUserCreateUsed",
             "type": "string",
-            "message": "Referenced by User creator."
+            "message": "Référencé par le créateur de l'utilisateur."
         },
         {
             "key": "StatusUserModifyUsed",
             "type": "string",
-            "message": "Referenced by User editor."
+            "message": "Référencé par l'éditeur de l'utilisateur."
         },
         {
             "key": "StatusRoleCreateUsed",
             "type": "string",
-            "message": "Referenced by Role creator."
+            "message": "Référencé par le créateur du rôle."
         },
         {
             "key": "StatusRoleModifyUsed",
             "type": "string",
-            "message": "Referenced by Role editor."
+            "message": "Référencé par l'éditeur du rôle."
         },
         {
             "key": "StatusTRDeptUsed",
             "type": "string",
-            "message": "Referenced by the department field of the Training Records document."
+            "message": "Référencé par le champ de département du document Registres de formation."
         },
         {
             "key": "StatusPPEIFDeptUsed",
             "type": "string",
-            "message": "Referenced by the issuing department in the PPE Issuance Form."
+            "message": "Référencé par le département émetteur dans le formulaire d'émission d'EPI."
         },
         {
             "key": "StatusErrorUnknown",
             "type": "string",
-            "message": "Unknown error."
+            "message": "Erreur inconnue."
         },
         {
             "key": "StatusResCodeError",
             "type": "string",
-            "message": "Response error."
+            "message": "Erreur de réponse."
         },
         {
             "key": "StatusInternalError",
             "type": "string",
-            "message": "Internal server error."
+            "message": "Erreur interne du serveur."
         },
         {
             "key": "StatusResReject",
             "type": "string",
-            "message": "Access denied by server."
+            "message": "Accès refusé par le serveur."
         },
         {
             "key": "StatusResNoData",
             "type": "string",
-            "message": "No data."
+            "message": "Aucune donnée."
         },
         {
             "key": "StatusOverRecord",
             "type": "string",
-            "message": "The number of records exceeds the maximum limit."
+            "message": "Le nombre d'enregistrements dépasse la limite maximale."
         },
         {
             "key": "StatusVoucherNoBody",
             "type": "string",
-            "message": "Transactional Document body is empty."
+            "message": "Le corps du document transactionnel est vide."
         },
         {
             "key": "StatusVoucherNoFree",
             "type": "string",
-            "message": "Transactional Document is not in a free state."
+            "message": "Le document transactionnel n'est pas en état libre."
         },
         {
             "key": "StatusVoucherOnlyCreateEdit",
             "type": "string",
-            "message": "Only the Transactional Document creator can modify the document."
+            "message": "Seul le créateur du document transactionnel peut modifier le document."
         },
         {
             "key": "StatusVoucherNoConfirm",
             "type": "string",
-            "message": "Transactional Document status is not confirmed."
+            "message": "Le statut du document transactionnel n'est pas confirmé."
         },
         {
             "key": "StatusVoucherCancelConfirmSelf",
             "type": "string",
-            "message": "Only the confirmer of the Transactional Document can cancel the document confirmation."
+            "message": "Seul le confirmateur du document transactionnel peut annuler la confirmation du document."
         },
         {
             "key": "hasApple",
             "type": "plural",
-            "message": "I have d% apple.",
+            "message": "J'ai d% pomme.",
             "selectorf": {
                 "arg": 1,
                 "format": "%d",
                 "cases": [
                     "=1",
-                    "I have an apple.",
+                    "J'ai une pomme.",
                     "=2",
-                    "I have Two apples",
+                    "J'ai deux pommes",
                     "other",
-                    "I have %[1]d apples."
+                    "J'ai %[1]d pommes."
                 ]
             }
         }
