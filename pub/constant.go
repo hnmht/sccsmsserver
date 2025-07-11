@@ -71,8 +71,8 @@ const (
 	CSC        DataType = "csc"        // Construction site Category
 	SimpOSAC   DataType = "simposac"   // Simple Construction site Category
 	CS         DataType = "cs"         // Construction Site Master Data
-	UDDT       DataType = "udc"        // User-defined Data Category
-	UDD        DataType = "ud"         // User-defined Data
+	UDC        DataType = "udc"        // User-defined Data Category
+	UD         DataType = "ud"         // User-defined Master Data
 	EPC        DataType = "epc"        // Execution Project Category
 	SimpEPC    DataType = "simpepc"    // Simple Execution Project Category
 	EP         DataType = "ep"         // Execution Project Master Data

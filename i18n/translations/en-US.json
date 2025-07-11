@@ -209,7 +209,7 @@
         {
             "key": "MenuUDC",
             "type": "string",
-            "message": "User defined Category"
+            "message": "User-defined Category"
         },
         {
             "key": "MenuUD",
@@ -295,6 +295,736 @@
             "key": "MenuAbout",
             "type": "string",
             "message": "About"
+        },
+        {
+            "key": "StatusOK",
+            "type": "string",
+            "message": "success."
+        },
+        {
+            "key": "StatusOtherEdit",
+            "type": "string",
+            "message": "The data is being modified by another user."
+        },
+        {
+            "key": "StatusDataDeleted",
+            "type": "string",
+            "message": "The data has been deleted."
+        },
+        {
+            "key": "StatusUserNotExist",
+            "type": "string",
+            "message": "User does not exist."
+        },
+        {
+            "key": "StatusInvalidPassword",
+            "type": "string",
+            "message": "Incorrect password."
+        },
+        {
+            "key": "StatusPasswordDisaccord",
+            "type": "string",
+            "message": "The two entered passwords do not match."
+        },
+        {
+            "key": "StatusUserDisabled",
+            "type": "string",
+            "message": "User account has been disabled."
+        },
+        {
+            "key": "StatusUserLocked",
+            "type": "string",
+            "message": "User account has been locked."
+        },
+        {
+            "key": "StatusOverAuthorization",
+            "type": "string",
+            "message": "The number of users exceeds the maximum authorized limit."
+        },
+        {
+            "key": "StatusRoleNameExist",
+            "type": "string",
+            "message": "Role name already exists."
+        },
+        {
+            "key": "StatusRoleUserExist",
+            "type": "string",
+            "message": "The relationship between the role and the user already exists."
+        },
+        {
+            "key": "StatusRoleAuthExist",
+            "type": "string",
+            "message": "This role has already been assigned permissions."
+        },
+        {
+            "key": "StatusUserCodeExist",
+            "type": "string",
+            "message": "User code already exists."
+        },
+        {
+            "key": "StatusUserNameExist",
+            "type": "string",
+            "message": "User name already exists."
+        },
+        {
+            "key": "StatusUserMobileExist",
+            "type": "string",
+            "message": "User phone number already exists."
+        },
+        {
+            "key": "StatusUserEmailExist",
+            "type": "string",
+            "message": "User email already exists."
+        },
+        {
+            "key": "StatusProfileOnlySelf",
+            "type": "string",
+            "message": "User can only modify their own information."
+        },
+        {
+            "key": "StatusDeptCodeExist",
+            "type": "string",
+            "message": "Department Code already exists."
+        },
+        {
+            "key": "StatusDeptFatherSelf",
+            "type": "string",
+            "message": "The parent department cannot be the department itself."
+        },
+        {
+            "key": "StatusDeptFatherCircle",
+            "type": "string",
+            "message": "Loop detected in parent department hierarchy."
+        },
+        {
+            "key": "StatusDeptLowLevelExist",
+            "type": "string",
+            "message": "Sub-department exists."
+        },
+        {
+            "key": "StatusDeptNotExist",
+            "type": "string",
+            "message": "Department does not exist."
+        },
+        {
+            "key": "StatusCSCNameExist",
+            "type": "string",
+            "message": "Construction site category name exists."
+        },
+        {
+            "key": "StatusCSCFatherSelf",
+            "type": "string",
+            "message": "The parent category cannot be itself."
+        },
+        {
+            "key": "StatusCSCFatherCircle",
+            "type": "string",
+            "message": "Loop detected in parent category hierarchy."
+        },
+        {
+            "key": "StatusCSCLowLevelExist",
+            "type": "string",
+            "message": "Sub-category exist."
+        },
+        {
+            "key": "StatusCSCodeExist",
+            "type": "string",
+            "message": "Construction site code already exists."
+        },
+        {
+            "key": "StatusUDCNameExist",
+            "type": "string",
+            "message": "User-defined category name already exists."
+        },
+        {
+            "key": "StatusUDCodeExist",
+            "type": "string",
+            "message": "User-defined master data code already exists."
+        },
+        {
+            "key": "StatusEPCNameExist",
+            "type": "string",
+            "message": "Execution project category name already exists."
+        },
+        {
+            "key": "StatusEPCFatherSelf",
+            "type": "string",
+            "message": "The parent category cannot be itself."
+        },
+        {
+            "key": "StatusEPCFatherCircle",
+            "type": "string",
+            "message": "Loop detected in parent category hierarchy."
+        },
+        {
+            "key": "StatusEPCLowLevelExist",
+            "type": "string",
+            "message": "Sub-category exists."
+        },
+        {
+            "key": "StatusEPCodeExist",
+            "type": "string",
+            "message": "Execution project code already exists."
+        },
+        {
+            "key": "StatusEPChangeResultType",
+            "type": "string",
+            "message": "Referenced items cannot have their result type modified."
+        },
+        {
+            "key": "StatusEPTCodeExist",
+            "type": "string",
+            "message": "Execution project template code already exists."
+        },
+        {
+            "key": "StatusFileOpenFailed",
+            "type": "string",
+            "message": "Failed to open file."
+        },
+        {
+            "key": "StatusFileUploadFailed",
+            "type": "string",
+            "message": "File upload failed."
+        },
+        {
+            "key": "StatusFileGetUrlFailed",
+            "type": "string",
+            "message": "Failed to get file URL."
+        },
+        {
+            "key": "StatusFileNotExist",
+            "type": "string",
+            "message": "File does not exist."
+        },
+        {
+            "key": "StatusWOOtherEdit",
+            "type": "string",
+            "message": "Work Order has been modified by another user."
+        },
+        {
+            "key": "StatusEOBodyNoConfirm",
+            "type": "string",
+            "message": "There are unconfirmed rows in the execution order body."
+        },
+        {
+            "key": "StatusIssueResolved",
+            "type": "string",
+            "message": "The issue has been resolved."
+        },
+        {
+            "key": "StatusMsgOnlyReadSelf",
+            "type": "string",
+            "message": "Messages can only be read by the recipient themselves."
+        },
+        {
+            "key": "StatusRLNameExist",
+            "type": "string",
+            "message": "Risk level name already exists."
+        },
+        {
+            "key": "StatusDCNameExist",
+            "type": "string",
+            "message": "Document Category name already exists."
+        },
+        {
+            "key": "StatusDCLowLevelExist",
+            "type": "string",
+            "message": "Sub-category exists."
+        },
+        {
+            "key": "StatusDCFatherSelf",
+            "type": "string",
+            "message": "The parent category cannot be itself."
+        },
+        {
+            "key": "StatusDocumentNoFile",
+            "type": "string",
+            "message": "The Document Archive has no attachments."
+        },
+        {
+            "key": "StatusPositionNameExist",
+            "type": "string",
+            "message": "Position name already exists."
+        },
+        {
+            "key": "StatusTCNameExist",
+            "type": "string",
+            "message": "Training Course name already exists."
+        },
+        {
+            "key": "StatusLPPECodeExist",
+            "type": "string",
+            "message": "Personal Protection Equipment code already exists."
+        },
+        {
+            "key": "StatusPQExist",
+            "type": "string",
+            "message": "A labor protection supplies post quota for the same period already exists."
+        },
+        {
+            "key": "StatusUDUsed",
+            "type": "string",
+            "message": "Referenced by User Defined master data."
+        },
+        {
+            "key": "StatusEPUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project master data."
+        },
+        {
+            "key": "StatusEPDefaultUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project default value."
+        },
+        {
+            "key": "StatusEPErrorUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project error value."
+        },
+        {
+            "key": "StatusEPTDefaultUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Template default values."
+        },
+        {
+            "key": "StatusEPTErrorUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Template error values."
+        },
+        {
+            "key": "StatusEPTUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Template."
+        },
+        {
+            "key": "StatusUserUsed",
+            "type": "string",
+            "message": "Referenced by User."
+        },
+        {
+            "key": "StatusDeptLeaderUsed",
+            "type": "string",
+            "message": "Referenced by Department."
+        },
+        {
+            "key": "StatusCSUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site."
+        },
+        {
+            "key": "StatusWOUsed",
+            "type": "string",
+            "message": "Referenced by Work Order."
+        },
+        {
+            "key": "StatusEOUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order."
+        },
+        {
+            "key": "StatusEOValueUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order values."
+        },
+        {
+            "key": "StatusEOErrorUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order error values."
+        },
+        {
+            "key": "StatusIRFUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form."
+        },
+        {
+            "key": "StatusCSRespUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site owner."
+        },
+        {
+            "key": "StatusWOEpUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order executor."
+        },
+        {
+            "key": "StatusEOEpUsed",
+            "type": "string",
+            "message": "Referenced by Execution order head executor."
+        },
+        {
+            "key": "StatusEODpUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order body handler."
+        },
+        {
+            "key": "StatusEOCommentUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order annotator."
+        },
+        {
+            "key": "StatusEOSendToUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order annotation message recipient."
+        },
+        {
+            "key": "StatusEOReviewUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order reviewer."
+        },
+        {
+            "key": "StatusIRFEpUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form executor."
+        },
+        {
+            "key": "StatusIRFDpUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form handler."
+        },
+        {
+            "key": "StatusCSOUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site Options."
+        },
+        {
+            "key": "StatusDocumentUsed",
+            "type": "string",
+            "message": "Referenced by Document."
+        },
+        {
+            "key": "StatusTRUsed",
+            "type": "string",
+            "message": "Referenced by Training Record."
+        },
+        {
+            "key": "StatusWOCreateUsed",
+            "type": "string",
+            "message": "Referenced by Work Order creator."
+        },
+        {
+            "key": "StatusWOModifyUsed",
+            "type": "string",
+            "message": "Referenced by Work Order editor."
+        },
+        {
+            "key": "StatusWOConfirmUsed",
+            "type": "string",
+            "message": "Referenced by Work Order confirmer."
+        },
+        {
+            "key": "StatusEOCreateUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order creator."
+        },
+        {
+            "key": "StatusEOModifyUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order editor."
+        },
+        {
+            "key": "StatusEOConfirmUsed",
+            "type": "string",
+            "message": "Referenced by Execution Order confirmer."
+        },
+        {
+            "key": "StatusIRFCreateUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form creator."
+        },
+        {
+            "key": "StatusIRFModifyUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form editor."
+        },
+        {
+            "key": "StatusIRFConfirmUsed",
+            "type": "string",
+            "message": "Referenced by Issue Resolution Form confirmer."
+        },
+        {
+            "key": "StatusDCCreateUsed",
+            "type": "string",
+            "message": "Referenced by Document Category creator."
+        },
+        {
+            "key": "StatusDCModifyUsed",
+            "type": "string",
+            "message": "Referenced by Document Category editor."
+        },
+        {
+            "key": "StatusDocumentCreateUsed",
+            "type": "string",
+            "message": "Referenced by Document creator."
+        },
+        {
+            "key": "StatusDocumentModifyUsed",
+            "type": "string",
+            "message": "Referenced by Document editor."
+        },
+        {
+            "key": "StatusTCCreateUsed",
+            "type": "string",
+            "message": "Referenced by Training Course creator."
+        },
+        {
+            "key": "StatusTCModifyUsed",
+            "type": "string",
+            "message": "Referenced by Training Course editor."
+        },
+        {
+            "key": "StatusTRLecturerUsed",
+            "type": "string",
+            "message": "Referenced by Training Record speaker."
+        },
+        {
+            "key": "StatusTRStudentUsed",
+            "type": "string",
+            "message": "Referenced by Training Record trainee."
+        },
+        {
+            "key": "StatusTRCreateUsed",
+            "type": "string",
+            "message": "Referenced by Training Record creator."
+        },
+        {
+            "key": "StatusTRModifyUsed",
+            "type": "string",
+            "message": "Referenced by Training Record editor."
+        },
+        {
+            "key": "StatusTRConfirmUsed",
+            "type": "string",
+            "message": "Referenced by Training Record confirmer."
+        },
+        {
+            "key": "StatusPQCreateUsed",
+            "type": "string",
+            "message": "Referenced by PPE Quota creator."
+        },
+        {
+            "key": "StatusPQModifyUsed",
+            "type": "string",
+            "message": "Referenced by PPE Quota editor."
+        },
+        {
+            "key": "StatusPQConfirmUsed",
+            "type": "string",
+            "message": "Referenced by PPE Quota confirmer."
+        },
+        {
+            "key": "StatusPPEIFCreateUsed",
+            "type": "string",
+            "message": "Referenced by PPE Issuance Form creator."
+        },
+        {
+            "key": "StatusPPEIFModifyUsed",
+            "type": "string",
+            "message": "Referenced by PPE Issuance Form editor."
+        },
+        {
+            "key": "StatusPPEIFConfirmUsed",
+            "type": "string",
+            "message": "Referenced by PPE Issuance Form confirmer."
+        },
+        {
+            "key": "StatusPPEIFRecipientUsed",
+            "type": "string",
+            "message": "Referenced by PPE Issuance Form recipient."
+        },
+        {
+            "key": "StatusDeptCreateUsed",
+            "type": "string",
+            "message": "Referenced by Department creator."
+        },
+        {
+            "key": "StatusDeptModifyUsed",
+            "type": "string",
+            "message": "Referenced by Department editor."
+        },
+        {
+            "key": "StatusPositionCreateUsed",
+            "type": "string",
+            "message": "Referenced by Position creator."
+        },
+        {
+            "key": "StatusPositionModifyUsed",
+            "type": "string",
+            "message": "Referenced by Position editor."
+        },
+        {
+            "key": "StatusCSCCreateUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site Category creator."
+        },
+        {
+            "key": "StatusCSCModifyUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site Category editor."
+        },
+        {
+            "key": "StatusCSCreateUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site creator."
+        },
+        {
+            "key": "StatusCSModifyUsed",
+            "type": "string",
+            "message": "Referenced by Construction Site editor."
+        },
+        {
+            "key": "StatusUDCCreateUsed",
+            "type": "string",
+            "message": "Referenced by User-defined Category creator."
+        },
+        {
+            "key": "StatusUDCModifyUsed",
+            "type": "string",
+            "message": "Referenced by User-defined Category editor."
+        },
+        {
+            "key": "StatusUDCreateUsed",
+            "type": "string",
+            "message": "Referenced by User Defined creator."
+        },
+        {
+            "key": "StatusUDModifyUsed",
+            "type": "string",
+            "message": "Referenced by User Defined editor."
+        },
+        {
+            "key": "StatusEPCCreateUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Category creator."
+        },
+        {
+            "key": "StatusEPCModifyUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Category editor."
+        },
+        {
+            "key": "StatusEPCreateUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project creator."
+        },
+        {
+            "key": "StatusEPModifyUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project editor."
+        },
+        {
+            "key": "StatusRLCreateUsed",
+            "type": "string",
+            "message": "Referenced by Risk Level creator."
+        },
+        {
+            "key": "StatusRLModifyUsed",
+            "type": "string",
+            "message": "Referenced by Risk Level editor."
+        },
+        {
+            "key": "StatusPPECreateUsed",
+            "type": "string",
+            "message": "Referenced by Personal Protection Equipment creator."
+        },
+        {
+            "key": "StatusPPEModifyUsed",
+            "type": "string",
+            "message": "Referenced by Personal Protection Equipment Archive editor."
+        },
+        {
+            "key": "StatusEPTCreateUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Template creator."
+        },
+        {
+            "key": "StatusEPTModifyUsed",
+            "type": "string",
+            "message": "Referenced by Execution Project Template editor."
+        },
+        {
+            "key": "StatusUserCreateUsed",
+            "type": "string",
+            "message": "Referenced by User creator."
+        },
+        {
+            "key": "StatusUserModifyUsed",
+            "type": "string",
+            "message": "Referenced by User Archive editor."
+        },
+        {
+            "key": "StatusRoleCreateUsed",
+            "type": "string",
+            "message": "Referenced by Role creator."
+        },
+        {
+            "key": "StatusRoleModifyUsed",
+            "type": "string",
+            "message": "Referenced by Role editor."
+        },
+        {
+            "key": "StatusTRDeptUsed",
+            "type": "string",
+            "message": "Referenced by the department field of the Training Records document."
+        },
+        {
+            "key": "StatusPPEIFDeptUsed",
+            "type": "string",
+            "message": "Referenced by the issuing department in the PPE Issuance Form."
+        },
+        {
+            "key": "StatusErrorUnknown",
+            "type": "string",
+            "message": "Unknown error."
+        },
+        {
+            "key": "StatusResCodeError",
+            "type": "string",
+            "message": "Response error."
+        },
+        {
+            "key": "StatusInternalError",
+            "type": "string",
+            "message": "Internal server error."
+        },
+        {
+            "key": "StatusResReject",
+            "type": "string",
+            "message": "Access denied by server."
+        },
+        {
+            "key": "StatusResNoData",
+            "type": "string",
+            "message": "No data."
+        },
+        {
+            "key": "StatusOverRecord",
+            "type": "string",
+            "message": "The number of records exceeds the maximum limit."
+        },
+        {
+            "key": "StatusVoucherNoBody",
+            "type": "string",
+            "message": "Transactional Document body is empty."
+        },
+        {
+            "key": "StatusVoucherNoFree",
+            "type": "string",
+            "message": "Transactional Document is not in a free state."
+        },
+        {
+            "key": "StatusVoucherOnlyCreateEdit",
+            "type": "string",
+            "message": "Only the Transactional Document creator can modify the document."
+        },
+        {
+            "key": "StatusVoucherNoConfirm",
+            "type": "string",
+            "message": "Transactional Document status is not confirmed."
+        },
+        {
+            "key": "StatusVoucherCancelConfirmSelf",
+            "type": "string",
+            "message": "Only the confirmer of the Transactional Document can cancel the document confirmation."
         },
         {
             "key": "hasApple",
