@@ -28,6 +28,39 @@ type MenuItem struct {
 	Children []MenuItem `json:"children"`
 }
 
+// initialize sysmenu table
+func initSysMenu() (isFinish bool, err error) {
+	// Step 1: Check if a record exists for the sysmenu table
+	sqlStr := "select count(id) as rownum from sysmenu where dr=0"
+	hasRecord, isFinish, err := genericCheckRecord("sysmenu", sqlStr)
+	// Step 2: Exit if the record exists or an error occurs
+	if hasRecord || !isFinish || err != nil {
+		return
+	}
+	// Step 3: Prepare to insert system menus into the sysmenu table.
+	sqlStr = `insert into sysmenu(id,fatherid,title,path,icon,
+		component,selected,indeterminate) 
+		values($1,$2,$3,$4,$5,
+		$6,$7,$8)`
+	stmt, err := db.Prepare(sqlStr)
+	if err != nil {
+		isFinish = false
+		zap.L().Error("initSysMenu db.Prepare failed:", zap.Error(err))
+		return isFinish, err
+	}
+	defer stmt.Close()
+	// Step 4: Write system menu data entry by entry
+	for _, menu := range SysFunctionList {
+		_, err = stmt.Exec(menu.ID, menu.FatherID, menu.Title, menu.Path, menu.Icon, menu.Component, menu.Selected, menu.Indeterminate)
+		if err != nil {
+			isFinish = false
+			zap.L().Error("initSysMenu Failed to write the "+string(menu.Title)+" menu to the sysmenu table:", zap.Error(err))
+			return isFinish, err
+		}
+	}
+	return
+}
+
 // Generate Menu Tree
 func (m *SystemMenus) ProcessToTree(pid int32, level int32) []MenuItem {
 	var menuTree []MenuItem

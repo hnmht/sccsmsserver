@@ -53,7 +53,7 @@ var SoftInfo ServerSoftInfo = ServerSoftInfo{
 const CacheExpiration = 2 * time.Hour
 
 // New user default password
-const DefaultPassword = "sc@123"
+const DefaultPassword string = "sc@123"
 
 // Database Schema version
 const DbVersion = "1.0.0"
