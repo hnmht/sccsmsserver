@@ -4,7 +4,6 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"go.uber.org/zap"
 	"golang.org/x/text/feature/plural"
@@ -57,7 +56,13 @@ var SupportLanguages []SystemLanguage = []SystemLanguage{
 // Default language message printer
 var defaultPrinter *message.Printer
 
+// Language message printers map
+var printers map[string]*message.Printer
+
 func InitTranslators() (err error) {
+	//Initialize printerMap
+	printers = make(map[string]*message.Printer, len(SupportLanguages))
+
 	for _, lang := range SupportLanguages {
 		// Read translation file content
 		file, err := transFile.Open("translations/" + lang.FileName)
@@ -100,16 +105,11 @@ func InitTranslators() (err error) {
 		if lang.Default {
 			defaultPrinter = p
 		}
+		// assign a value to the printers
+		printers[lang.Language] = p
 		// Close the file
 		file.Close()
 	}
-
-	fmt.Println(StatusCSCNameExist.Msg("en-US"))
-	fmt.Println(StatusCSCNameExist.Msg("zh-Hans"))
-	fmt.Println(StatusCSCNameExist.Msg("fr"))
-	fmt.Println(StatusCSCNameExist.Msg("es-ES"))
-	fmt.Println(StatusCSCNameExist.Msg("pt-PT"))
-
 	return
 }
 
@@ -120,9 +120,12 @@ func (r ResKey) String() string {
 
 // Type Reskey to Msg
 func (r ResKey) Msg(lang string, params ...interface{}) (result string) {
-	tag := language.MustParse(lang)
-	p1 := message.NewPrinter(tag)
-	result = p1.Sprintf(r.String(), params...)
+	p, ok := printers[lang]
+	if !ok {
+		result = defaultPrinter.Sprintf(r.String(), params...)
+	} else {
+		result = p.Sprintf(r.String(), params...)
+	}
 	if result == "" {
 		result = defaultPrinter.Sprintf(r.String(), params...)
 	}

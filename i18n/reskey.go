@@ -3,15 +3,16 @@ package i18n
 const (
 	// System Message
 	CodeSuccess       ResKey = "CodeSuccess"
+	CodeInvalidToken  ResKey = "CodeInvalidToken"
+	CodeNeedLogin     ResKey = "CodeNeedLogin"
+	CodeTokenDestroy  ResKey = "CodeTokenDestroy"
+	CodeLoginOther    ResKey = "CodeLoginOther"
 	CodeInvalidParm   ResKey = "CodeInvalidParm"
 	CodeServerBusy    ResKey = "CodeServerBusy"
 	CodeInternalError ResKey = "CodeInternalError"
-	CodeInvalidToken  ResKey = "CodeInvalidToken"
-	CodeNeedLogin     ResKey = "CodeNeedLogin"
 	CodeClientUnknown ResKey = "CodeClientUnknown"
 	CodeClientEmpty   ResKey = "CodeClientEmpty"
-	CodeTokenDestroy  ResKey = "CodeTokenDestroy"
-	CodeLoginOther    ResKey = "CodeLoginOther"
+
 	// Menu Name
 	MenuDashboard      ResKey = "MenuDashboard"
 	MenuCalendar       ResKey = "MenuCalendar"

@@ -17,7 +17,7 @@ func initSysUser() (isFinish bool, err error) {
 	if hasRecord || !isFinish || err != nil {
 		return
 	}
-	// Step 3: Insert a record for the system default user 'admin' into the sysuser tabel.
+	// Step 3: Insert a record for the system default user 'admin' into the sysuser table.
 	sqlStr = `insert into sysuser(id,username,password,createtime,description,
 		systemflag,usercode,createuserid) 
 		values(10000,'admin',$1,now(),'System default',
