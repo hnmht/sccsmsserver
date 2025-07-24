@@ -16,6 +16,6 @@ func AuthRoute(g *gin.RouterGroup) {
 		//注销登录
 		authGroup.POST("/logout", middleware.JWTAuthMiddleware(), control.LogoutHandler) */
 		//Rsa public key
-		authGroup.POST("/publickey", handlers.GetPublicKeyHandler)
+		authGroup.POST("/publickey1", handlers.GetPublicKeyHandler)
 	}
 }

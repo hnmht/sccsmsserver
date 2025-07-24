@@ -11,5 +11,6 @@ func PubRoute(g *gin.RouterGroup) {
 	{
 		//
 		pubGroup.POST("/sysinfo", handlers.PubSystemInformationHandler)
+
 	}
 }

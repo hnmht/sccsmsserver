@@ -2,78 +2,48 @@ package ui
 
 import (
 	"embed"
-	"fmt"
 	"io/fs"
 	"net/http"
+	"sccsmsserver/pub"
 	"strings"
 
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-//go:embed build
-var staticFS embed.FS
+//go:embed build/*
+var embeddedFiles embed.FS
 
-func AddRoutes(router gin.IRouter) {
-	embeddedBuildFolder := newStaticFileSystem()
-	fallbackFileSystem := newFallbackFileSystem(embeddedBuildFolder)
-	router.Use(static.Serve("/", embeddedBuildFolder))
-	router.Use(static.Serve("/", fallbackFileSystem))
-}
-
-// staticFileSystem serves files out of the embedded build folder
-type staticFileSystem struct {
-	http.FileSystem
-}
-
-var _ static.ServeFileSystem = (*staticFileSystem)(nil)
-
-func newStaticFileSystem() *staticFileSystem {
-	sub, err := fs.Sub(staticFS, "build")
-
+func AddRoutes(router *gin.Engine) {
+	// 获取 build 子目录
+	buildFS, err := fs.Sub(embeddedFiles, "build")
 	if err != nil {
-		panic(err)
+		zap.L().Error("AddRoutes fs.Sub failed:", zap.Error(err))
+		return
 	}
+	// 静态资源路径，例如 /static/js/main.js
+	router.StaticFS("/", http.FS(buildFS))
+	// fallback 所有非 /api/* 路由到 index.html
+	router.NoRoute(func(c *gin.Context) {
+		if strings.HasPrefix(c.Request.URL.Path, pub.GlobePath) {
+			c.JSON(http.StatusNotFound, gin.H{
+				"msg": "404 API endpoint not found",
+			})
+			return
+		}
+		file, err := buildFS.Open("index.html")
+		if err != nil {
+			c.String(http.StatusInternalServerError, "index.html not found")
+			return
+		}
+		defer file.Close()
 
-	return &staticFileSystem{
-		FileSystem: http.FS(sub),
-	}
-}
-
-func (s *staticFileSystem) Exists(prefix string, path string) bool {
-	buildpath := fmt.Sprintf("build%s", path)
-
-	// support for folders
-	if strings.HasSuffix(path, "/") {
-		_, err := staticFS.ReadDir(strings.TrimSuffix(buildpath, "/"))
-		return err == nil
-	}
-
-	// support for files
-	f, err := staticFS.Open(buildpath)
-	if f != nil {
-		_ = f.Close()
-	}
-	return err == nil
-}
-
-// fallbackFileSystem wraps a staticFileSystem and always serves /index.html
-type fallbackFileSystem struct {
-	staticFileSystem *staticFileSystem
-}
-
-var _ static.ServeFileSystem = (*fallbackFileSystem)(nil)
-var _ http.FileSystem = (*fallbackFileSystem)(nil)
-
-func newFallbackFileSystem(staticFileSystem *staticFileSystem) *fallbackFileSystem {
-	return &fallbackFileSystem{
-		staticFileSystem: staticFileSystem,
-	}
-}
-func (f *fallbackFileSystem) Open(path string) (http.File, error) {
-	return f.staticFileSystem.Open("/index.html")
-}
-
-func (f *fallbackFileSystem) Exists(prefix string, path string) bool {
-	return true
+		stat, err := file.Stat()
+		if err != nil {
+			zap.L().Error("AddRoutes file.Stat failed:", zap.Error(err))
+			c.String(http.StatusInternalServerError, "Failed to get index.html info")
+			return
+		}
+		c.DataFromReader(http.StatusOK, stat.Size(), "text/html", file, nil)
+	})
 }

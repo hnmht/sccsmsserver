@@ -120,14 +120,15 @@ func (r ResKey) String() string {
 
 // Type Reskey to Msg
 func (r ResKey) Msg(lang string, params ...interface{}) (result string) {
+	rs := r.String()
 	p, ok := printers[lang]
 	if !ok {
-		result = defaultPrinter.Sprintf(r.String(), params...)
+		result = defaultPrinter.Sprintf(rs, params...)
 	} else {
-		result = p.Sprintf(r.String(), params...)
+		result = p.Sprintf(rs, params...)
 	}
-	if result == "" {
-		result = defaultPrinter.Sprintf(r.String(), params...)
+	if result == rs {
+		result = defaultPrinter.Sprintf(rs, params...)
 	}
 	return
 }

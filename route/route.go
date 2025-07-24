@@ -1,7 +1,6 @@
 package route
 
 import (
-	"net/http"
 	"sccsmsserver/logger"
 	"sccsmsserver/pub"
 	"sccsmsserver/ui"
@@ -51,16 +50,12 @@ func Setup(mode string) *gin.Engine {
 		// UDDRoute(superGroup)       //udd用户自定义档案
 		// UserRoute(superGroup)      //user用户
 		// WORoute(superGroup)        //wo指令单
+
 	}
 	//ping
 	// r.POST("/ping", control.PubServerPing)
 	// Monolithic application
 	ui.AddRoutes(r)
 
-	r.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "404 找不到网页",
-		})
-	})
 	return r
 }
