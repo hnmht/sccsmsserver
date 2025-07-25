@@ -19,8 +19,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const secret = "Sea&Cloud"
-
 // ParamLogin 用户登录请求参数
 type ParamLogin struct {
 	UserCode   string `json:"usercode" binding:"required"`
