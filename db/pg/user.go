@@ -4,9 +4,38 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"sccsmsserver/pub"
+	"time"
 
 	"go.uber.org/zap"
 )
+
+// User 定义用户对象
+type User struct {
+	UserID     int32  `db:"id" json:"id"`
+	UserCode   string `db:"usercode" json:"code"`
+	Username   string `db:"username" json:"name"`
+	Password   string `db:"password" json:"password"`
+	Mobile     string `db:"mobile" json:"mobile"`
+	Email      string `db:"email" json:"email"`
+	IsOperator int16  `db:"isoperator" json:"isoperator"`
+	// OperatingPost OperatingPost `db:"op_id" json:"operatingpost"` //工作岗位
+	Avatar File `db:"file_id" json:"avatar"`
+	// Dept          SimpDept      `db:"dept_id" json:"department"`
+	Description string      `db:"description" json:"description"`
+	Gender      int16       `db:"gender" json:"gender"`
+	Locked      int16       `db:"locked" json:"locked"`
+	Status      int16       `db:"status" json:"status"`
+	SystemFlag  int16       `db:"systemflag" json:"systemflag"`
+	MenuList    SystemMenus `json:"menulist"`
+	Roles       []Role      `json:"roles"`
+	Person      Person      `json:"person"`
+	CreateDate  time.Time   `db:"create_time" json:"createdate"`
+	CreateUser  Person      `db:"createuserid" json:"createuser"`
+	ModifyDate  time.Time   `db:"modify_time" json:"modifydate"`
+	ModifyUser  Person      `db:"modifyuserid" json:"modifyuser"`
+	Dr          int16       `db:"dr" json:"dr"` //删除标志
+	Ts          time.Time   `db:"ts" json:"ts"`
+}
 
 // Initialize user table
 func initSysUser() (isFinish bool, err error) {

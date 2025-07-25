@@ -1,10 +1,11 @@
 package pub
 
 const (
-	CTXUserID   = "userid"
-	CTXUserCode = "usercode"
-	CTXTokenID  = "tokenid"
+	CTXUserID     = "userID"
+	CTXUserCode   = "userCode"
+	CTXTokenID    = "tokenID"
+	CTXClientType = "clientType"
 )
 
 // Global API service path
-const GlobePath = "/api/v1"
+const APIPath = "/api/v1"

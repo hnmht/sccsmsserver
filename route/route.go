@@ -16,7 +16,7 @@ func Setup(mode string) *gin.Engine {
 	r.Use(Cors()) //允许浏览器跨域
 	// r.Use(IpBlackListMiddleWare()) //Ip黑名单
 	//全局路径
-	superGroup := r.Group(pub.GlobePath)
+	superGroup := r.Group(pub.APIPath)
 	{
 		AuthRoute(superGroup) //auth权限
 		// DashboardRoute(superGroup) //看板数据

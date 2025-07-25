@@ -25,7 +25,7 @@ func AddRoutes(router *gin.Engine) {
 	router.StaticFS("/", http.FS(buildFS))
 	// fallback 所有非 /api/* 路由到 index.html
 	router.NoRoute(func(c *gin.Context) {
-		if strings.HasPrefix(c.Request.URL.Path, pub.GlobePath) {
+		if strings.HasPrefix(c.Request.URL.Path, pub.APIPath) {
 			c.JSON(http.StatusNotFound, gin.H{
 				"msg": "404 API endpoint not found",
 			})

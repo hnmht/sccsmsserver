@@ -1,14 +1,14 @@
 package pg
 
 import (
-	"sccsmsserver/pub"
+	"sccsmsserver/i18n"
 )
 
 // Data references check struct
 type DataReferenceCheck struct {
 	Description    string
 	SqlStr         string
-	UsedReturnCode pub.ResStatus
+	UsedReturnCode i18n.ResKey
 }
 
 // Data query conditions

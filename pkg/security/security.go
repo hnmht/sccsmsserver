@@ -1,6 +1,7 @@
 package security
 
 import (
+	"bytes"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -84,4 +85,35 @@ func GenRsaKey(bits int) (private string, public string, err error) {
 	}
 	public = string(pem.EncodeToMemory(block))
 	return
+}
+
+/**
+ * 解密
+ */
+func (thisRsa *Rsa) Decrypt(secretData []byte) ([]byte, error) {
+	blockLength := thisRsa.rsaPublicKey.N.BitLen() / 8
+	if len(secretData) <= blockLength {
+		return rsa.DecryptPKCS1v15(rand.Reader, thisRsa.rsaPrivateKey, secretData)
+	}
+
+	buffer := bytes.NewBufferString("")
+
+	pages := len(secretData) / blockLength
+	for index := 0; index <= pages; index++ {
+		start := index * blockLength
+		end := (index + 1) * blockLength
+		if index == pages {
+			if start == len(secretData) {
+				continue
+			}
+			end = len(secretData)
+		}
+
+		chunk, err := rsa.DecryptPKCS1v15(rand.Reader, thisRsa.rsaPrivateKey, secretData[start:end])
+		if err != nil {
+			return nil, err
+		}
+		buffer.Write(chunk)
+	}
+	return buffer.Bytes(), nil
 }

@@ -90,3 +90,6 @@ const (
 	PPE        DataType = "ppe"        // Personal Protective Equipment
 	IPBlack    DataType = "ipblack"    // IP Address Blacklist
 )
+
+// Valid values for the "clientType" request header
+var ValidClientTypes = [2]string{"sceneweb", "scenemob"}
