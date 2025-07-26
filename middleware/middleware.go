@@ -72,9 +72,9 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		}
 
 		//parts[1]是获取到的tokenString, 使用JWT解析函数进行解析
-		mc, err := jwt.ParseToken(parts[1])
-		if err != nil {
-			handlers.ResponseWithMsg(c, i18n.CodeInvalidToken, nil)
+		mc, resStaus := jwt.ParseToken(parts[1])
+		if resStaus != i18n.StatusOK {
+			handlers.ResponseWithMsg(c, resStaus, nil)
 			c.Abort()
 			return
 		}

@@ -51,7 +51,7 @@ func initSysUser() (isFinish bool, err error) {
 		systemflag,code,creatorid) 
 		values(10000,'admin',$1,now(),'System default',
 		1,'admin',10000)`
-	_, err = db.Exec(sqlStr, EncryptPassword(pub.DefaultPassword))
+	_, err = db.Exec(sqlStr, encryptPassword(pub.DefaultPassword))
 	if err != nil {
 		isFinish = false
 		zap.L().Error("initSysUser db.Exec failed:", zap.Error(err))
@@ -61,7 +61,7 @@ func initSysUser() (isFinish bool, err error) {
 }
 
 // encryptPassword 加密密码
-func EncryptPassword(oPassword string) string {
+func encryptPassword(oPassword string) string {
 	h := md5.New()
 	h.Write([]byte(pub.Secret))
 

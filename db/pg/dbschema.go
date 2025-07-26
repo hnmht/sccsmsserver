@@ -68,7 +68,7 @@ var tables []table = []table{
 		CreateSQL: `
 			create table sysrole (
 			id serial NOT NULL,
-			rolename varchar(64) not null,
+			name varchar(64) not null,
 			description varchar(256),
 			systemflag smallint DEFAULT 0,
 			alluserflag smallint DEFAULT 0,
@@ -377,7 +377,7 @@ var tables []table = []table{
 		TableName:   "epc",
 		Description: "Execution Project Category Master Data",
 		CreateSQL: `
-			create table exectiveitemclass (
+			create table epc (
 			id serial NOT NUll,
 			classname varchar(128),
 			description varchar(256),
@@ -424,10 +424,10 @@ var tables []table = []table{
 			PRIMARY KEY(id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       genericInitTable,
+		InitFunc:       initEP,
 	},
 	{
-		TableName:   "epth",
+		TableName:   "ept_h",
 		Description: "Execution Project Template Header",
 		CreateSQL: `
 			create table ept_h (

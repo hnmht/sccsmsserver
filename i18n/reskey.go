@@ -2,7 +2,7 @@ package i18n
 
 const (
 	// System Message
-	CodeSuccess       ResKey = "CodeSuccess"
+	// CodeSuccess       ResKey = "CodeSuccess"
 	CodeInvalidToken  ResKey = "CodeInvalidToken"
 	CodeNeedLogin     ResKey = "CodeNeedLogin"
 	CodeTokenDestroy  ResKey = "CodeTokenDestroy"
@@ -101,7 +101,7 @@ const (
 	StatusCSCodeExist ResKey = "StatusCSCodeExist"
 	// User-defined Category (10700-10799)
 	StatusUDCNameExist ResKey = "StatusUDCNameExist"
-	//  User-defined Data (10800-10899)
+	// User-defined Data (10800-10899)
 	StatusUDCodeExist ResKey = "StatusUDCodeExist"
 	// Execution Project Category (10900-10999)
 	StatusEPCNameExist     ResKey = "StatusEPCNameExist"

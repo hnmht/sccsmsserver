@@ -30,7 +30,8 @@ func initPosition() (isFinish bool, err error) {
 		return
 	}
 	// Step 3: Insert a record for the system default positon "Default position" into the position table.
-	sqlStr = "insert into position(id,name,description,creatorid) values(10000,'Default position','System default position',10000)"
+	sqlStr = `insert into position(id,name,description,creatorid) 
+	values(10000,'Default position','System pre-set position',10000)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
 		isFinish = false

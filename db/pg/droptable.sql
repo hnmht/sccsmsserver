@@ -5,4 +5,15 @@ drop table if exists sysuser cascade;
 drop table if exists sysuserrole cascade;
 drop table if exists sysrolemenu cascade;
 drop table if exists sysloginfault cascade;
-
+drop table if exists filelist cascade;
+drop table if exists department cascade;
+drop table if exists position cascade;
+drop table if exists csc cascade;
+drop table if exists cs cascade;
+drop table if exists cso cascade;
+drop table if exists udc cascade;
+drop table if exists ud cascade;
+drop table if exists epc cascade;
+drop table if exists ep cascade;
+drop table if exists ept_h cascade;
+drop table if exists ept_b cascade;

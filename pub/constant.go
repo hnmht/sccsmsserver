@@ -49,9 +49,6 @@ var SoftInfo ServerSoftInfo = ServerSoftInfo{
 	Author:          "Haitao Meng",
 }
 
-// Cache expiration time
-const CacheExpiration = 2 * time.Hour
-
 // New user default password
 const DefaultPassword string = "sc@123"
 
@@ -60,6 +57,9 @@ const DbVersion = "1.0.0"
 
 // Md5 secret
 const Secret = "Sea&Cloud comes from a character in both my wife's and my names."
+
+// JWT secret
+var TokenSecret = []byte("This is JWT secret")
 
 // Master Data Type
 const (
@@ -93,3 +93,15 @@ const (
 
 // Valid values for the "clientType" request header
 var ValidClientTypes = [2]string{"sceneweb", "scenemob"}
+
+// Minio File URL expiration time
+const FileURLExpireTime = 24 * time.Hour
+
+// Cache expiration time
+const CacheExpiration = 2 * time.Hour
+
+// Token Expire Duration
+const TokenExpireDuration = 2 * time.Hour
+
+// Token Issuer
+const TokenIssuer = "SeaCloud"

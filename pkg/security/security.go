@@ -50,16 +50,14 @@ func (thisRsa *Rsa) init() {
 	zap.L().Info("RSA component initialized successfully.")
 }
 
-/**
- * 发布publicKey
- */
+// Publish Public Key
 func (thisRsa *Rsa) GetPublicKey() string {
 	return thisRsa.publicKey
 }
 
-// 生成公钥、私钥文件
+// Generate RSA Private and Public Keys
 func GenRsaKey(bits int) (private string, public string, err error) {
-	// 生成私钥文件
+	// Generate Private Key
 	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		zap.L().Error("GenRsaKey PrivateKey failed", zap.Error(err))
@@ -72,7 +70,7 @@ func GenRsaKey(bits int) (private string, public string, err error) {
 	}
 	private = string(pem.EncodeToMemory(block))
 
-	// 生成公钥文件
+	// Generate Public Key
 	publicKey := &privateKey.PublicKey
 	derPkix, err := x509.MarshalPKIXPublicKey(publicKey)
 	if err != nil {
@@ -87,9 +85,7 @@ func GenRsaKey(bits int) (private string, public string, err error) {
 	return
 }
 
-/**
- * 解密
- */
+// Decrypt
 func (thisRsa *Rsa) Decrypt(secretData []byte) ([]byte, error) {
 	blockLength := thisRsa.rsaPublicKey.N.BitLen() / 8
 	if len(secretData) <= blockLength {

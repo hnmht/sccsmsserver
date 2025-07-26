@@ -1,7 +1,8 @@
 package jwt
 
 import (
-	"errors"
+	"sccsmsserver/i18n"
+	"sccsmsserver/pub"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,51 +15,42 @@ type MyClaims struct {
 	jwt.StandardClaims
 }
 
-var ErrorInvalidToken = errors.New("无效Token")
-
-const TokenExpireDuration = time.Hour * 2
-
-var mySercet = []byte("这是一个加密密码")
-
-// GenToken 生成JWT
+// Generate token
 func GenToken(userID int32, usercode string, tokenID string) (tokenString string, expireTime int64, err error) {
-	expireTime = time.Now().Add(TokenExpireDuration).Unix()
-	//解析token
+	expireTime = time.Now().Add(pub.TokenExpireDuration).Unix()
 	c := MyClaims{
 		UserID:   userID,
 		UserCode: usercode,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expireTime, // 过期时间
-			Issuer:    "seacloud", //签发人
-			Id:        tokenID,    //token ID
+			ExpiresAt: expireTime,
+			Issuer:    pub.TokenIssuer,
+			Id:        tokenID,
 		},
 	}
-	//使用指定的签名方法创建签名对象
+	// create signature object
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
-	//转换
-	tokenString, err = token.SignedString(mySercet)
-
+	// signed token
+	tokenString, err = token.SignedString(pub.TokenSecret)
 	if err != nil {
 		zap.L().Error("GenToken token.SignedString failed:", zap.Error(err))
 	}
 	return
 }
 
-// ParseToken 解析jwt
-func ParseToken(tokenString string) (*MyClaims, error) {
-	//解析token
+// Parse Token
+func ParseToken(tokenString string) (*MyClaims, i18n.ResKey) {
 	var mc = new(MyClaims)
 	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (i interface{}, err error) {
-		return mySercet, nil
+		return pub.TokenSecret, nil
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, i18n.CodeInternalError
 	}
 
 	if token.Valid {
-		return mc, nil
+		return mc, i18n.StatusOK
 	}
 
-	return nil, ErrorInvalidToken
+	return nil, i18n.CodeInvalidToken
 }

@@ -9,5 +9,5 @@ import (
 
 // Publish system public information
 func PubSystemInformationHandler(c *gin.Context) {
-	ResponseWithMsg(c, i18n.CodeSuccess, pg.ServerPubInfo)
+	ResponseWithMsg(c, i18n.StatusOK, pg.ServerPubInfo)
 }

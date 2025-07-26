@@ -122,6 +122,7 @@ func (r ResKey) String() string {
 func (r ResKey) Msg(lang string, params ...interface{}) (result string) {
 	rs := r.String()
 	p, ok := printers[lang]
+
 	if !ok {
 		result = defaultPrinter.Sprintf(rs, params...)
 	} else {

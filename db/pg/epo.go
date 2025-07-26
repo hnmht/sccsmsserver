@@ -1,5 +1,5 @@
 package pg
 
-func initEPO() (isFinish bool, err error) {
+/* func initEPO() (isFinish bool, err error) {
 	return
-}
+} */

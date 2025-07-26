@@ -8,7 +8,7 @@ import (
 )
 
 func GetCurrentUser(c *gin.Context) (userID int32, resStatus i18n.ResKey) {
-	resStatus = i18n.CodeSuccess
+	resStatus = i18n.StatusOK
 	uid, ok := c.Get(pub.CTXUserID)
 	if !ok {
 		resStatus = i18n.CodeNeedLogin

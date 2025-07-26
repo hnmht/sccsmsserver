@@ -8,25 +8,23 @@ import (
 	"go.uber.org/zap"
 )
 
-// LoginHandler 用户登录
+// User login handler
 func LoginHandler(c *gin.Context) {
-	//获取请求参数及校验
+	// Step 1: Get request parameters
 	p := new(pg.ParamLogin)
 	if err := c.ShouldBind(p); err != nil {
-		//请求参数有误，记录日志并返回响应
 		zap.L().Error("Login with invalid param", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//补充ParamLogin内容
+	// Provde additional login information
 	p.ClientIP = c.ClientIP()
 	p.ClientType = c.Request.Header.Get("XClientType")
 	p.UserAgent = c.Request.UserAgent()
 
-	//登录
+	// User login validation
 	resStatus, token, _ := pg.Login(p)
 
-	//返回响应
+	// Respond to client request
 	ResponseWithMsg(c, resStatus, token)
 }
