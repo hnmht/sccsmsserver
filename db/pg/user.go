@@ -11,29 +11,29 @@ import (
 
 // User 定义用户对象
 type User struct {
-	UserID     int32  `db:"id" json:"id"`
-	UserCode   string `db:"usercode" json:"code"`
-	Username   string `db:"username" json:"name"`
-	Password   string `db:"password" json:"password"`
-	Mobile     string `db:"mobile" json:"mobile"`
-	Email      string `db:"email" json:"email"`
-	IsOperator int16  `db:"isoperator" json:"isoperator"`
-	// OperatingPost OperatingPost `db:"op_id" json:"operatingpost"` //工作岗位
-	Avatar File `db:"file_id" json:"avatar"`
-	// Dept          SimpDept      `db:"dept_id" json:"department"`
+	ID          int32       `db:"id" json:"id"`
+	Code        string      `db:"code" json:"code"`
+	Name        string      `db:"name" json:"name"`
+	Password    string      `db:"password" json:"password"`
+	Mobile      string      `db:"mobile" json:"mobile"`
+	Email       string      `db:"email" json:"email"`
+	IsOperator  int16       `db:"isoperator" json:"isOperator"`
+	Position    Position    `db:"positionid" json:"position"`
+	Avatar      File        `db:"fileid" json:"avatar"`
+	Dept        SimpDept    `db:"deptid" json:"department"`
 	Description string      `db:"description" json:"description"`
 	Gender      int16       `db:"gender" json:"gender"`
 	Locked      int16       `db:"locked" json:"locked"`
 	Status      int16       `db:"status" json:"status"`
-	SystemFlag  int16       `db:"systemflag" json:"systemflag"`
-	MenuList    SystemMenus `json:"menulist"`
+	SystemFlag  int16       `db:"systemflag" json:"systemFlag"`
+	MenuList    SystemMenus `json:"menuList"`
 	Roles       []Role      `json:"roles"`
 	Person      Person      `json:"person"`
-	CreateDate  time.Time   `db:"create_time" json:"createdate"`
-	CreateUser  Person      `db:"createuserid" json:"createuser"`
-	ModifyDate  time.Time   `db:"modify_time" json:"modifydate"`
-	ModifyUser  Person      `db:"modifyuserid" json:"modifyuser"`
-	Dr          int16       `db:"dr" json:"dr"` //删除标志
+	CreateDate  time.Time   `db:"createtime" json:"createDate"`
+	Creator     Person      `db:"creatorid" json:"creator"`
+	ModifyDate  time.Time   `db:"modifytime" json:"modifyDate"`
+	Modifier    Person      `db:"modifierid" json:"modifier"`
+	Dr          int16       `db:"dr" json:"dr"`
 	Ts          time.Time   `db:"ts" json:"ts"`
 }
 
@@ -47,8 +47,8 @@ func initSysUser() (isFinish bool, err error) {
 		return
 	}
 	// Step 3: Insert a record for the system default user 'admin' into the sysuser table.
-	sqlStr = `insert into sysuser(id,username,password,createtime,description,
-		systemflag,usercode,createuserid) 
+	sqlStr = `insert into sysuser(id,name,password,createtime,description,
+		systemflag,code,creatorid) 
 		values(10000,'admin',$1,now(),'System default',
 		1,'admin',10000)`
 	_, err = db.Exec(sqlStr, EncryptPassword(pub.DefaultPassword))

@@ -1,5 +1,38 @@
 package pg
 
+import "time"
+
+// Department Master Data
+type Department struct {
+	ID          int32     `db:"id" json:"id"`
+	Code        string    `db:"code" json:"code"`
+	Name        string    `db:"name" json:"name"`
+	FatherID    SimpDept  `db:"deptparent" json:"fatherid"` //上级部门
+	Leader      Person    `db:"leader" json:"leader"`
+	Description string    `db:"description" json:"description"`
+	Status      int16     `db:"status" json:"status"`
+	CreateDate  time.Time `db:"createtime" json:"createdate"`
+	Creator     Person    `db:"creatorid" json:"creator"`
+	Modifier    Person    `db:"modifierid" json:"modifier"`
+	ModifyDate  time.Time `db:"modify_time" json:"modifydate"`
+	Ts          time.Time `db:"ts" json:"ts"`
+	Dr          int16     `db:"dr" json:"dr"` //删除标志
+}
+
+// Simplify Department Struct
+type SimpDept struct {
+	ID          int32     `db:"id" json:"id"`
+	Code        string    `db:"deptcode" json:"code"`
+	Name        string    `db:"deptname" json:"name"`
+	FatherID    int32     `db:"fatherid" json:"fatherid"`
+	Leader      Person    `db:"leader" json:"leader"`
+	Description string    `db:"description" json:"description"`
+	Status      int16     `db:"status" json:"status"`
+	CreateDate  time.Time `db:"create_time" json:"createdate"`
+	Ts          time.Time `db:"ts" json:"ts"`
+	Dr          int16     `db:"dr" json:"dr"` //删除标志
+}
+
 // 部门档案表初始化
 func initDepartment() (isFinish bool, err error) {
 	//检查部门档案表中是否存在记录

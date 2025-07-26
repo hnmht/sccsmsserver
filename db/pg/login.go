@@ -63,14 +63,14 @@ func Login(p *ParamLogin) (resStatus i18n.ResKey, token string, err error) {
 	p.Password = string(oriPassword)
 
 	user := &User{
-		UserCode: p.UserCode,
+		Code:     p.UserCode,
 		Password: p.Password,
 	}
 	oPassword := user.Password //用户登录时的密码
 
 	//检查用户是否存在
 	sqlStr := "select id,password,status,locked from sysuser where usercode = $1 and dr=0 and isoperator=1 limit 1"
-	err = db.QueryRow(sqlStr, user.UserCode).Scan(&user.UserID, &user.Password, &user.Status, &user.Locked)
+	err = db.QueryRow(sqlStr, user.Code).Scan(&user.ID, &user.Password, &user.Status, &user.Locked)
 	if err != nil && err != sql.ErrNoRows {
 		resStatus = i18n.CodeInternalError
 		zap.L().Error("Login query user information failed:", zap.Error(err))
@@ -118,8 +118,8 @@ func Login(p *ParamLogin) (resStatus i18n.ResKey, token string, err error) {
 		resStatus = i18n.StatusInvalidPassword
 		//用户输入密码错误处理
 		var ulfp UserLoginFault
-		ulfp.UserID = user.UserID
-		ulfp.UserCode = user.UserCode
+		ulfp.UserID = user.ID
+		ulfp.UserCode = user.Code
 		ulfp.ClientIp = p.ClientIP
 		ulfp.UserAgent = p.UserAgent
 		ulfp.Type = 1
@@ -130,7 +130,7 @@ func Login(p *ParamLogin) (resStatus i18n.ResKey, token string, err error) {
 	//生成tokenID
 	tokenID := strconv.FormatInt(mysf.GenID(), 10)
 	//生成JWT
-	token, expireTime, err := jwt.GenToken(user.UserID, user.UserCode, tokenID)
+	token, expireTime, err := jwt.GenToken(user.ID, user.Code, tokenID)
 	if err != nil {
 		resStatus = i18n.CodeInternalError
 		zap.L().Error("Login GenToken failed", zap.Error(err))
@@ -138,7 +138,7 @@ func Login(p *ParamLogin) (resStatus i18n.ResKey, token string, err error) {
 	}
 
 	person := Person{
-		ID: user.UserID,
+		ID: user.ID,
 	}
 
 	//获取人员信息
