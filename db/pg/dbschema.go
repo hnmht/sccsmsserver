@@ -197,6 +197,7 @@ var tables []table = []table{
 			createtime timestamp  with time zone default current_timestamp,
 			creatorid int default 0,
 			ts timestamp with time zone default current_timestamp,
+			dr smallint  DEFAULT 0,
 			PRIMARY KEY(id)
 			);`,
 		AddFromVersion: "1.0.0",

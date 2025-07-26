@@ -9,7 +9,7 @@ import (
 // Role Struct. A role is a collection of users with the same attributes
 type Role struct {
 	ID          int32     `db:"id" json:"ID"`
-	Name        string    `db:"rolename" json:"name"  binding:"required"`
+	Name        string    `db:"name" json:"name"  binding:"required"`
 	Description string    `db:"description" json:"description" `
 	SystemFlag  int16     `db:"systemflag" json:"systemFlag" `
 	AllUserFlag int16     `db:"alluserflag" json:"allUserFlag"`
@@ -32,7 +32,7 @@ func initSysrole() (isFinish bool, err error) {
 		return
 	}
 	// Step 3: Insert a record for the system default role 'systemadmin' into the sysrole table.
-	sqlStr = `insert into sysrole(id,rolename,description,systemflag,alluserflag) 
+	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag) 
 	values(10000,'systemadmin','System default',1,0)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
@@ -49,7 +49,7 @@ func initSysrole() (isFinish bool, err error) {
 		return
 	}
 	// Step 6: Insert a record for the system default role 'public' into the sysrole table.
-	sqlStr = `insert into sysrole(id,rolename,description,systemflag,alluserflag) 
+	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag) 
 	values(10001,'public','system default',1,1)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {

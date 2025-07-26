@@ -2,27 +2,28 @@ package pg
 
 import "time"
 
-//File 文件详情
+// File details
 type File struct {
-	FileId           int32     `db:"id" json:"fileID"`
-	FileHash         string    `db:"filehash" json:"filehash"`
-	MinioFileName    string    `db:"miniofilename" json:"miniofilename"`
-	OriginFileName   string    `db:"originfilename" json:"originfilename"`
-	FileKey          int       `db:"filekey" json:"filekey"`
-	FilePath         string    `json:"filepath"`
-	FileUri          string    `json:"fileuri"`
+	ID               int32     `db:"id" json:"ID"`
+	Hash             string    `db:"hash" json:"hash"`
+	MinioFileName    string    `db:"miniofilename" json:"minioFileName"`
+	OriginFileName   string    `db:"originfilename" json:"originFileName"`
+	FileKey          int       `db:"filekey" json:"fileKey"`
+	FilePath         string    `json:"filePath"`
+	FileUri          string    `json:"fileUri"`
 	Mime             string    `json:"mime"`
-	FileType         string    `db:"filetype" json:"filetype"`
-	IsImage          int       `db:"isimage" json:"isimage"`
+	FileType         string    `db:"filetype" json:"fileType"`
+	IsImage          int       `db:"isimage" json:"isImage"`
 	Model            string    `db:"model" json:"model"`
-	Longitude        float64   `db:"longitude" json:"longitude"` //经度
-	Latitude         float64   `db:"latitude" json:"latitude"`   //纬度
+	Longitude        float64   `db:"longitude" json:"longitude"`
+	Latitude         float64   `db:"latitude" json:"latitude"`
 	Size             int64     `db:"size" json:"size"`
-	FileUrl          string    `db:"fileurl" json:"fileurl"`
-	DateTimeOriginal string    `db:"datetimeoriginal" json:"datetimeoriginal"`
-	UpLoadDate       time.Time `db:"uploaddate" json:"uploadtime"`
+	FileUrl          string    `db:"fileurl" json:"fileUrl"`
+	DateTimeOriginal string    `db:"datetimeoriginal" json:"dateTimeOriginal"`
+	UpLoadDate       time.Time `db:"uploaddate" json:"uploadTime"`
 	Source           string    `db:"source" json:"source"`
-	CreateUserID     int32     `db:" createuserid" json:"createuserid"`    //创建用户id
-	CreateUserName   string    `db:"createusername" json:"createusername"` //创建用户名称
+	CreatorID        int32     `db:" creatorid" json:"creatorid"`
+	CreateUserName   string    `json:"creatorName"`
+	Dr               int16     `db:"dr" json:"dr"`
 	Ts               time.Time `db:"ts" json:"ts"`
 }
