@@ -1,6 +1,11 @@
 package pg
 
 import (
+	"database/sql"
+	"encoding/json"
+	"sccsmsserver/cache"
+	"sccsmsserver/i18n"
+	"sccsmsserver/pub"
 	"time"
 
 	"go.uber.org/zap"
@@ -23,7 +28,7 @@ type Department struct {
 	Dr          int16     `db:"dr" json:"dr"` //删除标志
 }
 
-// Simplify Department Struct
+// Simplify Department Struct.
 type SimpDept struct {
 	ID          int32     `db:"id" json:"id"`
 	Code        string    `db:"deptcode" json:"code"`
@@ -37,7 +42,7 @@ type SimpDept struct {
 	Dr          int16     `db:"dr" json:"dr"` //删除标志
 }
 
-// Initialize Department table
+// Initialize Department table.
 func initDepartment() (isFinish bool, err error) {
 	// Step 1: Check if a record exists for the default department "Default Department" in the department table
 	sqlStr := "select count(id) as rownum from department where id=10000"
@@ -56,4 +61,41 @@ func initDepartment() (isFinish bool, err error) {
 		return isFinish, err
 	}
 	return
+}
+
+// Get Simplify department information by ID.
+func (d *SimpDept) GetSimpDeptInfoByID() (resStatus i18n.ResKey, err error) {
+	// Get simplify information from cache
+	number, sdb, _ := cache.Get(pub.SimpDept, d.ID)
+	if number > 0 {
+		json.Unmarshal(sdb, &d)
+		resStatus = i18n.StatusOK
+		return
+	}
+	// If Simplify information isn't in cache, retrieve it from database
+	sqlStr := `select code,name,leader,description,status,ts 
+	from department where id=$1`
+	err = db.QueryRow(sqlStr, d.ID).Scan(&d.Code, &d.Name, &d.Leader.ID, &d.Description, &d.Status, &d.Ts)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			resStatus = i18n.StatusDeptNotExist
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetSimpDeptInfoById failed", zap.Error(err))
+		return
+	}
+	// Get Department Leader's information
+	if d.Leader.ID > 0 {
+		resStatus, err = d.Leader.GetPersonInfoByID()
+		if resStatus != i18n.StatusOK || err != nil {
+			return
+		}
+	}
+
+	// Write into cache
+	jsonB, _ := json.Marshal(d)
+	cache.Set(pub.SimpDept, d.ID, jsonB)
+
+	return i18n.StatusOK, nil
 }

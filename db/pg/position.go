@@ -1,12 +1,16 @@
 package pg
 
 import (
+	"encoding/json"
+	"sccsmsserver/cache"
+	"sccsmsserver/i18n"
+	"sccsmsserver/pub"
 	"time"
 
 	"go.uber.org/zap"
 )
 
-// Position 岗位
+// Position Master Data
 type Position struct {
 	ID          int32     `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"`
@@ -39,4 +43,46 @@ func initPosition() (isFinish bool, err error) {
 		return isFinish, err
 	}
 	return
+}
+
+// Get Position information by ID
+func (p *Position) GetInfoByID() (resStatus i18n.ResKey, err error) {
+	// Get Postion information from cache
+	number, b, _ := cache.Get(pub.Position, p.ID)
+	if number > 0 {
+		json.Unmarshal(b, &p)
+		resStatus = i18n.StatusOK
+		return
+	}
+	// If Position information isn't in cache, retrieve it from database.
+	sqlStr := `select name,description,status,createtime,creatorid,
+	modifytime,modifierid,ts,dr
+	from position 
+	where id = $1`
+	err = db.QueryRow(sqlStr, p.ID).Scan(&p.Name, &p.Description, &p.Status, &p.CreateDate, &p.Creator.ID,
+		&p.ModifyDate, &p.Modifier.ID, &p.Ts, &p.Dr)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Position.GetInfoByID db.QueryRow failed", zap.Error(err))
+		return
+	}
+	// Get creator information.
+	if p.Creator.ID > 0 {
+		resStatus, err = p.Creator.GetPersonInfoByID()
+		if resStatus != i18n.StatusOK || err != nil {
+			return
+		}
+	}
+	// Get Modifier information.
+	if p.Modifier.ID > 0 {
+		resStatus, err = p.Modifier.GetPersonInfoByID()
+		if resStatus != i18n.StatusOK || err != nil {
+			return
+		}
+	}
+	// Write into cache
+	pB, _ := json.Marshal(p)
+	cache.Set(pub.Position, p.ID, pB)
+
+	return i18n.StatusOK, nil
 }

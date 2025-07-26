@@ -49,6 +49,9 @@ var SoftInfo ServerSoftInfo = ServerSoftInfo{
 	Author:          "Haitao Meng",
 }
 
+// API service path
+const APIPath = "/api/v1"
+
 // New user default password
 const DefaultPassword string = "sc@123"
 
@@ -56,7 +59,7 @@ const DefaultPassword string = "sc@123"
 const DbVersion = "1.0.0"
 
 // Md5 secret
-const Secret = "Sea&Cloud comes from a character in both my wife's and my names."
+var Md5Secret = []byte("Sea&Cloud comes from a character in both my wife's and my names.")
 
 // JWT secret
 var TokenSecret = []byte("This is JWT secret")

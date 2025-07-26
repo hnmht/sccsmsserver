@@ -48,7 +48,7 @@ func Setup(mode string) *gin.Engine {
 		// TRRoute(superGroup)        //tr培训记录
 		// UDCRoute(superGroup)       //udc用户自定义档案类别
 		// UDDRoute(superGroup)       //udd用户自定义档案
-		// UserRoute(superGroup)      //user用户
+		UserRoute(superGroup) //user用户
 		// WORoute(superGroup)        //wo指令单
 
 	}

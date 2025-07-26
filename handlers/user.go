@@ -24,7 +24,21 @@ func LoginHandler(c *gin.Context) {
 
 	// User login validation
 	resStatus, token, _ := pg.Login(p)
-
 	// Respond to client request
 	ResponseWithMsg(c, resStatus, token)
+}
+
+// Get User Information handler
+func UserInfoHandler(c *gin.Context) {
+	userID, resStatus := GetCurrentUser(c)
+	if resStatus != i18n.StatusOK {
+		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		return
+	}
+
+	var u = pg.User{ID: userID}
+
+	resStatus, _ = u.GetUserInfoByID()
+
+	ResponseWithMsg(c, resStatus, u)
 }
