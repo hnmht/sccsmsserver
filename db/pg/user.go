@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// User 定义用户对象
+// User Master Data
 type User struct {
 	ID          int32       `db:"id" json:"id"`
 	Code        string      `db:"code" json:"code"`
