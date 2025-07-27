@@ -17,7 +17,7 @@ var tables []table = []table{
 	{
 		TableName:   "sysinfo",
 		Description: "system information",
-		CreateSQL: `create table sysinfo (			
+		CreateSQL: `create table if not exists sysinfo (			
 		dbid bigint,
 		serialnumber varchar(64) default '',
 		macarray varchar(1024) default '',
@@ -45,7 +45,7 @@ var tables []table = []table{
 		TableName:   "sysmenu",
 		Description: "System menus table",
 		CreateSQL: `
-			create table sysmenu (
+			create table if not exists sysmenu (
 			autoid serial NOT NULL,
 			id int NOT NULL,
 			fatherid int,
@@ -66,7 +66,7 @@ var tables []table = []table{
 		TableName:   "sysrole",
 		Description: "system Role",
 		CreateSQL: `
-			create table sysrole (
+			create table if not exists sysrole (
 			id serial NOT NULL,
 			name varchar(64) not null,
 			description varchar(256),
@@ -89,7 +89,7 @@ var tables []table = []table{
 		TableName:   "sysuser",
 		Description: "User",
 		CreateSQL: `
-			create table sysuser (
+			create table if not exists sysuser (
 			id serial NOT NULL,
 			code varchar(32) NOT NULL,
 			name varchar(64) NOT NULL,
@@ -120,7 +120,7 @@ var tables []table = []table{
 		TableName:   "sysuserrole",
 		Description: "User and Role Mapping",
 		CreateSQL: `
-			create table sysuserrole (
+			create table if not exists sysuserrole (
 			id serial NOT NULL,
 			userid int,
 			roleid int,
@@ -139,7 +139,7 @@ var tables []table = []table{
 		TableName:   "sysrolemenu",
 		Description: "Role and Menu Mapping Table",
 		CreateSQL: `
-			create table sysrolemenu (
+			create table if not exists sysrolemenu (
 			id serial NOT NULL,
 			roleid int,
 			menuid int,
@@ -160,7 +160,7 @@ var tables []table = []table{
 		TableName:   "sysloginfault",
 		Description: "User authentication failed record",
 		CreateSQL: `
-			create table sysloginfault (
+			create table if not exists sysloginfault (
 			id serial NOT NULL,
 			userid int DEFAULT 0,
 			usercode varchar(32), 
@@ -178,7 +178,7 @@ var tables []table = []table{
 		TableName:   "filelist",
 		Description: "File information Record",
 		CreateSQL: `
-			create table filelist (
+			create table if not exists filelist (
 			id serial NOT NULL,
 			filehash varchar(64),
 			miniofilename varchar(256),
@@ -207,7 +207,7 @@ var tables []table = []table{
 		TableName:   "department",
 		Description: "Department Master data",
 		CreateSQL: `
-			create table department (
+			create table if not exists department (
 			id serial NOT NULL,
 			code varchar(64), 
 			name varchar(128),
@@ -230,7 +230,7 @@ var tables []table = []table{
 		TableName:   "position",
 		Description: "Position Master Data",
 		CreateSQL: `
-			create table position(
+			create table if not existsposition(
 			id serial NOT NULL,
 			name varchar(128),
 			description varchar(256),
@@ -250,7 +250,7 @@ var tables []table = []table{
 		TableName:   "csc",
 		Description: "Construction Site Category",
 		CreateSQL: `
-			create table csc (
+			create table if not exists csc (
 			id serial NOT NUll,
 			name varchar(128),
 			description varchar(256),
@@ -271,7 +271,7 @@ var tables []table = []table{
 		TableName:   "cs",
 		Description: "Construction Site Master Data",
 		CreateSQL: `
-			create table cs (
+			create table if not exists cs (
 			id serial NOT NULL,
 			code varchar(64),
 			name varchar(64),
@@ -308,9 +308,9 @@ var tables []table = []table{
 	},
 	{
 		TableName:   "cso",
-		Description: "Construction Site options",
+		Description: "Construction Site Options",
 		CreateSQL: `
-			create table cso (
+			create table if not exists cso (
 			id int,
 			code varchar(64),
 			name varchar(64),
@@ -333,7 +333,7 @@ var tables []table = []table{
 		TableName:   "udc",
 		Description: "User-define Category",
 		CreateSQL: `
-			create table udc (
+			create table if not exists udc (
 			id serial NOT NULL,
 			name varchar(128),
 			description varchar(256),
@@ -354,7 +354,7 @@ var tables []table = []table{
 		TableName:   "ud",
 		Description: "User-define Master Data",
 		CreateSQL: `
-			create table ud (
+			create table if not exists ud (
 			id serial NOT NULL,
 			udcid int default 0,
 			code varchar(128), 
@@ -377,7 +377,7 @@ var tables []table = []table{
 		TableName:   "epc",
 		Description: "Execution Project Category Master Data",
 		CreateSQL: `
-			create table epc (
+			create table if not existsepc (
 			id serial NOT NUll,
 			classname varchar(128),
 			description varchar(256),
@@ -398,7 +398,7 @@ var tables []table = []table{
 		TableName:   "ep",
 		Description: "Execution Project",
 		CreateSQL: `
-			create table ep (
+			create table if not exists ep (
 			id serial NOT NUll,
 			code varchar(128),
 			name varchar(128),
@@ -430,7 +430,7 @@ var tables []table = []table{
 		TableName:   "ept_h",
 		Description: "Execution Project Template Header",
 		CreateSQL: `
-			create table ept_h (
+			create table if not exists ept_h (
 			id serial NOT NUll,
 			code varchar(128),
 			name varchar(128),
@@ -449,11 +449,11 @@ var tables []table = []table{
 		AddFromVersion: "1.0.0",
 		InitFunc:       genericInitTable,
 	},
-	{ //执行模板档案表体表
+	{
 		TableName:   "ept_b",
 		Description: "Execution Project Template Body",
 		CreateSQL: `
-			create table ept_b (
+			create table if not exists ept_b (
 			id serial NOT NUll,
 			hid int default 0,
 			rownumber int default 0,
@@ -474,6 +474,83 @@ var tables []table = []table{
 			modifierid int DEFAULT 0,
 			dr smallint default 0,			
 			ts timestamp with time zone default current_timestamp,				
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       genericInitTable,
+	},
+	{
+		TableName:   "risklevel",
+		Description: "Risk Level",
+		CreateSQL: `create table if not exists risklevel(
+			id serial NOT NUll,
+			name varchar(128),
+			description varchar(512),
+			color varchar(128),
+			status smallint default 0, 
+			createtime timestamp with time zone default current_timestamp,
+			createorid int DEFAULT 0,				
+			modifytime timestamp with time zone default current_timestamp,
+			modifierid int DEFAULT 0,
+			dr smallint default 0,			
+			ts timestamp with time zone default current_timestamp,				
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.1.0",
+		InitFunc:       initRiskLevel,
+	},
+	{
+		TableName:   "dc",
+		Description: "Document Category",
+		CreateSQL: `
+			create table if not exists dc (
+			id serial NOT NUll,
+			name varchar(128),
+			description varchar(256),
+			fatherid int default 0,
+			status smallint default 0,
+			createtime timestamp with time zone default current_timestamp,
+			creatorid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifierid int DEFAULT 0,
+			dr smallint default 0,			
+			ts timestamp with time zone default current_timestamp,				
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       initDocumentCategory,
+	},
+	{
+		TableName:   "ppe",
+		Description: "Personal Protective Equipment",
+		CreateSQL: `
+			create table if not exists ppe (
+			id serial NOT NUll,
+			code varchar(256) default '',
+			name varchar(256) default '',
+			model varchar(256) default '',
+			unit varchar(256) default 'pcs',
+			description varchar(2048) default '',			
+			createtime timestamp with time zone default current_timestamp,
+			creatorid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifierid int DEFAULT 0,
+			dr smallint default 0,			
+			ts timestamp with time zone default current_timestamp,				
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       genericInitTable,
+	},
+	{
+		TableName:   "serialno",
+		Description: "Serial number",
+		CreateSQL: `
+			create table if not exists serialno (
+			id serial NOT NULL,
+			datestring varchar(8) NOT NULL,
+			vouchertype varchar(4) NOT NULL,
+			serialno int default 0,
 			PRIMARY KEY(id)
 			);`,
 		AddFromVersion: "1.0.0",

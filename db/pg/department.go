@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Department Master Data
+// Department Master Data.
 type Department struct {
 	ID          int32     `db:"id" json:"id"`
 	Code        string    `db:"code" json:"code"`
