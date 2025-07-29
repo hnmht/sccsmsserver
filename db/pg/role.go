@@ -1,6 +1,8 @@
 package pg
 
 import (
+	"database/sql"
+	"sccsmsserver/i18n"
 	"time"
 
 	"go.uber.org/zap"
@@ -14,9 +16,9 @@ type Role struct {
 	SystemFlag  int16     `db:"systemflag" json:"systemFlag" `
 	AllUserFlag int16     `db:"alluserflag" json:"allUserFlag"`
 	Member      []Person  `json:"member"`
-	CreateTime  time.Time `db:"createtime" json:"createTime"`
+	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`
-	ModifyTime  time.Time `db:"modifytime" json:"modifyTime"`
+	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
 	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Dr          int16     `db:"dr" json:"dr"`
 	Ts          time.Time `json:"ts"`
@@ -134,5 +136,104 @@ func initSysRoleMenu() (isFinish bool, err error) {
 		}
 	}
 	stmt.Close()
+	return
+}
+
+// Get role list
+func GetRoles() (roles []Role, resStatus i18n.ResKey, err error) {
+	roles = make([]Role, 0)
+	// Retrieve from sysrole table
+	sqlStr := `select a.id, a.name,a.description,a.systemflag,a.alluserflag,
+	a.createtime,a.creatorid,a.modifytime,a.modifierid,a.dr,a.ts 
+	from sysrole a
+	where a.dr = 0
+	order by a.name`
+	rows, err := db.Query(sqlStr)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetRoles db.Query failed:", zap.Error(err))
+		return
+	}
+	defer rows.Close()
+	// Extract data from database query results
+	for rows.Next() {
+		var role Role
+		err = rows.Scan(&role.ID, &role.Name, &role.Description, &role.SystemFlag, &role.AllUserFlag,
+			&role.CreateDate, &role.Creator.ID, &role.ModifyDate, &role.Modifier.ID, &role.Dr, &role.Ts)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetRoles rows.next failed", zap.Error(err))
+			return
+		}
+		// Get creator details
+		if role.Creator.ID > 0 {
+			resStatus, err = role.Creator.GetPersonInfoByID()
+			if resStatus != i18n.StatusOK || err != nil {
+				return
+			}
+		}
+		// Get modifier details
+		if role.Modifier.ID > 0 {
+			resStatus, err = role.Modifier.GetPersonInfoByID()
+			if resStatus != i18n.StatusOK || err != nil {
+				return
+			}
+		}
+		// Get role members
+		resStatus, err = role.GetMembers()
+		if resStatus != i18n.StatusOK || err != nil {
+			return
+		}
+		// Add to roles slice
+		roles = append(roles, role)
+	}
+	return
+}
+
+// Get Role members
+func (role *Role) GetMembers() (resStatus i18n.ResKey, err error) {
+	role.Member = make([]Person, 0)
+	resStatus = i18n.StatusOK
+	// Retrieve data from database
+	sqlStr := `select a.id,a.code,a.name,a.fileid,a.deptid,
+	COALESCE((select b.code from department b where b.id = a.deptid),'') as deptcode,
+	COALESCE((select b.name from department b where b.id = a.deptid),'') as deptname,
+	COALESCE(a.description,'') as description,
+	COALESCE(a.mobile,'') as mobile,
+	COALESCE(a.email,'') as email,
+	a.gender,a.systemflag,a.status,a.createtime,a.ts,a.dr from sysuser a
+	where a.dr=0  and a.id in (select c.userid from sysuserrole c where roleid = $1)`
+	rows, err := db.Query(sqlStr, role.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("role.GetMembers db.Qurey failed", zap.Error(err))
+		return
+	}
+	defer rows.Close()
+	// Extract data from database query results
+	for rows.Next() {
+		var p Person
+		err = rows.Scan(&p.ID, &p.Code, &p.Name, &p.Avatar.ID, &p.DeptID,
+			&p.DeptCode, &p.DeptName, &p.Description, &p.Mobile, &p.Email,
+			&p.Gender, &p.SystemFlag, &p.Status, &p.CreateDate, &p.Ts, &p.Dr)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetUserByRoleID rows.Next() failed", zap.Error(err))
+			return
+		}
+		// Get Avatar details
+		if p.Avatar.ID > 0 {
+			resStatus, err = p.Avatar.GetFileInfoByID()
+			if resStatus != i18n.StatusOK || err != nil {
+				return
+			}
+		}
+		// Add to member slice
+		role.Member = append(role.Member, p)
+	}
 	return
 }

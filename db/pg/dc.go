@@ -46,7 +46,7 @@ func initDocumentCategory() (isFinish bool, err error) {
 		return
 	}
 	// Step 3: Insert a record for the system default DC "Default Category" into the
-	sqlStr = `insert into dc(id,classname,description,createuserid) values(10000,'Default Category','System Pre-Set',10000)`
+	sqlStr = `insert into dc(id,name,description,creatorid) values(10000,'Default Category','System Pre-Set',10000)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
 		isFinish = false

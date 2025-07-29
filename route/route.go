@@ -38,10 +38,10 @@ func Setup(mode string) *gin.Engine {
 		// OPRoute(superGroup)        //岗位档案
 		// OuRoute(superGroup)        //在线用户
 		// PersonRoute(superGroup)    //person人员
-		// PubRoute(superGroup)       //pub公共信息
+		PubRoute(superGroup) // System public information
 		// RepRoute(superGroup)       //报表
 		// RLRoute(superGroup)        //风险等级
-		// RoleRoute(superGroup)      //role角色
+		RoleRoute(superGroup) //role角色
 		// SIRoute(superGroup)        //si现场档案
 		// SICRoute(superGroup)       //sic现场档案分类
 		// TCRoute(superGroup)        //tc培训课程

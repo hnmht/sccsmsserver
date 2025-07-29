@@ -17,3 +17,7 @@ drop table if exists epc cascade;
 drop table if exists ep cascade;
 drop table if exists ept_h cascade;
 drop table if exists ept_b cascade;
+drop table if exists risklevel cascade;
+drop table if exists dc cascade;
+drop table if exists ppe cascade;
+drop table if exists serialno cascade;

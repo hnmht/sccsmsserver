@@ -230,7 +230,7 @@ var tables []table = []table{
 		TableName:   "position",
 		Description: "Position Master Data",
 		CreateSQL: `
-			create table if not existsposition(
+			create table if not exists position(
 			id serial NOT NULL,
 			name varchar(128),
 			description varchar(256),
@@ -250,7 +250,7 @@ var tables []table = []table{
 		TableName:   "csc",
 		Description: "Construction Site Category",
 		CreateSQL: `
-			create table if not exists csc (
+			create table if not exists csc(
 			id serial NOT NUll,
 			name varchar(128),
 			description varchar(256),
@@ -271,7 +271,7 @@ var tables []table = []table{
 		TableName:   "cs",
 		Description: "Construction Site Master Data",
 		CreateSQL: `
-			create table if not exists cs (
+			create table if not exists cs(
 			id serial NOT NULL,
 			code varchar(64),
 			name varchar(64),
@@ -377,7 +377,7 @@ var tables []table = []table{
 		TableName:   "epc",
 		Description: "Execution Project Category Master Data",
 		CreateSQL: `
-			create table if not existsepc (
+			create table if not exists epc(
 			id serial NOT NUll,
 			classname varchar(128),
 			description varchar(256),
@@ -489,7 +489,7 @@ var tables []table = []table{
 			color varchar(128),
 			status smallint default 0, 
 			createtime timestamp with time zone default current_timestamp,
-			createorid int DEFAULT 0,				
+			creatorid int DEFAULT 0,				
 			modifytime timestamp with time zone default current_timestamp,
 			modifierid int DEFAULT 0,
 			dr smallint default 0,			
