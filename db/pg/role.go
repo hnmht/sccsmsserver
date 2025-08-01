@@ -10,7 +10,7 @@ import (
 
 // Role Struct. A role is a collection of users with the same attributes
 type Role struct {
-	ID          int32     `db:"id" json:"ID"`
+	ID          int32     `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"  binding:"required"`
 	Description string    `db:"description" json:"description" `
 	SystemFlag  int16     `db:"systemflag" json:"systemFlag" `
@@ -141,6 +141,7 @@ func initSysRoleMenu() (isFinish bool, err error) {
 
 // Get role list
 func GetRoles() (roles []Role, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	roles = make([]Role, 0)
 	// Retrieve from sysrole table
 	sqlStr := `select a.id, a.name,a.description,a.systemflag,a.alluserflag,
@@ -150,6 +151,9 @@ func GetRoles() (roles []Role, resStatus i18n.ResKey, err error) {
 	order by a.name`
 	rows, err := db.Query(sqlStr)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return
+		}
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GetRoles db.Query failed:", zap.Error(err))
 		return

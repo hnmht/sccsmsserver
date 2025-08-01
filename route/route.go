@@ -37,8 +37,8 @@ func Setup(mode string) *gin.Engine {
 		// MsgRoute(superGroup)       //消息
 		// OPRoute(superGroup)        //岗位档案
 		// OuRoute(superGroup)        //在线用户
-		// PersonRoute(superGroup)    //person人员
-		PubRoute(superGroup) // System public information
+		PersonRoute(superGroup) // Person
+		PubRoute(superGroup)    // System public information
 		// RepRoute(superGroup)       //报表
 		// RLRoute(superGroup)        //风险等级
 		RoleRoute(superGroup) //role角色

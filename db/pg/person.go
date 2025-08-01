@@ -27,11 +27,21 @@ type Person struct {
 	Mobile       string    `db:"mobile" json:"mobile"`
 	Email        string    `db:"email" json:"email"`
 	Gender       int16     `db:"gender" json:"gender"`
-	SystemFlag   int16     `db:"systemflag" json:"systemflag"`
+	SystemFlag   int16     `db:"systemflag" json:"systemFlag"`
 	Status       int16     `db:"status" json:"status"`
 	CreateDate   time.Time `db:"createtime" json:"createDate"`
 	Ts           time.Time `db:"ts" json:"ts"`
 	Dr           int16     `db:"dr" json:"dr"`
+}
+
+// Latest Person Master Data
+type PersonCache struct {
+	QueryTs      time.Time `json:"queryTs"`
+	ResultNumber int32     `json:"resultNumber"`
+	DelItems     []Person  `json:"delItems"`
+	UpdateItems  []Person  `json:"updateItems"`
+	NewItems     []Person  `json:"newItems"`
+	ResultTs     time.Time `json:"resultTs"`
 }
 
 // Get Person information by User ID.
@@ -97,4 +107,129 @@ func (p *Person) GetPersonInfoByID() (resStatus i18n.ResKey, err error) {
 	cache.Set(pub.Person, p.ID, jsonP)
 
 	return i18n.StatusOK, nil
+}
+
+// Get Person List
+func GetPersons() (persons []Person, resStatus i18n.ResKey, err error) {
+	persons = make([]Person, 0)
+	resStatus = i18n.StatusOK
+	// Retrieve from sysuser table
+	sqlStr := `select id from sysuser where dr=0 order by ts desc`
+	rows, err := db.Query(sqlStr)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Get Persons from database failed", zap.Error(err))
+		return
+	}
+	defer rows.Close()
+	// Extract data from database query results
+	for rows.Next() {
+		var p Person
+		err = rows.Scan(&p.ID)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetPerson from rows scan person info failed", zap.Error(err))
+			return
+		}
+		resStatus, err = p.GetPersonInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
+		persons = append(persons, p)
+	}
+
+	return
+}
+
+// Get Latest Person Master data
+func (pc *PersonCache) GetLatestPersons() (resStatus i18n.ResKey, err error) {
+	pc.DelItems = make([]Person, 0)
+	pc.NewItems = make([]Person, 0)
+	pc.UpdateItems = make([]Person, 0)
+	resStatus = i18n.StatusOK
+	// Get the latest timestamp from sysuser table
+	sqlStr := "select ts from sysuser where ts > $1 order by ts desc limit(1)"
+	err = db.QueryRow(sqlStr, pc.QueryTs).Scan(&pc.ResultTs)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			pc.ResultNumber = 0
+			pc.ResultTs = pc.QueryTs
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("PersonCache.GetLatestPersons  db.QueryRow failed:", zap.Error(err))
+		return
+	}
+	// Retrieve all data greater than the latest timestamp.
+	sqlStr = `select a.id,
+	a.code,
+	a.name,
+	a.fileid,
+	a.deptid,
+	COALESCE((select b.code from department b where b.id = a.deptid),'') as deptcode,
+	COALESCE((select b.name from department b where b.id = a.deptid),'') as deptname,
+	a.isoperator as isoperator,
+	a.positionid as positionid,
+	COALESCE((select o.name from position o where o.id = a.positionid),'') as positionname,
+	COALESCE(a.description,'') as description,
+	COALESCE(a.mobile,'') as mobile,
+	COALESCE(a.email,'') as email,
+	a.gender,
+	a.systemflag,
+	a.status,
+	a.createtime,
+	a.ts,
+	a.dr 
+	from sysuser a
+	where a.ts > $1 and a.systemflag=0 order by a.ts desc`
+	rows, err := db.Query(sqlStr, pc.QueryTs)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("PersonCache.GetLatestPersons()  db.Query() failed", zap.Error(err))
+		return
+	}
+	defer rows.Close()
+
+	// Extract data from database query results
+	for rows.Next() {
+		var p Person
+		err = rows.Scan(&p.ID, &p.Code, &p.Name, &p.Avatar.ID, &p.DeptID,
+			&p.DeptCode, &p.DeptName, &p.IsOperator, &p.PositionID, &p.PositionName,
+			&p.Description, &p.Mobile, &p.Email, &p.Gender, &p.SystemFlag,
+			&p.Status, &p.CreateDate, &p.Ts, &p.Dr)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("PersonCache.GetLatestPersons rows.scan failed", zap.Error(err))
+			return
+		}
+		// Get Avatar detail
+		if p.Avatar.ID > 0 {
+			resStatus, err = p.Avatar.GetFileInfoByID()
+			if resStatus != i18n.StatusOK || err != nil {
+				return
+			}
+		}
+
+		// Determine the latest data category.
+		if p.Dr == 0 { // The Dr field being equal 0 means the data has not been deleted
+			// If the data's createDate field is less than or equal to the QueryTs.
+			if p.CreateDate.Before(pc.QueryTs) || p.CreateDate.Equal(pc.QueryTs) { // It means the client needs to update the data
+				pc.ResultNumber++
+				pc.UpdateItems = append(pc.UpdateItems, p)
+			} else { // It means the client needs to add the data
+				pc.ResultNumber++
+				pc.NewItems = append(pc.NewItems, p)
+			}
+		} else { // The Dr field being not equal 0 means the data has been deleted
+			// If the data's createDate field is less than or equal to the QueryTs
+			if p.CreateDate.Before(pc.QueryTs) || p.CreateDate.Equal(pc.QueryTs) { // It means the client needs to delete the data
+				pc.ResultNumber++
+				pc.DelItems = append(pc.DelItems, p)
+			}
+		}
+	}
+	return
 }

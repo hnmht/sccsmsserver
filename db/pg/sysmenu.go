@@ -8,7 +8,7 @@ import (
 
 // System menu struct
 type SystemMenu struct {
-	ID             int32       `json:"ID"`
+	ID             int32       `json:"id"`
 	FatherID       int32       `json:"fatherID"`
 	Title          i18n.ResKey `json:"title"`
 	Path           string      `json:"path"`
