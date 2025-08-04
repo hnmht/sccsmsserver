@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"sccsmsserver/db/pg"
+	"sccsmsserver/i18n"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Get role list handler
@@ -14,88 +16,92 @@ func GetRolesHandler(c *gin.Context) {
 	ResponseWithMsg(c, resStatus, roles)
 }
 
-/* //CheckRoleNameExistHandler 检查角色名称是否存在
+// Check the Role name exists handler
 func CheckRoleNameExistHandler(c *gin.Context) {
 	r := new(pg.Role)
-	if err := c.ShouldBind(r); err != nil {
-		//请求参数有误，记录日志并返回响应
+	err := c.ShouldBind(r)
+	if err != nil {
 		zap.L().Error("CheckRoleNameExistHandler with invalid param", zap.Error(err))
-		//判断err是不是validator.validationErrors类型
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			ResponseError(c, pub.CodeInvalidParm)
-			return
-		}
-		ResponseErrorWithMsg(c, pub.CodeInvalidParm, removeTopStruct(errs.Translate(trans)))
+		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//检查
 	resStatus, _ := r.CheckNameExist()
 	//返回
-	ResponseSuccess(c, resStatus, r)
+	ResponseWithMsg(c, resStatus, r)
 }
 
-//AddRoleHandler 增加角色
+// Add Role Handler
 func AddRoleHandler(c *gin.Context) {
 	r := new(pg.Role)
 	err := c.ShouldBind(r)
 	if err != nil {
-		//请求参数有误，记录日志并返回响应
 		zap.L().Error("AddRoleHandler invalid param", zap.Error(err))
-		//判断err是不是validator.validationErrors类型
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			ResponseError(c, pub.CodeInvalidParm)
-			return
-		}
-		ResponseErrorWithMsg(c, pub.CodeInvalidParm, removeTopStruct(errs.Translate(trans)))
+		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//获取操作用户id
-	createUserId, err := GetCurrentUser(c)
-	if err != nil {
+
+	// Get Current user ID
+	creatorID, resStatus := GetCurrentUser(c)
+	if resStatus != i18n.StatusOK {
 		zap.L().Error("AddRoleHandler getCurrentUser failed", zap.Error(err))
-		ResponseErrorWithMsg(c, pub.CodeInternalError, r)
+		ResponseWithMsg(c, resStatus, r)
 		return
 	}
-	r.CreateUser.UserID = createUserId
-	//向数据库添加角色
-	resStatus, _ := r.Add()
-	//返回
-	ResponseSuccess(c, resStatus, r)
+	r.Creator.ID = creatorID
+	// Add the role
+	resStatus, _ = r.Add()
+	// Response
+	ResponseWithMsg(c, resStatus, r)
 }
 
-//DeleteRoleHandler 删除角色
+// Delete Role Handler
 func DeleteRoleHandler(c *gin.Context) {
 	r := new(pg.Role)
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("DeleteRoleHandler invalid params", zap.Error(err))
-		//判断err是不是validator.validationErrors类型
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			ResponseError(c, pub.CodeInvalidParm)
-			return
-		}
-		ResponseErrorWithMsg(c, pub.CodeInvalidParm, removeTopStruct(errs.Translate(trans)))
+		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//获取操作用户id
-	modifyUserId, err := GetCurrentUser(c)
-	if err != nil {
+	// Get Current User ID
+	modifierID, resStatus := GetCurrentUser(c)
+	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteRoleHandler getCurrentUser failed", zap.Error(err))
-		ResponseErrorWithMsg(c, pub.CodeInternalError, r)
+		ResponseWithMsg(c, resStatus, r)
 		return
 	}
-	r.ModifyUser.UserID = modifyUserId
+	r.Modifier.ID = modifierID
+	resStatus, _ = r.Delete()
 
-	statusCode, _ := r.Delete()
-
-	//返回
-	ResponseSuccess(c, statusCode, r)
+	// Response
+	ResponseWithMsg(c, resStatus, r)
 }
 
-//DeleteRolesHandler 批量删除角色
+// Edit Role Handler
+func EditRoleHandler(c *gin.Context) {
+	r := new(pg.Role)
+	err := c.ShouldBind(r)
+	if err != nil {
+		zap.L().Error("EditRoleHandler invalid param", zap.Error(err))
+		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		return
+	}
+	// Get current user ID
+	modifierId, resStatus := GetCurrentUser(c)
+	if resStatus != i18n.StatusOK {
+		zap.L().Error("EditRoleHandler getCurrentUser failed", zap.Error(err))
+		ResponseWithMsg(c, i18n.CodeInternalError, r)
+		return
+	}
+	r.Modifier.ID = modifierId
+
+	// Edit role
+	statusCode, _ := r.Edit()
+	// Response
+	ResponseWithMsg(c, statusCode, r)
+}
+
+/*//DeleteRolesHandler 批量删除角色
 func DeleteRolesHandler(c *gin.Context) {
 	r := new([]pg.Role)
 	err := c.ShouldBind(r)
@@ -143,35 +149,7 @@ func GetRoleMenusHandler(c *gin.Context) {
 	ResponseSuccess(c, resStatus, menus)
 }
 
-//EditRoleHandler 修改角色
-func EditRoleHandler(c *gin.Context) {
-	r := new(pg.Role)
-	err := c.ShouldBind(r)
-	if err != nil {
-		zap.L().Error("EditRoleHandler invalid param", zap.Error(err))
-		//判断err是不是validator.validationErrors类型
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			ResponseError(c, pub.CodeInvalidParm)
-			return
-		}
-		ResponseErrorWithMsg(c, pub.CodeInvalidParm, removeTopStruct(errs.Translate(trans)))
-		return
-	}
-	//获取操作用户id
-	modifyUserId, err := GetCurrentUser(c)
-	if err != nil {
-		zap.L().Error("EditRoleHandler getCurrentUser failed", zap.Error(err))
-		ResponseErrorWithMsg(c, pub.CodeInternalError, r)
-		return
-	}
-	r.ModifyUser.UserID = modifyUserId
 
-	//修改角色
-	statusCode, _ := r.Edit()
-	//返回响应
-	ResponseSuccess(c, statusCode, r)
-}
 
 //UpdateRoleMenus 更新角色权限
 func UpdateRoleMenusHandler(c *gin.Context) {

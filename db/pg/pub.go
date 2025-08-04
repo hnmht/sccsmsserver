@@ -22,3 +22,10 @@ type PagingQueryParams struct {
 	Page        int32  `json:"page"`
 	PerPage     int32  `json:"perPage"`
 }
+
+// the struct Check the archive is refreneced
+type ArchiveCheckUsed struct {
+	Description    string
+	SqlStr         string
+	UsedReturnCode i18n.ResKey
+}

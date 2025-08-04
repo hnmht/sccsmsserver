@@ -241,3 +241,234 @@ func (role *Role) GetMembers() (resStatus i18n.ResKey, err error) {
 	}
 	return
 }
+
+// Check if the role name exists
+func (r *Role) CheckNameExist() (resStatus i18n.ResKey, err error) {
+	var count int32
+	resStatus = i18n.StatusOK
+	// Query the number of records with the same name from the database
+	sqlStr := "select count(id) from sysrole where name = $1 and id <> $2 and dr = 0"
+	err = db.QueryRow(sqlStr, r.Name, r.ID).Scan(&count)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.CheckNameExist failed", zap.Error(err))
+		return
+	}
+
+	if count > 0 {
+		resStatus = i18n.StatusRoleNameExist
+		return
+	}
+
+	return
+}
+
+// Add Role
+func (role *Role) Add() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Check if the role name exists
+	resStatus, err = role.CheckNameExist()
+	if resStatus != i18n.StatusOK || err != nil {
+		return
+	}
+	// Begin a database transaction
+	tx, err := db.Begin()
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Add tx.Begin failed", zap.Error(err))
+		return
+	}
+	defer tx.Commit()
+
+	// Insert a Role record into the database
+	sqlStr := "insert into sysrole(name,description,creatorid) values($1,$2,$3) returning id"
+	err = tx.QueryRow(sqlStr, role.Name, role.Description, role.Creator.ID).Scan(&role.ID)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Add tx.QueryRow failed", zap.Error(err))
+		tx.Rollback()
+		return
+	}
+	// Check if the role member exists.
+	if len(role.Member) > 0 {
+		// Record write pre-processing
+		sqlStr2 := `insert into sysuserrole(userid,roleid,creatorid) values($1,$2,$3)`
+		stmt2, err2 := tx.Prepare(sqlStr2)
+		if err2 != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("Role.Add stmt2 tx.Prepare failed", zap.Error(err2))
+			tx.Rollback()
+			return resStatus, err2
+		}
+		defer stmt2.Close()
+
+		// Write role members to the database row by row.
+		for _, item := range role.Member {
+			_, err3 := stmt2.Exec(item.ID, role.ID, role.Creator.ID)
+			if err3 != nil {
+				resStatus = i18n.StatusInternalError
+				zap.L().Error("Role.Add stmt2.Exec failed", zap.Error(err3))
+				tx.Rollback()
+				return resStatus, err3
+			}
+		}
+	}
+	return
+}
+
+// Edit Role
+func (role *Role) Edit() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Check if the Role name exists.
+	resStatus, err = role.CheckNameExist()
+	if resStatus != i18n.StatusOK || err != nil {
+		return
+	}
+
+	// Begin a database transaction
+	tx, err := db.Begin()
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Edit db.Begin failed", zap.Error(err))
+		return
+	}
+	defer tx.Commit()
+
+	// Update database record.
+	sqlStr := `update sysrole set name=$1,description=$2,modifierid=$3,modifytime=current_timestamp,ts=current_timestamp
+	where id=$4 and ts=$5 and dr=0`
+	res, err := tx.Exec(sqlStr, role.Name, role.Description, role.Modifier.ID, role.ID, role.Ts)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Edit tx.Exec failed", zap.Error(err))
+		tx.Rollback()
+		return
+	}
+	// Check the number of rows affected by the SQL update operation.
+	affected, err := res.RowsAffected()
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Edit stmt res.RowsAffected falied", zap.Error(err))
+		tx.Rollback()
+		return
+	}
+	// If the update operation affects fewer than one row,
+	// it indicates that another user has already updated that row.
+	if affected < 1 {
+		resStatus = i18n.StatusOtherEdit
+		zap.L().Info("DeleteRoles other edit")
+		return
+	}
+
+	// Query the number of records in the sysuserrole table.
+	var recordNumber int32
+	findSqlStr := `select count(id) from sysuserrole where roleid = $1`
+	err = tx.QueryRow(findSqlStr, role.ID).Scan(&recordNumber)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("Role.Edit tx.QueryRow(findSqlStr) failed", zap.Error(err))
+		tx.Rollback()
+		return
+	}
+	// Delete related records from the sysuserrole table.
+	if recordNumber > 0 {
+		delSqlStr := "delete from sysuserrole where roleid = $1"
+		_, err := tx.Exec(delSqlStr, role.ID)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("Role.Edit tx.Exec(delSqlStr) failed", zap.Error(err))
+			tx.Rollback()
+			return resStatus, err
+		}
+	}
+	// Insert role member records into the sysuserrole table.
+	if len(role.Member) > 0 {
+		// member records write pre-processing
+		sqlStr2 := `insert into sysuserrole(userid,roleid,creatorid) values($1,$2,$3)`
+		stmt2, err2 := tx.Prepare(sqlStr2)
+		if err2 != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("Role.Edit stmt2 tx.Prepare(sqlStr2) failed", zap.Error(err2))
+			tx.Rollback()
+			return resStatus, err2
+		}
+		defer stmt2.Close()
+
+		for _, item := range role.Member {
+			_, err3 := stmt2.Exec(item.ID, role.ID, role.Modifier.ID)
+			if err3 != nil {
+				resStatus = i18n.StatusInternalError
+				zap.L().Error("Role.Edit stmt2.Exec failed", zap.Error(err3))
+				tx.Rollback()
+				return resStatus, err3
+			}
+		}
+	}
+	return
+}
+
+// Delete Role
+func (role *Role) Delete() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Check if the role id referenced.
+	resStatus, err = role.CheckIsUsed()
+	if resStatus != i18n.StatusOK || err != nil {
+		return
+	}
+	// Update the Role record in the database.
+	sqlStr := "update sysrole set dr=1,ts=current_timestamp,modifytime=current_timestamp,modifierid=$1 where id = $2 and ts=$3 and dr=0"
+	res, err := db.Exec(sqlStr, role.Modifier.ID, role.ID, role.Ts)
+	if err != nil {
+		zap.L().Error("DeleteRole exec delete role failed", zap.Error(err))
+		return i18n.StatusResCodeError, err
+	}
+	// Check the number of rows affected by the SQL update operation.
+	errected, err := res.RowsAffected()
+	if err != nil {
+		zap.L().Error("DeleteRoles get RowsAffected failed", zap.Error(err))
+		return i18n.StatusResCodeError, err
+	}
+	// If the update operation affects fewer than one row,
+	// it indicates that another user has already updated that row.
+	if errected < 1 {
+		zap.L().Info("DeleteRoles other edit")
+		return i18n.StatusOtherEdit, nil
+	}
+
+	return
+}
+
+// Check if the role is refrenced.
+func (role *Role) CheckIsUsed() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Create a slice of check content definitions
+	checkItems := []ArchiveCheckUsed{
+		{
+			Description:    "User and Role Mapping",
+			SqlStr:         "select count(id) from sysuserrole where roleid=$1",
+			UsedReturnCode: i18n.StatusRoleUserExist,
+		},
+		{
+			Description:    "Role and Menu Mapping",
+			SqlStr:         `select count(id) from sysrolemenu where roleid = $1`,
+			UsedReturnCode: i18n.StatusRoleAuthExist,
+		},
+	}
+
+	// Check item by item
+	var usedNum int32
+	for _, item := range checkItems {
+		err = db.QueryRow(item.SqlStr, role.ID).Scan(&usedNum)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("role.CheckIsUsed "+item.Description+"failed", zap.Error(err))
+			return
+		}
+		if usedNum > 0 {
+			resStatus = item.UsedReturnCode
+			return
+		}
+	}
+
+	return
+}
