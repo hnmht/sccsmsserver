@@ -3,6 +3,7 @@ package pg
 import (
 	"database/sql"
 	"sccsmsserver/i18n"
+	"strconv"
 	"time"
 
 	"go.uber.org/zap"
@@ -22,6 +23,12 @@ type Role struct {
 	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Dr          int16     `db:"dr" json:"dr"`
 	Ts          time.Time `json:"ts"`
+}
+
+// Modify role permission request parameter struct.
+type ParamsRoleMenu struct {
+	Role  Role         `json:"role"`
+	Auths []SystemMenu `json:"auths"`
 }
 
 // Initialize the sysrole table
@@ -254,12 +261,10 @@ func (r *Role) CheckNameExist() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("Role.CheckNameExist failed", zap.Error(err))
 		return
 	}
-
 	if count > 0 {
 		resStatus = i18n.StatusRoleNameExist
 		return
 	}
-
 	return
 }
 
@@ -301,7 +306,6 @@ func (role *Role) Add() (resStatus i18n.ResKey, err error) {
 			return resStatus, err2
 		}
 		defer stmt2.Close()
-
 		// Write role members to the database row by row.
 		for _, item := range role.Member {
 			_, err3 := stmt2.Exec(item.ID, role.ID, role.Creator.ID)
@@ -438,7 +442,7 @@ func (role *Role) Delete() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// Check if the role is refrenced.
+// Check if the role is refrenced
 func (role *Role) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Create a slice of check content definitions
@@ -469,6 +473,171 @@ func (role *Role) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
+	return
+}
 
+// Get a list of role permissions
+func (role *Role) GetRoleMenus() (menus SystemMenus, resStatus i18n.ResKey, err error) {
+	menus = make(SystemMenus, 0)
+	resStatus = i18n.StatusOK
+
+	sqlStr := `select b.id,b.fatherid,b.title,b.path,b.icon,
+	b.component,a.selected,a.indeterminate 
+	from sysrolemenu a left join sysmenu b on (a.menuid = b.id) 
+	where a.roleid=$1`
+	var menu SystemMenu
+	rows, err := db.Query(sqlStr, role.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetRoleMenus db.Query failed", zap.Error(err))
+		return
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&menu.ID, &menu.FatherID, &menu.Title, &menu.Path, &menu.Icon,
+			&menu.Component, &menu.Selected, &menu.Indeterminate)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetRoleMenus rows.Next() failed", zap.Error(err))
+			return
+		}
+		menus = append(menus, menu)
+	}
+	resStatus = i18n.StatusOK
+	return
+}
+
+// Batch delete roles.
+func DeleteRoles(roles *[]Role, modifyUserId int32) (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Begin a database transaction
+	tx, err := db.Begin()
+	if err != nil {
+		zap.L().Error("DeleteRoles db.Begin failed", zap.Error(err))
+		return i18n.StatusResCodeError, err
+	}
+	defer tx.Commit()
+
+	// Delete role pre-processing
+	uSqlStr := `update sysrole set dr=1,ts=current_timestamp,modifytime=current_timestamp,modifierid=$1 
+	where id=$2 and ts=$3 and dr=0`
+	stmt, err := tx.Prepare(uSqlStr)
+	if err != nil {
+		zap.L().Error("DeleteRoles prepare delete role failed", zap.Error(err))
+		_ = tx.Rollback()
+		return i18n.StatusResCodeError, err
+	}
+	defer stmt.Close()
+
+	for _, role := range *roles {
+		// Check if the role id referenced.
+		resStatus, err = role.CheckIsUsed()
+		if resStatus != i18n.StatusOK || err != nil {
+			_ = tx.Rollback()
+			return
+		}
+		// Execute deletion operation.
+		res, err1 := stmt.Exec(modifyUserId, role.ID, role.Ts)
+		if err1 != nil {
+			zap.L().Error("DeleteRoles stmt.Exec failed:", zap.Error(err1))
+			_ = tx.Rollback()
+			return i18n.StatusResCodeError, err1
+		}
+		// Check the number of rows affected by the SQL update operation.
+		errected, err2 := res.RowsAffected()
+		if err2 != nil {
+			zap.L().Error("DeleteRoles get RowsAffected failed:", zap.Error(err2))
+			_ = tx.Rollback()
+			return i18n.StatusResCodeError, err2
+		}
+		// if the update operation affects fewer than one row,
+		// it indicates that another user has already updated that row.
+		if errected < 1 {
+			zap.L().Info("DeleteRoles other edit")
+			_ = tx.Rollback()
+			return i18n.StatusOtherEdit, nil
+		}
+	}
+
+	return
+}
+
+// Modify role permission request parameter struct.
+func (roleMenu *ParamsRoleMenu) RoleMenuUpdate() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Begin a database transaction
+	tx, err := db.Begin()
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("RoleMenuUpdate db.Begin failed", zap.Error(err))
+		return
+	}
+	defer tx.Commit()
+
+	// Udpate sysrole table pre-processing
+	uSqlStr := `update sysrole set ts=current_timestamp,modifytime=current_timestamp,modifierid=$1 
+	where id=$2 and ts=$3 and dr=0`
+	// Execute update operation.
+	res, err := tx.Exec(uSqlStr, roleMenu.Role.Modifier.ID, roleMenu.Role.ID, roleMenu.Role.Ts)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("RoleMenuUpdate tx.Exec failed:", zap.Error(err))
+		_ = tx.Rollback()
+		return
+	}
+	// Check the number of rows affected by the Update SQL.
+	affected, err := res.RowsAffected()
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("RoleMenuUpdate get uStmt.exec Affected rows failed", zap.Error(err))
+		_ = tx.Rollback()
+		return
+	}
+	// If the update operation affected fewer than one row,
+	// it indicates that another user has already update that row.
+	if affected < 1 {
+		resStatus = i18n.StatusOtherEdit
+		zap.L().Info("DeleteRoles other edit")
+		_ = tx.Rollback()
+		return
+	}
+
+	// Delete existing permission records from the table.
+	delSql := "delete from sysrolemenu where roleid=$1"
+	_, err = tx.Exec(delSql, roleMenu.Role.ID)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("RoleMenuUpdate delStmt.exec failed", zap.Error(err))
+		_ = tx.Rollback()
+		return
+	}
+	// If the permissions list is empty, return immediately
+	if len(roleMenu.Auths) == 0 {
+		return
+	}
+	// Per-processing for inserting data into the sysrolemenu table
+	insertSql := "insert into sysrolemenu(roleid,menuid,selected,indeterminate,ts) values($1,$2,$3,$4,now())"
+	insertStmt, err := tx.Prepare(insertSql)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("RoleMenuUpdate insertStmt.Prepare failed", zap.Error(err))
+		_ = tx.Rollback()
+		return
+	}
+	defer insertStmt.Close()
+	// Insert data row by row.
+	for _, item := range roleMenu.Auths {
+		_, err = insertStmt.Exec(roleMenu.Role.ID, item.ID, item.Selected, item.Indeterminate)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("RoleMenuUpdate insertStmt.Exec MenuID="+strconv.FormatInt(int64(item.ID), 10)+"failed:", zap.Error(err))
+			_ = tx.Rollback()
+			return
+		}
+	}
 	return
 }

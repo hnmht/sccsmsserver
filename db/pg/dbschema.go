@@ -137,7 +137,7 @@ var tables []table = []table{
 	},
 	{
 		TableName:   "sysrolemenu",
-		Description: "Role and Menu Mapping Table",
+		Description: "Role and Menu Mapping",
 		CreateSQL: `
 			create table if not exists sysrolemenu (
 			id serial NOT NULL,

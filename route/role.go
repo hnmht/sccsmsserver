@@ -20,11 +20,11 @@ func RoleRoute(g *gin.RouterGroup) {
 		roleGroup.POST("/edit", middleware.JWTAuthMiddleware(), handlers.EditRoleHandler)
 		// Delete Role
 		roleGroup.POST("/delete", middleware.JWTAuthMiddleware(), handlers.DeleteRoleHandler)
-		/*//批量删除角色
+		// Batch delete roles
 		roleGroup.POST("/deleteroles", middleware.JWTAuthMiddleware(), handlers.DeleteRolesHandler)
-		//查询角色权限菜单
+		// Get role's permissions
 		roleGroup.POST("/getmenus", middleware.JWTAuthMiddleware(), handlers.GetRoleMenusHandler)
-		//更新用户角色权限
-		roleGroup.POST("/updaterolemenus", middleware.JWTAuthMiddleware(), handlers.UpdateRoleMenusHandler) */
+		// Modify role's permissions
+		roleGroup.POST("/updaterolemenus", middleware.JWTAuthMiddleware(), handlers.UpdateRoleMenusHandler)
 	}
 }
