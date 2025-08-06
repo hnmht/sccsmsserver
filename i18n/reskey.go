@@ -81,7 +81,7 @@ const (
 	StatusRoleUserExist ResKey = "StatusRoleUserExist"
 	StatusRoleAuthExist ResKey = "StatusRoleAuthExist"
 	// User(10300-10399)
-	StatusUserIDExist     ResKey = "StatusUserIDExist"
+	StatusUserCodeExist   ResKey = "StatusUserCodeExist"
 	StatusUserNameExist   ResKey = "StatusUserNameExist"
 	StatusUserMobileExist ResKey = "StatusUserMobileExist"
 	StatusUserEmailExist  ResKey = "StatusUserEmailExist"

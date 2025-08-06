@@ -367,6 +367,11 @@
             "message": "用户名称已经存在."
         },
         {
+            "key": "StatusUserCodeExist",
+            "type": "string",
+            "message": "用户编码已经存在."
+        },
+        {
             "key": "StatusUserMobileExist",
             "type": "string",
             "message": "用户手机号码已经存在."

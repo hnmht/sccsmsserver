@@ -365,7 +365,7 @@
             "key": "StatusUserNameExist",
             "type": "string",
             "message": "User name already exists."
-        },
+        },      
         {
             "key": "StatusUserMobileExist",
             "type": "string",
