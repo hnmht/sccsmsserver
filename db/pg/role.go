@@ -566,7 +566,7 @@ func DeleteRoles(roles *[]Role, modifyUserId int32) (resStatus i18n.ResKey, err 
 	return
 }
 
-// Modify role permission request parameter struct.
+// Modify role permission.
 func (roleMenu *ParamsRoleMenu) RoleMenuUpdate() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Begin a database transaction

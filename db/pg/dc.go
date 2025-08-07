@@ -11,7 +11,7 @@ type DC struct {
 	ID          int32     `db:"id" json:"id"`
 	Name        string    `db:"name" json:"name"`
 	Description string    `db:"description" json:"description"`
-	HigherClass SimpDC    `db:"fatherid" json:"fatherid"`
+	HigherClass SimpDC    `db:"fatherid" json:"fatherID"`
 	Status      int16     `db:"status" json:"status"`
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`
@@ -26,7 +26,7 @@ type SimpDC struct {
 	ID          int32     `db:"id" json:"id"`
 	ClassName   string    `db:"classname" json:"name"`
 	Description string    `db:"description" json:"description"`
-	FatherID    int32     `db:"fatherid" json:"fatherid"`
+	FatherID    int32     `db:"fatherid" json:"fatherID"`
 	Status      int16     `db:"status" json:"status"`
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`

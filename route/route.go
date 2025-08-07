@@ -23,7 +23,7 @@ func Setup(mode string) *gin.Engine {
 		// DCRoute(superGroup)        //文档类别
 		// DocRoute(superGroup)       //文档
 		// DDRoute(superGroup)        //dd问题处理单
-		// DeptRoute(superGroup)      //dept部门
+		DeptRoute(superGroup) //dept部门
 		// EDRoute(superGroup)        //ed执行单
 		// EICRoute(superGroup)       //eic执行项目类别
 		// EIDRoute(superGroup)       //eid执行项目档案
