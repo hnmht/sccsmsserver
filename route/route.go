@@ -18,12 +18,12 @@ func Setup(mode string) *gin.Engine {
 	//全局路径
 	superGroup := r.Group(pub.APIPath)
 	{
-		AuthRoute(superGroup) //auth权限
+		AuthRoute(superGroup) // Auth
 		// DashboardRoute(superGroup) //看板数据
 		// DCRoute(superGroup)        //文档类别
 		// DocRoute(superGroup)       //文档
 		// DDRoute(superGroup)        //dd问题处理单
-		DeptRoute(superGroup) //dept部门
+		DeptRoute(superGroup) // Department
 		// EDRoute(superGroup)        //ed执行单
 		// EICRoute(superGroup)       //eic执行项目类别
 		// EIDRoute(superGroup)       //eid执行项目档案
@@ -35,20 +35,20 @@ func Setup(mode string) *gin.Engine {
 		// LPRoute(superGroup)        //劳保用品档案
 		// LQRoute(superGroup)        //劳保用品岗位定额
 		// MsgRoute(superGroup)       //消息
-		// OPRoute(superGroup)        //岗位档案
-		// OuRoute(superGroup)        //在线用户
-		PersonRoute(superGroup) // Person
-		PubRoute(superGroup)    // System public information
+		PositionRoute(superGroup) // Position
+		OuRoute(superGroup)       // Online user
+		PersonRoute(superGroup)   // Person
+		PubRoute(superGroup)      // System public information
 		// RepRoute(superGroup)       //报表
 		// RLRoute(superGroup)        //风险等级
-		RoleRoute(superGroup) //role角色
+		RoleRoute(superGroup) // Role
 		// SIRoute(superGroup)        //si现场档案
 		// SICRoute(superGroup)       //sic现场档案分类
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录
 		// UDCRoute(superGroup)       //udc用户自定义档案类别
 		// UDDRoute(superGroup)       //udd用户自定义档案
-		UserRoute(superGroup) //user用户
+		UserRoute(superGroup) // User
 		// WORoute(superGroup)        //wo指令单
 
 	}

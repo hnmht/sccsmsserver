@@ -50,8 +50,7 @@ func AddUserHandler(c *gin.Context) {
 	err := c.ShouldBind(u)
 	if err != nil {
 		zap.L().Error("AddUserHandler invalid param", zap.Error(err))
-
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get Operator id

@@ -14,7 +14,7 @@ func GetPersonsHandler(c *gin.Context) {
 	ResponseWithMsg(c, resStatus, persons)
 }
 
-// Get latest Person master data for front-end caching
+// Get latest Person master data for front-end cache
 func GetPersonsCacheHandler(c *gin.Context) {
 	pc := new(pg.PersonCache)
 	err := c.ShouldBind(pc)

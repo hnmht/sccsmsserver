@@ -14,12 +14,12 @@ import (
 type OnlineUser struct {
 	User       Person `json:"user"`
 	TokenID    string `json:"id"`
-	ClientType string `json:"clienttype"`
-	FromIp     string `json:"fromip"`
-	ExpireTime int64  `json:"expiretime"`
+	ClientType string `json:"clientType"`
+	FromIp     string `json:"fromIp"`
+	ExpireTime int64  `json:"expireTime"`
 }
 
-// OnlineUser.Add 增加在线用户
+// Add online user
 func (ou *OnlineUser) Add() (resStatus i18n.ResKey, err error) {
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
 	jsonL, _ := json.Marshal(ou)
@@ -27,7 +27,7 @@ func (ou *OnlineUser) Add() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// OnlineUser.Get 获取在线用户
+// Get online user from cache
 func (ou *OnlineUser) Get() (exist int32, resStatus i18n.ResKey, err error) {
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
 	exist, v, err := cache.GetOther(key)
@@ -37,7 +37,7 @@ func (ou *OnlineUser) Get() (exist int32, resStatus i18n.ResKey, err error) {
 	return
 }
 
-// OnlineUser.Del 删除在线用户
+// Delete online user
 func (ou *OnlineUser) Del() (resStatus i18n.ResKey, err error) {
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
 	err = cache.DelOther(key)
@@ -48,12 +48,11 @@ func (ou *OnlineUser) Del() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// GetAllOnlineUser 获取所有在线用户列表
+// Get All online user list
 func GetAllOnlineUser() (ous []OnlineUser, resStatus i18n.ResKey, err error) {
 	ous = make([]OnlineUser, 0)
 	//获取用户表中的所有用户
 	sqlStr := `select id from sysuser where dr=0`
-
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		resStatus = i18n.CodeInternalError
