@@ -44,12 +44,12 @@ type SimpDept struct {
 
 // Simplify Department front end Cache struct
 type SimpDeptCache struct {
-	QueryTs      time.Time  `json:"queryts"`
-	ResultNumber int32      `json:"resultnum"`
-	DelDepts     []SimpDept `json:"delitems"`
-	UpdateDepts  []SimpDept `json:"updateitems"`
-	NewDepts     []SimpDept `json:"newitems"`
-	ResultTs     time.Time  `json:"resultts"`
+	QueryTs      time.Time  `json:"queryTs"`
+	ResultNumber int32      `json:"resultNumber"`
+	DelDepts     []SimpDept `json:"delItems"`
+	UpdateDepts  []SimpDept `json:"updateItems"`
+	NewDepts     []SimpDept `json:"newItems"`
+	ResultTs     time.Time  `json:"resultTs"`
 }
 
 // Initialize Department table.
