@@ -83,7 +83,7 @@ func EditUserHandler(c *gin.Context) {
 	err := c.ShouldBind(u)
 	if err != nil {
 		zap.L().Error("EditUserHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// If the password field is not empty,

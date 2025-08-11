@@ -10,27 +10,27 @@ import (
 func UserRoute(g *gin.RouterGroup) {
 	userGroup := g.Group("/user", middleware.JWTAuthMiddleware())
 	{
-		//获取用户列表
+		// Get User list
 		userGroup.POST("/list", handlers.GetUsersHandler)
-		//获取权限菜单
-		// userGroup.POST("/getmenu", handlers.GetMenuHandler)
-		//删除用户
+		// Get Menu List
+		userGroup.POST("/getmenu", handlers.GetMenuHandler)
+		// Delete User
 		userGroup.POST("/delete", handlers.DeleteUserHandler)
-		//批量删除用户
+		// Batch Delete User
 		userGroup.POST("/deletemultiple", handlers.DeleteUsersHandler)
-		//检查用户代码是否存在
+		// Check if the user code exists
 		userGroup.POST("/validatecode", handlers.CheckUserCodeExistHandler)
-		//检查用户名称是否存在
+		// Check if the user name exists
 		userGroup.POST("/validatename", handlers.CheckUserNameExistHandler)
-		//增加用户
+		// Add User
 		userGroup.POST("/add", handlers.AddUserHandler)
-		//编辑用户
+		// Edit User
 		userGroup.POST("/edit", handlers.EditUserHandler)
-		//更换头像
-		userGroup.POST("/changeAvatar", handlers.ChangeUserAvatarHandler)
-		// 发送token获取用户信息
+		// Change user avatar
+		userGroup.POST("/changeavatar", handlers.ChangeUserAvatarHandler)
+		// Get user information based on token
 		userGroup.POST("/userInfo", handlers.UserInfoHandler)
-		//通过用户中心修改用户信息
+		// User update VIA personal center
 		userGroup.POST("/modifyprofile", handlers.ModifyProfileHandler)
 	}
 }

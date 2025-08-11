@@ -325,14 +325,14 @@ func (user *User) Edit() (resStatus i18n.ResKey, err error) {
 	// Update the record in the sysuser table.
 	var uSql string
 	if user.Password != "" {
-		uSql = `update sysuser set usercode=$1,username=$2,mobile=$3, email=$4, file_id=$5,
-		isoperator=$6,op_id=$7,dept_id=$8,description=$9, gender=$10,
-		status=$11,locked=$12,modify_time=now(), modifyuserid = $13,ts=current_timestamp,password=$14 
+		uSql = `update sysuser set code=$1,name=$2,mobile=$3, email=$4, fileid=$5,
+		isoperator=$6,positionid=$7,deptid=$8,description=$9, gender=$10,
+		status=$11,locked=$12,modifytime=now(), modifierid = $13,ts=current_timestamp,password=$14 
 		where id=$15 and ts=$16 and dr=0`
 	} else {
-		uSql = `update sysuser set usercode=$1,username=$2,mobile=$3, email=$4, file_id=$5,
-		isoperator=$6,op_id=$7,dept_id=$8,description=$9, gender=$10,
-		status=$11,locked=$12,modify_time=now(), modifyuserid=$13,ts=current_timestamp 
+		uSql = `update sysuser set code=$1,name=$2,mobile=$3, email=$4, fileid=$5,
+		isoperator=$6,positionid=$7,deptid=$8,description=$9, gender=$10,
+		status=$11,locked=$12,modifytime=now(), modifierid=$13,ts=current_timestamp 
 		where id=$14 and ts=$15 and dr=0`
 	}
 
@@ -392,7 +392,7 @@ func (user *User) Edit() (resStatus i18n.ResKey, err error) {
 	}
 
 	// Insert new records into the sysuserole table.
-	iSql := "insert into sysuserrole(user_id,role_id,ts) values($1,$2,now())"
+	iSql := "insert into sysuserrole(userid,roleid,ts) values($1,$2,now())"
 	insertStmt, err := tx.Prepare(iSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -567,7 +567,7 @@ func DeleteUsers(users *[]User, modifyUserID int32) (resStatus i18n.ResKey, err 
 	}
 	defer tx.Commit()
 	// Pre-Processing for update the sysuser table deletion flag.
-	sqlStr := "update sysuser set dr = 1,ts = current_timestamp,modifyuserid=$1,modify_time=current_timestamp where id = $2 and ts=$3 and dr=0"
+	sqlStr := "update sysuser set dr = 1,ts = current_timestamp,modifierid=$1,modifytime=current_timestamp where id = $2 and ts=$3 and dr=0"
 	stmt, err := tx.Prepare(sqlStr)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -652,7 +652,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被指令单修改人引用",
-		   			SqlStr:         "select count(id) from workorder_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from workorder_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusWOModifyUsed,
 		   		},
 		   		{
@@ -667,7 +667,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被执行单修改人引用",
-		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusEOModifyUsed,
 		   		},
 		   		{
@@ -682,7 +682,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被问题处理单修改人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusIRFModifyUsed,
 		   		},
 		   		{
@@ -697,7 +697,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被文档类别修改人引用",
-		   			SqlStr:         "select count(id) from documentclass where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from documentclass where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusDCModifyUsed,
 		   		},
 		   		{
@@ -707,7 +707,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被文档修改人引用",
-		   			SqlStr:         "select count(id) from document where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from document where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusDocumentModifyUsed,
 		   		},
 		   		{
@@ -717,7 +717,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被培训课程修改人引用",
-		   			SqlStr:         "select count(id) from traincourse where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from traincourse where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusTCModifyUsed,
 		   		},
 		   		{
@@ -737,7 +737,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被培训记录修改人引用",
-		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusTRModifyUsed,
 		   		},
 		   		{
@@ -752,7 +752,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被岗位定额修改人引用",
-		   			SqlStr:         "select count(id) from lpaquota_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from lpaquota_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusPQModifyUsed,
 		   		},
 		   		{
@@ -772,7 +772,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被劳保用品发放单修改人引用",
-		   			SqlStr:         "select count(id) from lpaissuedoc_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from lpaissuedoc_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusPPEIFModifyUsed,
 		   		},
 		   		{
@@ -787,7 +787,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被岗位档案修改人引用",
-		   			SqlStr:         "select count(id) from operatingpost where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from operatingpost where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusPositionModifyUsed,
 		   		},
 		   		{
@@ -797,7 +797,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被现场档案类别修改人引用",
-		   			SqlStr:         "select count(id) from sceneitemclass where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from sceneitemclass where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusCSModifyUsed,
 		   		},
 		   		{
@@ -807,7 +807,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被现场档案修改人引用",
-		   			SqlStr:         "select count(id) from sceneitem where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from sceneitem where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusCSModifyUsed,
 		   		},
 		   		{
@@ -817,7 +817,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被自定义档案类别修改人引用",
-		   			SqlStr:         "select count(id) from userdefineclass where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from userdefineclass where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusUDCModifyUsed,
 		   		},
 		   		{
@@ -827,7 +827,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被自定义档案修改人引用",
-		   			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusUDModifyUsed,
 		   		},
 		   		{
@@ -837,7 +837,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被执行项目类别修改人引用",
-		   			SqlStr:         "select count(id) from exectiveitemclass where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from exectiveitemclass where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusEPCModifyUsed,
 		   		},
 		   		{
@@ -847,7 +847,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被执行项目修改人引用",
-		   			SqlStr:         "select count(id) from exectiveitem where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from exectiveitem where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusEPModifyUsed,
 		   		},
 		   		{
@@ -857,7 +857,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被风险等级修改人引用",
-		   			SqlStr:         "select count(id) from risklevel where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from risklevel where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusRLModifyUsed,
 		   		},
 		   		{
@@ -867,7 +867,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被劳保用品修改人引用",
-		   			SqlStr:         "select count(id) from laborprotection where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from laborprotection where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusPPEModifyUsed,
 		   		},
 		   		{
@@ -877,7 +877,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被执行模板修改人引用",
-		   			SqlStr:         "select count(id) from exectivetemplate_h where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from exectivetemplate_h where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusEPTModifyUsed,
 		   		},
 
@@ -893,7 +893,7 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		   		},
 		   		{
 		   			Description:    "被部门档案修改人引用",
-		   			SqlStr:         "select count(id) from department where dr = 0 and modifyuserid=$1",
+		   			SqlStr:         "select count(id) from department where dr = 0 and modifierid=$1",
 		   			UsedReturnCode: i18n.StatusDeptModifyUsed,
 		   		},
 		   		{
