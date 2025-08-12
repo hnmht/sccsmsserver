@@ -21,27 +21,52 @@ type OnlineUser struct {
 
 // Add online user
 func (ou *OnlineUser) Add() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
-	jsonL, _ := json.Marshal(ou)
+	jsonL, err := json.Marshal(ou)
+	if err != nil {
+		zap.L().Error("OnlineUser.Add json.Marshal failed:", zap.Error(err))
+		resStatus = i18n.StatusInternalError
+		return
+	}
 	err = cache.SetOther(key, jsonL)
+	if err != nil {
+		zap.L().Error("OnlineUser.Add cache.SetOther failed:", zap.Error(err))
+		resStatus = i18n.StatusInternalError
+		return
+	}
 	return
 }
 
 // Get online user from cache
 func (ou *OnlineUser) Get() (exist int32, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
 	exist, v, err := cache.GetOther(key)
+	if err != nil {
+		zap.L().Error("OulineUser.Get cache.GetOther failed:", zap.Error(err))
+		resStatus = i18n.StatusInternalError
+		return
+	}
+
 	if exist == 1 {
 		err = json.Unmarshal(v, &ou)
+		if err != nil {
+			zap.L().Error("OulineUser.Get json.Unmarshal failed:", zap.Error(err))
+			resStatus = i18n.StatusInternalError
+			return
+		}
 	}
 	return
 }
 
 // Delete online user
 func (ou *OnlineUser) Del() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	key := fmt.Sprintf("%s%s%d", ou.ClientType, ":", ou.User.ID)
 	err = cache.DelOther(key)
 	if err != nil {
+		zap.L().Error("OnlineUser.Del cache.DelOther failed:", zap.Error(err))
 		resStatus = i18n.CodeInternalError
 		return
 	}
@@ -51,6 +76,7 @@ func (ou *OnlineUser) Del() (resStatus i18n.ResKey, err error) {
 // Get All online user list
 func GetAllOnlineUser() (ous []OnlineUser, resStatus i18n.ResKey, err error) {
 	ous = make([]OnlineUser, 0)
+	resStatus = i18n.StatusOK
 	//获取用户表中的所有用户
 	sqlStr := `select id from sysuser where dr=0`
 	rows, err := db.Query(sqlStr)
