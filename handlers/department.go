@@ -113,11 +113,10 @@ func DelDeptHandler(c *gin.Context) {
 		return
 	}
 	d.Modifier.ID = operatorID
-
 	// Delete
-	statusCode, _ := d.Delete()
+	resStatus, _ = d.Delete()
 	// Resopnse
-	ResponseWithMsg(c, statusCode, d)
+	ResponseWithMsg(c, resStatus, d)
 }
 
 // Batch delete department

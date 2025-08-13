@@ -75,6 +75,7 @@ func initDepartment() (isFinish bool, err error) {
 
 // Get Simplify department information by ID.
 func (d *SimpDept) GetSimpDeptInfoByID() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Get simplify information from cache
 	number, sdb, _ := cache.Get(pub.SimpDept, d.ID)
 	if number > 0 {
@@ -107,7 +108,7 @@ func (d *SimpDept) GetSimpDeptInfoByID() (resStatus i18n.ResKey, err error) {
 	jsonB, _ := json.Marshal(d)
 	cache.Set(pub.SimpDept, d.ID, jsonB)
 
-	return i18n.StatusOK, nil
+	return
 }
 
 // Get department list
@@ -348,6 +349,7 @@ func (d *Department) AddDept() (resStatus i18n.ResKey, err error) {
 
 // Edit Department
 func (dept *Department) Edit() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Check if the parent department is compliant.
 	resStatus, err = dept.CheckFather()
 	if resStatus != i18n.StatusOK || err != nil {
@@ -390,7 +392,6 @@ func (dept *Department) Edit() (resStatus i18n.ResKey, err error) {
 // Check if the parent department is compliant.
 func (dept *Department) CheckFather() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
-
 	if dept.FatherID.ID > 0 {
 		// The parent department cannot be itself
 		if dept.ID == dept.FatherID.ID {
@@ -526,6 +527,7 @@ func DeleteDepts(depts *[]Department, modifyUserid int32) (resStatus i18n.ResKey
 		// Delete from local cache
 		dept.DelFromLocalCache()
 	}
+
 	return
 }
 
@@ -539,6 +541,7 @@ func (d *Department) DelFromLocalCache() {
 
 // Check if the department ID is refrenced.
 func (dept *Department) CheckIsUsed() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Define the items to be checked.
 	checkItems := []ArchiveCheckUsed{
 		{
