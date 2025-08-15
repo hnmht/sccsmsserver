@@ -404,16 +404,17 @@ func (p *Position) DelFromLocalCache() {
 
 // Check if the position ID is refrenced
 func (p *Position) CheckUsed() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Define the items to be checked.
 	checkItems := []ArchiveCheckUsed{
 		{
 			Description:    "Refrenced by user",
-			SqlStr:         "select count(id) as usednum from sysuser where dr=0 and op_id=$1",
+			SqlStr:         "select count(id) as usednum from sysuser where dr=0 and positionid=$1",
 			UsedReturnCode: i18n.StatusUserUsed,
 		},
 		/* {
 			Description:    "被劳保用品岗位定额表头引用",
-			SqlStr:         "select count(id) as usednum from lpaquota_h where dr=0 and op_id=$1",
+			SqlStr:         "select count(id) as usednum from lpaquota_h where dr=0 and positionid=$1",
 			UsedReturnCode: i18n.StatusLPAQuotaHUsed,
 		}, */
 	}
@@ -431,5 +432,5 @@ func (p *Position) CheckUsed() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
