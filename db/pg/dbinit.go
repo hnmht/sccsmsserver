@@ -32,7 +32,7 @@ var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 740, FatherID: 700, Title: "MenuPPES", Path: "/private/ppe/ppeStatistics", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1000, FatherID: 0, Title: "MenuMD", Path: "/private/masterData", Icon: "Article", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1010, FatherID: 1000, Title: "MenuDepartment", Path: "/private/masterData/department", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
-	SystemMenu{ID: 1011, FatherID: 1000, Title: "MenuPosition", Path: "/private/masterData/MenuPosition", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 1011, FatherID: 1000, Title: "MenuPosition", Path: "/private/masterData/position", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1016, FatherID: 1000, Title: "MenuCSC", Path: "/private/masterData/constructionSiteCategory", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1020, FatherID: 1000, Title: "MenuCS", Path: "/private/masterData/constructionSite", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1030, FatherID: 1000, Title: "MenuUDC", Path: "/private/masterData/userDefinedCategory", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},

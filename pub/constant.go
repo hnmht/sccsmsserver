@@ -72,7 +72,7 @@ const (
 	SimpDept   DataType = "simpdept"   // Simple Department Profile
 	File       DataType = "file"       // File metadata
 	CSC        DataType = "csc"        // Construction site Category
-	SimpOSAC   DataType = "simposac"   // Simple Construction site Category
+	SimpCSC    DataType = "simpcsc"    // Simple Construction site Category
 	CS         DataType = "cs"         // Construction Site Master Data
 	UDC        DataType = "udc"        // User-defined Data Category
 	UD         DataType = "ud"         // User-defined Master Data
