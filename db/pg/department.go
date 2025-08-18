@@ -443,7 +443,7 @@ func (dept *Department) Delete() (resStatus i18n.ResKey, err error) {
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	// Update the department table with  a deletion flag.
+	// Update the department table with a deletion flag.
 	sqlStr := `update department set dr=1,modifytime=now(),modifierid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and ts=$3`
 	res, err := db.Exec(sqlStr, dept.Modifier.ID, dept.ID, dept.Ts)
@@ -474,7 +474,7 @@ func (dept *Department) Delete() (resStatus i18n.ResKey, err error) {
 // Batch delete department
 func DeleteDepts(depts *[]Department, modifyUserid int32) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
-	// Begin a database trnasaction.
+	// Begin a database transaction.
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError

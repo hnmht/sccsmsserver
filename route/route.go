@@ -43,7 +43,7 @@ func Setup(mode string) *gin.Engine {
 		// RLRoute(superGroup)        //风险等级
 		RoleRoute(superGroup) // Role
 		// SIRoute(superGroup)        //si现场档案
-		// SICRoute(superGroup)       //sic现场档案分类
+		CSCRoute(superGroup) // Construction Site Category
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录
 		// UDCRoute(superGroup)       //udc用户自定义档案类别

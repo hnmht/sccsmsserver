@@ -384,52 +384,55 @@ func (csc *CSC) Edit() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// CSC CheckIsUsed 检查现场档案类别是否被引用
+// Check if the CSC have been refrenced
 func (csc *CSC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
-	//创建数据被引用检查类型切片
+	resStatus = i18n.StatusOK
+	// Define the items to be checked.
 	checkItems := []ArchiveCheckUsed{
 		{
-			Description:    "下级类别",
+			Description:    "Refrenced by subCategory",
 			SqlStr:         `select count(id) as usedNum from csc where fatherid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusCSCLowLevelExist,
 		},
 		{
-			Description:    "被现场档案引用",
-			SqlStr:         `select count(id) as usednum from sceneitem where class_id = $1 and dr=0`,
+			Description:    "Refrenced bye ",
+			SqlStr:         `select count(id) as usednum from sceneitem where cscid = $1 and dr=0`,
 			UsedReturnCode: i18n.StatusCSUsed,
 		},
-		/* 	{
-			Description:    "被执行项目默认值引用",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '525' and dr=0 and defaultvalue=cast($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEIDDefaultUsed,
-		},
-		{
-			Description:    "被执行项目错误值引用",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '525' and dr=0 and errorvalue=cast($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEIDErrorUsed,
-		},
-		{
-			Description:    "被执行模板默认值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITDefaultUsed,
-		},
-		{
-			Description:    "被执行模板错误值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITErrorUsed,
-		},
-		{
-			Description:    "被执行单执行值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDValueUsed,
-		},
-		{
-			Description:    "被执行单错误值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDErrorUsed,
-		}, */
+		/*
+			{
+				Description:    "被执行项目默认值引用",
+				SqlStr:         `select count(id) as usednum from cs where resulttypeid = '525' and dr=0 and defaultvalue=cast($1 as varchar)`,
+				UsedReturnCode: i18n.StatusEIDDefaultUsed,
+			},
+			{
+				Description:    "被执行项目错误值引用",
+				SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '525' and dr=0 and errorvalue=cast($1 as varchar)`,
+				UsedReturnCode: i18n.StatusEIDErrorUsed,
+			},
+
+				{
+					Description:    "被执行模板默认值引用",
+					SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+					UsedReturnCode: i18n.StatusEITDefaultUsed,
+				},
+				{
+					Description:    "被执行模板错误值引用",
+					SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+					UsedReturnCode: i18n.StatusEITErrorUsed,
+				},
+				{
+					Description:    "被执行单执行值引用",
+					SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
+					UsedReturnCode: i18n.StatusEDValueUsed,
+				},
+				{
+					Description:    "被执行单错误值引用",
+					SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+					UsedReturnCode: i18n.StatusEDErrorUsed,
+				}, */
 	}
-	//检查项目
+	// Check item by item
 	var usedNum int32
 	for _, item := range checkItems {
 		err = db.QueryRow(item.SqlStr, csc.ID).Scan(&usedNum)
@@ -443,33 +446,26 @@ func (csc *CSC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExectiveItemClass Delete 删除现场档案类别
+// Delete Construction Site Cateory
 func (csc *CSC) Delete() (resStatus i18n.ResKey, err error) {
-	//检查是否被其他档案引用
+	resStatus = i18n.StatusOK
+	// Check if it's refrenced by other data.
 	resStatus, err = csc.CheckIsUsed()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	//准备删除类别
+	// Update the deletion flag for the record
 	sqlStr := `update csc set dr=1,modifyTime=current_timestamp,modifierid=$1,ts=current_timestamp where id=$2 and dr=0 and ts=$3`
-	stmt, err := db.Prepare(sqlStr)
-	if err != nil {
-		resStatus = i18n.StatusInternalError
-		zap.L().Error("CSC.Delete db.Prepare failed", zap.Error(err))
-		return
-	}
-	defer stmt.Close()
-	//执行删除操作
-	res, err := stmt.Exec(csc.Modifier.ID, csc.ID, csc.Ts)
+	res, err := db.Exec(sqlStr, csc.Modifier.ID, csc.ID, csc.Ts)
 	if err != nil {
 		zap.L().Error("CSC.Delete stmt.Exec failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
 		return
 	}
-	//检查删除操作影响的行数
+	// Check the number of the rows affected by the update operation.
 	affected, err := res.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -482,19 +478,19 @@ func (csc *CSC) Delete() (resStatus i18n.ResKey, err error) {
 		zap.L().Info("CSC.Delete Other User Edit")
 		return
 	}
-	//从localCache删除
+	// Delete from the local cache
 	csc.DelFromLocalCache()
-
-	return i18n.StatusOK, nil
+	return
 }
 
-// DeleteSICs 批量删除现场档案类别
-func DeleteSICs(cscs *[]CSC, modifyUserID int32) (statusCode i18n.ResKey, err error) {
-	//开始执行事务
+// Batch delete cscs
+func DeleteCSCs(cscs *[]CSC, modifierID int32) (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Start a database transaction
 	tx, err := db.Begin()
 	if err != nil {
-		statusCode = i18n.StatusInternalError
-		zap.L().Error("DeleteSICs db.Begin failed", zap.Error(err))
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("DeleteCSCs db.Begin failed", zap.Error(err))
 		return
 	}
 	defer tx.Commit()
@@ -503,52 +499,50 @@ func DeleteSICs(cscs *[]CSC, modifyUserID int32) (statusCode i18n.ResKey, err er
 
 	stmt, err := tx.Prepare(delSqlStr)
 	if err != nil {
-		statusCode = i18n.StatusInternalError
-		zap.L().Error("DeleteSICs Delete prepare failed", zap.Error(err))
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("DeleteCSCs Delete prepare failed", zap.Error(err))
 		tx.Rollback()
-		return statusCode, err
+		return resStatus, err
 	}
 	defer stmt.Close()
 
 	for _, csc := range *cscs {
-		//检查是否被其他档案引用
-		statusCode, err = csc.CheckIsUsed()
-		if statusCode != i18n.StatusOK || err != nil {
+		// Check if it's refrenced by other data
+		resStatus, err = csc.CheckIsUsed()
+		if resStatus != i18n.StatusOK || err != nil {
 			tx.Rollback()
 			return
 		}
-
-		//执行删除操作
-		res, err := stmt.Exec(modifyUserID, csc.ID, csc.Ts)
+		// Write into database table
+		res, err := stmt.Exec(modifierID, csc.ID, csc.Ts)
 		if err != nil {
-			zap.L().Error("DeleteSICs stmt.Exec failed", zap.Error(err))
-			statusCode = i18n.StatusInternalError
+			zap.L().Error("DeleteCSCs stmt.Exec failed", zap.Error(err))
+			resStatus = i18n.StatusInternalError
 			tx.Rollback()
-			return statusCode, err
+			return resStatus, err
 		}
-		//检查删除操作影响的行数
+		// Check the number of the rows bye the updated operation.
 		affectRows, err := res.RowsAffected()
 		if err != nil {
-			zap.L().Error("DeleteSICs res.RowsAffected failed", zap.Error(err))
-			statusCode = i18n.StatusInternalError
+			zap.L().Error("DeleteCSCs res.RowsAffected failed", zap.Error(err))
+			resStatus = i18n.StatusInternalError
 			tx.Rollback()
-			return statusCode, err
+			return resStatus, err
 		}
 
 		if affectRows < 1 {
-			statusCode = i18n.StatusOtherEdit
-			zap.L().Info("DeleteSICs: " + csc.Name + " other user eidting")
+			resStatus = i18n.StatusOtherEdit
+			zap.L().Info("DeleteCSCs: " + csc.Name + " other user eidting")
 			tx.Rollback()
-			return statusCode, nil
+			return resStatus, nil
 		}
-		//从localCache删除
+		// Delete from local cache
 		csc.DelFromLocalCache()
 	}
-
-	return i18n.StatusOK, nil
+	return
 }
 
-// CSC.DelFromLocalCache 从localCache删除
+// Delete CSC from local cache
 func (csc *CSC) DelFromLocalCache() {
 	number, _, _ := cache.Get(pub.SimpCSC, csc.ID)
 	if number > 0 {
@@ -556,7 +550,7 @@ func (csc *CSC) DelFromLocalCache() {
 	}
 }
 
-// FindSimpSICChildrens 根据现场档案类别ID查找所有子类别
+// Find all subcategories by ID
 func FindSimpSICChildrens(scscs []SimpCSC, id int32) []SimpCSC {
 	childrens := make([]SimpCSC, 0)
 	for _, scsc := range scscs {
