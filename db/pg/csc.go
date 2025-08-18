@@ -395,8 +395,8 @@ func (csc *CSC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			UsedReturnCode: i18n.StatusCSCLowLevelExist,
 		},
 		{
-			Description:    "Refrenced bye ",
-			SqlStr:         `select count(id) as usednum from sceneitem where cscid = $1 and dr=0`,
+			Description:    "Refrenced by Construction Site",
+			SqlStr:         `select count(id) as usednum from cs where cscid = $1 and dr=0`,
 			UsedReturnCode: i18n.StatusCSUsed,
 		},
 		/*

@@ -8,7 +8,7 @@ import (
 )
 
 func CSCRoute(g *gin.RouterGroup) {
-	CSCGroup := g.Group("/sic", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
+	CSCGroup := g.Group("/csc", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Get CSC list
 		CSCGroup.POST("/list", handlers.GetCSCListHandler)
