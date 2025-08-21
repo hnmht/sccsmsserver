@@ -42,7 +42,7 @@ type SimpDept struct {
 	Dr          int16     `db:"dr" json:"dr"`
 }
 
-// Simplify Department front end Cache struct
+// Simplify Department front end cache struct
 type SimpDeptCache struct {
 	QueryTs      time.Time  `json:"queryTs"`
 	ResultNumber int32      `json:"resultNumber"`
@@ -80,7 +80,6 @@ func (d *SimpDept) GetSimpDeptInfoByID() (resStatus i18n.ResKey, err error) {
 	number, sdb, _ := cache.Get(pub.SimpDept, d.ID)
 	if number > 0 {
 		json.Unmarshal(sdb, &d)
-		resStatus = i18n.StatusOK
 		return
 	}
 	// If Simplify information isn't in cache, retrieve it from database

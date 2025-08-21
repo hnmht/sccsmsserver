@@ -294,7 +294,7 @@ func ChangeUserPasswordHandler(c *gin.Context) {
 	ResponseWithMsg(c, statusCode, nil)
 }
 
-// ChangeUserAvatarHandler 修改用户头像
+// Change User avatar handler
 func ChangeUserAvatarHandler(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -309,14 +309,14 @@ func ChangeUserAvatarHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//向minio上传文件
+	// Upload the file to the MINIO server
 	_, err = minio.UploadFile(fileName, fileObj, file.Size)
 	if err != nil {
 		zap.L().Error("ChangeUserAvatarHandler minio.UploadFile failed:", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 		return
 	}
-	//获取文件url
+	// Get the file URL to the MINIO server
 	presignedURL, err := minio.GetFileUrl(fileName, time.Second*24*60*60)
 	if err != nil {
 		zap.L().Error("ChangeUserAvatarHandler  minio.GetFileUrl failed:", zap.Error(err))

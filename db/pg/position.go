@@ -58,11 +58,11 @@ func initPosition() (isFinish bool, err error) {
 
 // Get Position information by ID
 func (p *Position) GetInfoByID() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Get Postion information from cache
 	number, b, _ := cache.Get(pub.Position, p.ID)
 	if number > 0 {
 		json.Unmarshal(b, &p)
-		resStatus = i18n.StatusOK
 		return
 	}
 	// If Position information isn't in cache, retrieve it from database.
@@ -95,7 +95,7 @@ func (p *Position) GetInfoByID() (resStatus i18n.ResKey, err error) {
 	pB, _ := json.Marshal(p)
 	cache.Set(pub.Position, p.ID, pB)
 
-	return i18n.StatusOK, nil
+	return
 }
 
 // Get Position Master Data list
@@ -247,6 +247,7 @@ func (p *Position) Add() (resStatus i18n.ResKey, err error) {
 
 // Edit position
 func (p *Position) Edit() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Check if the position name exists
 	resStatus, err = p.CheckNameExist()
 	if resStatus != i18n.StatusOK || err != nil {
