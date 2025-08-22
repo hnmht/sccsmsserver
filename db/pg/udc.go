@@ -19,7 +19,7 @@ type UserDefineCategory struct {
 	IsLevel     int16     `db:"islevel" json:"isLevel"`
 	Status      int16     `db:"status" json:"status"`
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
-	Creator     Person    `db:"Creatorid" json:"createuser"`
+	Creator     Person    `db:"Creatorid" json:"creator"`
 	Modifier    Person    `db:"modifierid" json:"modifier"`
 	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
 	Ts          time.Time `db:"ts" json:"ts"`
@@ -263,7 +263,8 @@ func (udfc *UserDefineCategory) Edit() (resStatus i18n.ResKey, err error) {
 
 // Delete User-define Category master data
 func (udfc *UserDefineCategory) Delete() (resStatus i18n.ResKey, err error) {
-	// Check if the data is refrenced.
+	resStatus = i18n.StatusOK
+	// Check if the data is referenced.
 	resStatus, err = udfc.CheckUsed()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
@@ -278,7 +279,6 @@ func (udfc *UserDefineCategory) Delete() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("UserDefineCategory.Delete stmt.exec failed", zap.Error(err))
 		return
 	}
-
 	// Check the number of rows affected by update operation.
 	affected, err := res.RowsAffected()
 	if err != nil {
@@ -286,14 +286,12 @@ func (udfc *UserDefineCategory) Delete() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("UserDefineCategory.Delete res.RowsAffected failed", zap.Error(err))
 		return
 	}
-
 	if affected < 1 {
 		resStatus = i18n.StatusOtherEdit
 		return
 	}
 	// Delete from local cache
 	udfc.DelFromCache()
-
 	return
 }
 
@@ -380,6 +378,7 @@ func (udc *UserDefineCategory) DelFromCache() {
 
 // Check if the UDC ID if refrenced
 func (udc *UserDefineCategory) CheckUsed() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Define the items to be checked
 	checkItems := []ArchiveCheckUsed{
 		{

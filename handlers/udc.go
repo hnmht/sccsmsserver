@@ -21,7 +21,7 @@ func AddUDCHandler(c *gin.Context) {
 	creatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("AddUDCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, udc)
+		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
 	udc.Creator.ID = creatorID
@@ -49,7 +49,7 @@ func EditUDCHandler(c *gin.Context) {
 	modifierID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("EditUDCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, udc)
+		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
 	udc.Modifier.ID = modifierID
@@ -72,7 +72,7 @@ func DeleteUDCHandler(c *gin.Context) {
 	modifierID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteUDCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, udc)
+		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
 	udc.Modifier.ID = modifierID
