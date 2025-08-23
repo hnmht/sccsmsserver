@@ -55,14 +55,14 @@ func AddCSCHandler(c *gin.Context) {
 	err := c.ShouldBind(csc)
 	if err != nil {
 		zap.L().Error("AddCSCHandler invalid param:", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get current operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("AddCSCHandler getCurrentUser failed:" + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, csc)
+		ResponseWithMsg(c, resStatus, csc)
 		return
 	}
 	csc.Creator.ID = operatorID
@@ -78,14 +78,14 @@ func EditCSCHandler(c *gin.Context) {
 	err := c.ShouldBind(csc)
 	if err != nil {
 		zap.L().Error("EditCSCHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get current operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("EditCSCHandler getCurrentUser failed:" + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		ResponseWithMsg(c, resStatus, csc)
 		return
 	}
 	csc.Modifier.ID = operatorID
@@ -101,14 +101,14 @@ func DeleteCSCHandler(c *gin.Context) {
 	err := c.ShouldBind(csc)
 	if err != nil {
 		zap.L().Error("DeleteCSCHandler invalid param:", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get current opeartor ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteCSCHandler getCurrentUser failed:" + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		ResponseWithMsg(c, resStatus, csc)
 		return
 	}
 	csc.Modifier.ID = operatorID
@@ -124,13 +124,13 @@ func DeleteCSCsHandler(c *gin.Context) {
 	err := c.ShouldBind(cscs)
 	if err != nil {
 		zap.L().Error("DeleteCSCsHandler invaid parms", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get current operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteCSCsHandler getCurrentUser failed: " + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		ResponseWithMsg(c, resStatus, cscs)
 		return
 	}
 	// Batch delete

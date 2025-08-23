@@ -126,7 +126,7 @@ func DeletePositionsHandler(c *gin.Context) {
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ps)
+		ResponseWithMsg(c, resStatus, ps)
 		return
 	}
 	// Batch Delete

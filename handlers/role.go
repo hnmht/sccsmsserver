@@ -12,7 +12,6 @@ import (
 func GetRolesHandler(c *gin.Context) {
 	// Get data
 	roles, resStatus, _ := pg.GetRoles()
-
 	ResponseWithMsg(c, resStatus, roles)
 }
 
@@ -22,7 +21,7 @@ func CheckRoleNameExistHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("CheckRoleNameExistHandler with invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	resStatus, _ := r.CheckNameExist()
@@ -36,7 +35,7 @@ func AddRoleHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("AddRoleHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 
@@ -60,7 +59,7 @@ func DeleteRoleHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("DeleteRoleHandler invalid params", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get Current User ID
@@ -83,18 +82,17 @@ func EditRoleHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("EditRoleHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get current user ID
 	modifierId, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("EditRoleHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, r)
+		ResponseWithMsg(c, resStatus, r)
 		return
 	}
 	r.Modifier.ID = modifierId
-
 	// Edit role
 	statusCode, _ := r.Edit()
 	// Response
@@ -107,14 +105,14 @@ func DeleteRolesHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("DeleteRolesHandler invalid params", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteRoleHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, r)
+		ResponseWithMsg(c, resStatus, r)
 		return
 	}
 	resStatus, _ = pg.DeleteRoles(r, operatorID)
@@ -128,7 +126,7 @@ func GetRoleMenusHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("AddRoleHandler invalid param:", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		ResponseWithMsg(c, i18n.CodeInternalError, err)
 		return
 	}
 	// Get menu list
@@ -143,14 +141,14 @@ func UpdateRoleMenusHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("AddRoleHandler invalid param:", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("UpdateRoleMenus getCurrentUser failed: ", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, r)
+		ResponseWithMsg(c, resStatus, r)
 		return
 	}
 	r.Role.Modifier.ID = operatorID

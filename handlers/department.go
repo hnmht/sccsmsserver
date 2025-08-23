@@ -30,7 +30,7 @@ func GetSimpDeptsCacheHandler(c *gin.Context) {
 	err := c.ShouldBind(dc)
 	if err != nil {
 		zap.L().Error("GetSimpDeptsCacheHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	resStatus, _ := dc.GetLatestSimpDepts()
@@ -44,7 +44,7 @@ func CheckDeptCodeExistHandler(c *gin.Context) {
 	err := c.ShouldBind(d)
 	if err != nil {
 		zap.L().Error("CheckDeptCodeExistHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	resStatus, _ := d.CheckDeptCodeExist()
@@ -57,14 +57,14 @@ func AddDeptHandler(c *gin.Context) {
 	err := c.ShouldBind(d)
 	if err != nil {
 		zap.L().Error("AddDeptHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("AddDeptHandler getCurrentUser failed: " + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, d)
+		ResponseWithMsg(c, resStatus, d)
 		return
 	}
 	d.Creator.ID = operatorID
@@ -80,13 +80,13 @@ func EditDeptHandler(c *gin.Context) {
 	err := c.ShouldBind(d)
 	if err != nil {
 		zap.L().Error("EditDeptHandler invaid parms", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("EditDeptHandler getCurrentUser failed: " + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, d)
+		ResponseWithMsg(c, resStatus, d)
 		return
 	}
 	d.Modifier.ID = operatorID
@@ -103,13 +103,13 @@ func DelDeptHandler(c *gin.Context) {
 	err := c.ShouldBind(d)
 	if err != nil {
 		zap.L().Error("DelDeptHandler invaid parms", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DelDeptHandler getCurrentUser failed: " + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, d)
+		ResponseWithMsg(c, resStatus, d)
 		return
 	}
 	d.Modifier.ID = operatorID
@@ -125,13 +125,13 @@ func DelDeptsHandler(c *gin.Context) {
 	err := c.ShouldBind(depts)
 	if err != nil {
 		zap.L().Error("DelDeptsHandler invaid parms", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DelDeptsHandler getCurrentUser failed: " + resStatus.String())
-		ResponseWithMsg(c, i18n.CodeInternalError, depts)
+		ResponseWithMsg(c, resStatus, depts)
 		return
 	}
 	// Delete departments

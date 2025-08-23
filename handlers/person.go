@@ -20,7 +20,7 @@ func GetPersonsCacheHandler(c *gin.Context) {
 	err := c.ShouldBind(pc)
 	if err != nil {
 		zap.L().Error("GetPersonsCacheHandler invalid param", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	resStatus, _ := pc.GetLatestPersons()

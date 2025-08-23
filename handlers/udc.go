@@ -121,7 +121,7 @@ func DeleteUDCsHandler(c *gin.Context) {
 	modifierID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
 		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, udcs)
+		ResponseWithMsg(c, resStatus, udcs)
 		return
 	}
 	// Batch Delete
