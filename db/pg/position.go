@@ -147,7 +147,7 @@ func GetPositionList() (ps []Position, resStatus i18n.ResKey, err error) {
 	return
 }
 
-// Get latest positon master data
+// Get latest positon master data front-end cache
 func (pc *PositionCache) GetOPsCache() (resStatus i18n.ResKey, err error) {
 	pc.DelItems = make([]Position, 0)
 	pc.NewItems = make([]Position, 0)
@@ -160,7 +160,6 @@ func (pc *PositionCache) GetOPsCache() (resStatus i18n.ResKey, err error) {
 		if err == sql.ErrNoRows {
 			pc.ResultNumber = 0
 			pc.ResultTs = pc.QueryTs
-			resStatus = i18n.StatusOK
 			return
 		}
 		zap.L().Error("PositionCache.GetOPsCache query latest ts failed", zap.Error(err))

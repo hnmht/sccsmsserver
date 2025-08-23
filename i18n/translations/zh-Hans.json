@@ -437,7 +437,7 @@
             "message": "自定义档案类别名称已经存在."
         },
         {
-            "key": "StatusUDCodeExist",
+            "key": "StatusUDACodeExist",
             "type": "string",
             "message": "自定义档案编码已经存在."
         },

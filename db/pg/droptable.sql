@@ -12,7 +12,7 @@ drop table if exists csc cascade;
 drop table if exists cs cascade;
 drop table if exists cso cascade;
 drop table if exists udc cascade;
-drop table if exists ud cascade;
+drop table if exists uda cascade;
 drop table if exists epc cascade;
 drop table if exists ep cascade;
 drop table if exists ept_h cascade;

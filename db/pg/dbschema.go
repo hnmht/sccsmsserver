@@ -351,10 +351,10 @@ var tables []table = []table{
 		InitFunc:       genericInitTable,
 	},
 	{
-		TableName:   "ud",
-		Description: "User-define Master Data",
+		TableName:   "uda",
+		Description: "User-define Archive Master Data",
 		CreateSQL: `
-			create table if not exists ud (
+			create table if not exists uda (
 			id serial NOT NULL,
 			udcid int default 0,
 			code varchar(128), 

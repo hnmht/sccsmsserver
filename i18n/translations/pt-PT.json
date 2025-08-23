@@ -437,7 +437,7 @@
             "message": "Nome da categoria definida pelo usuário já existe."
         },
         {
-            "key": "StatusUDCodeExist",
+            "key": "StatusUDACodeExist",
             "type": "string",
             "message": "Código de dados mestre definido pelo usuário já existe."
         },

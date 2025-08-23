@@ -46,8 +46,8 @@ func Setup(mode string) *gin.Engine {
 		CSCRoute(superGroup) // Construction Site Category
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录
-		UDCRoute(superGroup) // User-define Category
-		// UDDRoute(superGroup)       //udd用户自定义档案
+		UDARoute(superGroup)  // User-defined Archive
+		UDCRoute(superGroup)  // User-defined Category
 		UserRoute(superGroup) // User
 		// WORoute(superGroup)        //wo指令单
 

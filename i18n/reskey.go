@@ -102,7 +102,7 @@ const (
 	// User-defined Category (10700-10799)
 	StatusUDCNameExist ResKey = "StatusUDCNameExist"
 	// User-defined Data (10800-10899)
-	StatusUDCodeExist ResKey = "StatusUDCodeExist"
+	StatusUDACodeExist ResKey = "StatusUDCodeExist"
 	// Execution Project Category (10900-10999)
 	StatusEPCNameExist     ResKey = "StatusEPCNameExist"
 	StatusEPCFatherSelf    ResKey = "StatusEPCFatherSelf"

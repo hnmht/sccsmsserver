@@ -437,9 +437,9 @@
             "message": "User-defined category name already exists."
         },
         {
-            "key": "StatusUDCodeExist",
+            "key": "StatusUDACodeExist",
             "type": "string",
-            "message": "User-defined master data code already exists."
+            "message": "User-defined Archive master data code already exists."
         },
         {
             "key": "StatusEPCNameExist",

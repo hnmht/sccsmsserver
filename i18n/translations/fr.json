@@ -437,7 +437,7 @@
             "message": "Le nom de la catégorie définie par l'utilisateur existe déjà."
         },
         {
-            "key": "StatusUDCodeExist",
+            "key": "StatusUDACodeExist",
             "type": "string",
             "message": "Le code de données de base défini par l'utilisateur existe déjà."
         },
