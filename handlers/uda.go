@@ -63,7 +63,7 @@ func DeleteUDAHandler(c *gin.Context) {
 	}
 	// Get operator ID
 	modifierID, resStatus := GetCurrentUser(c)
-	if err != nil {
+	if resStatus != i18n.StatusOK {
 		zap.L().Error("DeleteUDAHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, uda)
 		return

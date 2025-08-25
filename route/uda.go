@@ -17,7 +17,7 @@ func UDARoute(g *gin.RouterGroup) {
 		// Delete UDA
 		UDAGroup.POST("/delete", handlers.DeleteUDAHandler)
 		// Batch delete UDA
-		UDAGroup.POST("/deleteudds", handlers.DeleteUDAsHandler)
+		UDAGroup.POST("/deleteudas", handlers.DeleteUDAsHandler)
 		// Get UDA list under the UDC
 		UDAGroup.POST("/list", handlers.GetUDAListHandler)
 		// Get all UDA list
