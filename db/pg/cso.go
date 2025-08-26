@@ -38,6 +38,35 @@ type SceneItemOptionCache struct {
 
 // Initialize cso table
 func initCSO() (isFinish bool, err error) {
+	// Check if a record exists in the cso table
+	sqlStr := "select count(id) from cso"
+	hasRecord, isFinish, err := genericCheckRecord("cso", sqlStr)
+	if hasRecord || !isFinish || err != nil { //有数据 或 没有完成 或有错误
+		return
+	}
+	// If there's no data, continue with the initialzation
+	var options = []ConstructionSiteOption{
+		{ID: 1, Code: "udf1", Name: "udf1", DisplayName: "udf1"},
+		{ID: 2, Code: "udf2", Name: "udf2", DisplayName: "udf2"},
+		{ID: 3, Code: "udf3", Name: "udf3", DisplayName: "udf3"},
+		{ID: 4, Code: "udf4", Name: "udf4", DisplayName: "udf4"},
+		{ID: 5, Code: "udf5", Name: "udf5", DisplayName: "udf5"},
+		{ID: 6, Code: "udf6", Name: "udf6", DisplayName: "udf6"},
+		{ID: 7, Code: "udf7", Name: "udf7", DisplayName: "udf7"},
+		{ID: 8, Code: "udf8", Name: "udf8", DisplayName: "udf8"},
+		{ID: 9, Code: "udf9", Name: "udf9", DisplayName: "udf9"},
+		{ID: 10, Code: "udf10", Name: "udf10", DisplayName: "udf10"},
+	}
+	// Write the preset data to the cso table
+	sqlStr = "insert into cso(id,code,name,displayname) values($1,$2,$3,$4)"
+	for _, option := range options {
+		_, err = db.Exec(sqlStr, option.ID, option.Code, option.Name, option.DisplayName)
+		if err != nil {
+			isFinish = false
+			zap.L().Error("initSceneItemOption insert initvalues failed", zap.Error(err))
+			return
+		}
+	}
 	return
 }
 
