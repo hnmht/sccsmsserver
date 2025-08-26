@@ -51,6 +51,7 @@ type SimpSICCache struct {
 	ResultTs     time.Time `json:"resultTs"`
 }
 
+// Initialize csc table
 func initCSC() (isFinish bool, err error) {
 	return true, nil
 }

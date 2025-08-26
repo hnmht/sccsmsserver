@@ -105,10 +105,10 @@ func (udcc *UDCCache) GetUDCsCache() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	// Retrieve all data greater than the latest timestamp from usc
+	// Retrieve all data greater than the latest timestamp from usc table
 	sqlStr = `select a.id,a.name,a.description,a.islevel,a.status,
 	a.createtime,a.Creatorid,a.modifytime,a.modifierid,a.ts,
-	a.dr
+	a.dr 
 	from udc a
 	where a.ts > $1 order by a.ts desc`
 	rows, err := db.Query(sqlStr, udcc.QueryTs)
@@ -376,7 +376,7 @@ func (udc *UserDefineCategory) DelFromCache() {
 	}
 }
 
-// Check if the UDC ID if refrenced
+// Check if the UDC ID is refrenced
 func (udc *UserDefineCategory) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Define the items to be checked
