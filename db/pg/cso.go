@@ -27,7 +27,7 @@ type ConstructionSiteOption struct {
 }
 
 // Construction Site Options Front-end Cache
-type SceneItemOptionCache struct {
+type ConstructionSiteOptionCache struct {
 	QueryTs      time.Time                `json:"queryTs"`
 	ResultNumber int32                    `json:"resultNumber"`
 	DelItems     []ConstructionSiteOption `json:"delItems"`
@@ -130,7 +130,7 @@ func GetCSOs() (scOptions []ConstructionSiteOption, resStatus i18n.ResKey, err e
 }
 
 // Get Construction Site Options front-end cache
-func (csoc *SceneItemOptionCache) GetCSOCache() (resStatus i18n.ResKey, err error) {
+func (csoc *ConstructionSiteOptionCache) GetCSOCache() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Get the latest timestamp from cso table
 	sqlStr := `select ts from cso where ts > $1 order by ts desc limit(1)`

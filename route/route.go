@@ -42,8 +42,9 @@ func Setup(mode string) *gin.Engine {
 		// RepRoute(superGroup)       //报表
 		// RLRoute(superGroup)        //风险等级
 		RoleRoute(superGroup) // Role
-		// SIRoute(superGroup)        //si现场档案
-		CSCRoute(superGroup) // Construction Site Category
+		CSARoute(superGroup)  // Construction Site Archive
+		CSCRoute(superGroup)  // Construction Site Category
+		CSORoute(superGroup)  // Construction Site Options
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录
 		UDARoute(superGroup)  // User-defined Archive
