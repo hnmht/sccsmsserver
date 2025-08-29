@@ -202,7 +202,7 @@
             "message": "现场档案类别"
         },
         {
-            "key": "MenuCS",
+            "key": "MenuCSA",
             "type": "string",
             "message": "现场档案"
         },
@@ -607,7 +607,7 @@
             "message": "被部门档案引用."
         },
         {
-            "key": "StatusCSUsed",
+            "key": "StatusCSAUsed",
             "type": "string",
             "message": "被现场档案引用."
         },
@@ -637,7 +637,7 @@
             "message": "被问题处理单引用."
         },
         {
-            "key": "StatusCSRespUsed",
+            "key": "StatusCSARespUsed",
             "type": "string",
             "message": "被现场档案负责人引用."
         },
@@ -862,12 +862,12 @@
             "message": "被现场档案类别修改人引用."
         },
         {
-            "key": "StatusCSCreateUsed",
+            "key": "StatusCSACreateUsed",
             "type": "string",
             "message": "被现场档案创建人引用."
         },
         {
-            "key": "StatusCSModifyUsed",
+            "key": "StatusCSAModifyUsed",
             "type": "string",
             "message": "被现场档案修改人引用."
         },

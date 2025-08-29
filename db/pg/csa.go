@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Initialize cs table
+// Initialize csa table
 func initCS() (isFinish bool, err error) {
 	return
 }
@@ -27,8 +27,8 @@ type ConstructionSite struct {
 	RespDept    SimpDept           `db:"respdeptid" json:"respDept"`
 	RespPerson  Person             `db:"resppersonid" json:"respPerson"`
 	Status      int16              `db:"status" json:"status"`
-	FinishFlag  int16              `db:"finishflag" json:"finishFlag"`
-	FinishDate  string             `db:"finishdate" json:"finishDate"`
+	EndFlag     int16              `db:"endflag" json:"endFlag"`
+	EndDate     string             `db:"enddate" json:"endDate"`
 	Longitude   float64            `db:"longitude" json:"longitude"`
 	Latitude    float64            `db:"latitude" json:"latitude"`
 	Udf1        UserDefinedArchive `db:"udf1" json:"udf1"`
@@ -63,14 +63,14 @@ type ConstructionSiteCache struct {
 func GetCSs() (css []ConstructionSite, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	css = make([]ConstructionSite, 0)
-	// Retrieve data from cs table
+	// Retrieve data from csa table
 	sqlStr := `select id,code,name,description,cscid,
-	subdeptid,respdeptid,resppersonid,status,finishflag,
-	finishdate,	longitude,latitude,createtime,creatorid,
+	subdeptid,respdeptid,resppersonid,status,endflag,
+	enddate,longitude,latitude,createtime,creatorid,
 	udf1,udf2,udf3,udf4,udf5,
 	udf6,udf7,udf8,udf9,udf10,
 	modifytime,modifierid,ts,dr
-	from cs where dr=0 order by ts desc`
+	from csa where dr=0 order by ts desc`
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -80,24 +80,24 @@ func GetCSs() (css []ConstructionSite, resStatus i18n.ResKey, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var cs ConstructionSite
-		err = rows.Scan(&cs.ID, &cs.Code, &cs.Name, &cs.Description, &cs.Csc.ID,
-			&cs.Department.ID, &cs.RespDept.ID, &cs.RespPerson.ID, &cs.Status, &cs.FinishFlag,
-			&cs.FinishDate, &cs.Longitude, &cs.Latitude, &cs.CreateDate, &cs.Creator.ID,
-			&cs.Udf1.ID, &cs.Udf2.ID, &cs.Udf3.ID, &cs.Udf4.ID, &cs.Udf5.ID,
-			&cs.Udf6.ID, &cs.Udf7.ID, &cs.Udf8.ID, &cs.Udf9.ID, &cs.Udf10.ID,
-			&cs.ModifyDate, &cs.Modifier.ID, &cs.Ts, &cs.Dr)
+		var csa ConstructionSite
+		err = rows.Scan(&csa.ID, &csa.Code, &csa.Name, &csa.Description, &csa.Csc.ID,
+			&csa.Department.ID, &csa.RespDept.ID, &csa.RespPerson.ID, &csa.Status, &csa.EndFlag,
+			&csa.EndDate, &csa.Longitude, &csa.Latitude, &csa.CreateDate, &csa.Creator.ID,
+			&csa.Udf1.ID, &csa.Udf2.ID, &csa.Udf3.ID, &csa.Udf4.ID, &csa.Udf5.ID,
+			&csa.Udf6.ID, &csa.Udf7.ID, &csa.Udf8.ID, &csa.Udf9.ID, &csa.Udf10.ID,
+			&csa.ModifyDate, &csa.Modifier.ID, &csa.Ts, &csa.Dr)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("GetCSs rows.Next failed", zap.Error(err))
 			return
 		}
 		// Get details
-		resStatus, err = cs.GetAttachInfo()
+		resStatus, err = csa.GetAttachInfo()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
-		css = append(css, cs)
+		css = append(css, csa)
 	}
 	return
 }
@@ -108,8 +108,8 @@ func (csc *ConstructionSiteCache) GetCSCache() (resStatus i18n.ResKey, err error
 	csc.DelItems = make([]ConstructionSite, 0)
 	csc.NewItems = make([]ConstructionSite, 0)
 	csc.UpdateItems = make([]ConstructionSite, 0)
-	// Get the latest timestamp from the cs table
-	sqlStr := `select ts from cs where ts>$1 order by ts desc limit(1)`
+	// Get the latest timestamp from the csa table
+	sqlStr := `select ts from csa where ts>$1 order by ts desc limit(1)`
 	err = db.QueryRow(sqlStr, csc.QueryTs).Scan(&csc.ResultTs)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -123,14 +123,14 @@ func (csc *ConstructionSiteCache) GetCSCache() (resStatus i18n.ResKey, err error
 		return
 	}
 
-	// Retrieve all data greater than latest timestamp from cs table
+	// Retrieve all data greater than latest timestamp from csa table
 	sqlStr = `select id,code,name,description,cscid,
-	subdeptid,respdeptid,resppersonid,status,finishflag,
-	finishdate,longitude,latitude,createtime,creatorid,
+	subdeptid,respdeptid,resppersonid,status,endflag,
+	enddate,longitude,latitude,createtime,creatorid,
 	udf1,udf2,udf3,	udf4,udf5,
 	udf6,udf7,udf8,udf9,udf10,
 	modifytime,modifierid,ts,dr
-	from cs where ts>$1 order by ts desc`
+	from csa where ts>$1 order by ts desc`
 	rows, err := db.Query(sqlStr, csc.QueryTs)
 	if err != nil {
 		zap.L().Error("ConstructionSiteCache.GetCSCache db.Query failed", zap.Error(err))
@@ -140,36 +140,36 @@ func (csc *ConstructionSiteCache) GetCSCache() (resStatus i18n.ResKey, err error
 	defer rows.Close()
 
 	for rows.Next() {
-		var cs ConstructionSite
-		err = rows.Scan(&cs.ID, &cs.Code, &cs.Name, &cs.Description, &cs.Csc.ID,
-			&cs.Department.ID, &cs.RespDept.ID, &cs.RespPerson.ID, &cs.Status, &cs.FinishFlag,
-			&cs.FinishDate, &cs.Longitude, &cs.Latitude, &cs.CreateDate, &cs.Creator.ID,
-			&cs.Udf1.ID, &cs.Udf2.ID, &cs.Udf3.ID, &cs.Udf4.ID, &cs.Udf5.ID,
-			&cs.Udf6.ID, &cs.Udf7.ID, &cs.Udf8.ID, &cs.Udf9.ID, &cs.Udf10.ID,
-			&cs.ModifyDate, &cs.Modifier.ID, &cs.Ts, &cs.Dr)
+		var csa ConstructionSite
+		err = rows.Scan(&csa.ID, &csa.Code, &csa.Name, &csa.Description, &csa.Csc.ID,
+			&csa.Department.ID, &csa.RespDept.ID, &csa.RespPerson.ID, &csa.Status, &csa.EndFlag,
+			&csa.EndDate, &csa.Longitude, &csa.Latitude, &csa.CreateDate, &csa.Creator.ID,
+			&csa.Udf1.ID, &csa.Udf2.ID, &csa.Udf3.ID, &csa.Udf4.ID, &csa.Udf5.ID,
+			&csa.Udf6.ID, &csa.Udf7.ID, &csa.Udf8.ID, &csa.Udf9.ID, &csa.Udf10.ID,
+			&csa.ModifyDate, &csa.Modifier.ID, &csa.Ts, &csa.Dr)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("ConstructionSiteCache.GetCSCache rows.Next failed", zap.Error(err))
 			return
 		}
 		// Get details
-		resStatus, err = cs.GetAttachInfo()
+		resStatus, err = csa.GetAttachInfo()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 
-		if cs.Dr == 0 {
-			if cs.CreateDate.Before(csc.QueryTs) || cs.CreateDate.Equal(csc.QueryTs) {
+		if csa.Dr == 0 {
+			if csa.CreateDate.Before(csc.QueryTs) || csa.CreateDate.Equal(csc.QueryTs) {
 				csc.ResultNumber++
-				csc.UpdateItems = append(csc.UpdateItems, cs)
+				csc.UpdateItems = append(csc.UpdateItems, csa)
 			} else {
 				csc.ResultNumber++
-				csc.NewItems = append(csc.NewItems, cs)
+				csc.NewItems = append(csc.NewItems, csa)
 			}
 		} else {
-			if cs.CreateDate.Before(csc.QueryTs) || cs.CreateDate.Equal(csc.QueryTs) {
+			if csa.CreateDate.Before(csc.QueryTs) || csa.CreateDate.Equal(csc.QueryTs) {
 				csc.ResultNumber++
-				csc.DelItems = append(csc.DelItems, cs)
+				csc.DelItems = append(csc.DelItems, csa)
 			}
 		}
 	}
@@ -177,116 +177,116 @@ func (csc *ConstructionSiteCache) GetCSCache() (resStatus i18n.ResKey, err error
 }
 
 // Get CS master data details
-func (cs *ConstructionSite) GetAttachInfo() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) GetAttachInfo() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Get Construction Site Category details
-	if cs.Csc.ID > 0 {
-		resStatus, err = cs.Csc.GetSCSCInfoByID()
+	if csa.Csc.ID > 0 {
+		resStatus, err = csa.Csc.GetSCSCInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get Department details
-	if cs.Department.ID > 0 {
-		resStatus, err = cs.Department.GetSimpDeptInfoByID()
+	if csa.Department.ID > 0 {
+		resStatus, err = csa.Department.GetSimpDeptInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get Responsible  Department details
-	if cs.RespDept.ID > 0 {
-		resStatus, err = cs.RespDept.GetSimpDeptInfoByID()
+	if csa.RespDept.ID > 0 {
+		resStatus, err = csa.RespDept.GetSimpDeptInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get Responsible Person details
-	if cs.RespPerson.ID > 0 {
-		resStatus, err = cs.RespPerson.GetPersonInfoByID()
+	if csa.RespPerson.ID > 0 {
+		resStatus, err = csa.RespPerson.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 1 details
-	if cs.Udf1.ID > 0 {
-		resStatus, err = cs.Udf1.GetInfoByID()
+	if csa.Udf1.ID > 0 {
+		resStatus, err = csa.Udf1.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 2 details
-	if cs.Udf2.ID > 0 {
-		resStatus, err = cs.Udf2.GetInfoByID()
+	if csa.Udf2.ID > 0 {
+		resStatus, err = csa.Udf2.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 3 details
-	if cs.Udf3.ID > 0 {
-		resStatus, err = cs.Udf3.GetInfoByID()
+	if csa.Udf3.ID > 0 {
+		resStatus, err = csa.Udf3.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 4 details
-	if cs.Udf4.ID > 0 {
-		resStatus, err = cs.Udf4.GetInfoByID()
+	if csa.Udf4.ID > 0 {
+		resStatus, err = csa.Udf4.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 51 details
-	if cs.Udf5.ID > 0 {
-		resStatus, err = cs.Udf5.GetInfoByID()
+	if csa.Udf5.ID > 0 {
+		resStatus, err = csa.Udf5.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 6 details
-	if cs.Udf6.ID > 0 {
-		resStatus, err = cs.Udf6.GetInfoByID()
+	if csa.Udf6.ID > 0 {
+		resStatus, err = csa.Udf6.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 7 details
-	if cs.Udf7.ID > 0 {
-		resStatus, err = cs.Udf7.GetInfoByID()
+	if csa.Udf7.ID > 0 {
+		resStatus, err = csa.Udf7.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 8 details
-	if cs.Udf8.ID > 0 {
-		resStatus, err = cs.Udf8.GetInfoByID()
+	if csa.Udf8.ID > 0 {
+		resStatus, err = csa.Udf8.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 9 details
-	if cs.Udf9.ID > 0 {
-		resStatus, err = cs.Udf9.GetInfoByID()
+	if csa.Udf9.ID > 0 {
+		resStatus, err = csa.Udf9.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get User-defined filed 10 details
-	if cs.Udf10.ID > 0 {
-		resStatus, err = cs.Udf10.GetInfoByID()
+	if csa.Udf10.ID > 0 {
+		resStatus, err = csa.Udf10.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get Creator details
-	if cs.Creator.ID > 0 {
-		resStatus, err = cs.Creator.GetPersonInfoByID()
+	if csa.Creator.ID > 0 {
+		resStatus, err = csa.Creator.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
 	// Get Modifier details
-	if cs.Modifier.ID > 0 {
-		resStatus, err = cs.Modifier.GetPersonInfoByID()
+	if csa.Modifier.ID > 0 {
+		resStatus, err = csa.Modifier.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
@@ -296,31 +296,31 @@ func (cs *ConstructionSite) GetAttachInfo() (resStatus i18n.ResKey, err error) {
 }
 
 // Get Construction Site details by ID
-func (cs *ConstructionSite) GetInfoByID() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) GetInfoByID() (resStatus i18n.ResKey, err error) {
 	// Get detail from cache
-	number, b, _ := cache.Get(pub.CS, cs.ID)
+	number, b, _ := cache.Get(pub.CSA, csa.ID)
 	if number > 0 {
-		json.Unmarshal(b, &cs)
+		json.Unmarshal(b, &csa)
 		resStatus = i18n.StatusOK
 		return
 	}
-	// If CS information not in cache, retrieve it from the cs table
+	// If CS information not in cache, retrieve it from the csa table
 	sqlStr := `select code,name,description,cscid,subdeptid,
-	respdeptid,resppersonid,status,finishflag,finishdate,
+	respdeptid,resppersonid,status,endflag,enddate,
 	longitude,latitude,
 	udf1,udf2,udf3,udf4,udf5,
 	udf6,udf7,udf8,udf9,udf10,
 	createtime,creatorid,modifytime,modifierid,ts,
 	dr 
-	from cs where id=$1`
-	err = db.QueryRow(sqlStr, cs.ID).Scan(
-		&cs.Code, &cs.Name, &cs.Description, &cs.Csc.ID, &cs.Department.ID,
-		&cs.RespDept.ID, &cs.RespPerson.ID, &cs.Status, &cs.FinishFlag, &cs.FinishDate,
-		&cs.Longitude, &cs.Latitude,
-		&cs.Udf1.ID, &cs.Udf2.ID, &cs.Udf3.ID, &cs.Udf4.ID, &cs.Udf5.ID,
-		&cs.Udf6.ID, &cs.Udf7.ID, &cs.Udf8.ID, &cs.Udf9.ID, &cs.Udf10.ID,
-		&cs.CreateDate, &cs.Creator.ID, &cs.ModifyDate, &cs.Modifier.ID, &cs.Ts,
-		&cs.Dr)
+	from csa where id=$1`
+	err = db.QueryRow(sqlStr, csa.ID).Scan(
+		&csa.Code, &csa.Name, &csa.Description, &csa.Csc.ID, &csa.Department.ID,
+		&csa.RespDept.ID, &csa.RespPerson.ID, &csa.Status, &csa.EndFlag, &csa.EndDate,
+		&csa.Longitude, &csa.Latitude,
+		&csa.Udf1.ID, &csa.Udf2.ID, &csa.Udf3.ID, &csa.Udf4.ID, &csa.Udf5.ID,
+		&csa.Udf6.ID, &csa.Udf7.ID, &csa.Udf8.ID, &csa.Udf9.ID, &csa.Udf10.ID,
+		&csa.CreateDate, &csa.Creator.ID, &csa.ModifyDate, &csa.Modifier.ID, &csa.Ts,
+		&csa.Dr)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ConstructionSite.GetInfoByID db.QueryRow failed", zap.Error(err))
@@ -328,28 +328,27 @@ func (cs *ConstructionSite) GetInfoByID() (resStatus i18n.ResKey, err error) {
 	}
 
 	// Get detail
-	resStatus, err = cs.GetAttachInfo()
+	resStatus, err = csa.GetAttachInfo()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
 	// Write into cache
-	csB, _ := json.Marshal(cs)
-	cache.Set(pub.CS, cs.ID, csB)
-
+	csaB, _ := json.Marshal(csa)
+	cache.Set(pub.CSA, csa.ID, csaB)
 	return
 }
 
 // Add Construction Site
-func (cs *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Check if the CS Code exist
-	resStatus, err = cs.CheckCodeExist()
+	resStatus, err = csa.CheckCodeExist()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	// Write data into the cs table
-	sqlStr := `insert into cs(code,name,description,cscid,subdeptid,
-	respdeptid,resppersonid,status,finishflag,finishdate,
+	// Write data into the csa table
+	sqlStr := `insert into csa(code,name,description,cscid,subdeptid,
+	respdeptid,resppersonid,status,endflag,enddate,
 	longitude,latitude,udf1,udf2,udf3,
 	udf4,udf5,udf6,udf7,udf8,
 	udf9,udf10,creatorid,modifierid)
@@ -359,11 +358,11 @@ func (cs *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
 	$16,$17,$18,$19,$20,
 	$21,$22,$23,$24)
 	returning id`
-	_, err = db.Exec(sqlStr, cs.Code, cs.Name, cs.Description, cs.Csc.ID, cs.Department.ID,
-		cs.RespDept.ID, cs.RespPerson.ID, cs.Status, cs.FinishFlag, cs.FinishDate,
-		cs.Longitude, cs.Latitude, cs.Udf1.ID, cs.Udf2.ID, cs.Udf3.ID,
-		cs.Udf4.ID, cs.Udf5.ID, cs.Udf6.ID, cs.Udf7.ID, cs.Udf8.ID,
-		cs.Udf9.ID, cs.Udf10.ID, cs.Creator.ID, cs.Modifier.ID)
+	_, err = db.Exec(sqlStr, csa.Code, csa.Name, csa.Description, csa.Csc.ID, csa.Department.ID,
+		csa.RespDept.ID, csa.RespPerson.ID, csa.Status, csa.EndFlag, csa.EndDate,
+		csa.Longitude, csa.Latitude, csa.Udf1.ID, csa.Udf2.ID, csa.Udf3.ID,
+		csa.Udf4.ID, csa.Udf5.ID, csa.Udf6.ID, csa.Udf7.ID, csa.Udf8.ID,
+		csa.Udf9.ID, csa.Udf10.ID, csa.Creator.ID, csa.Modifier.ID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ConstructionSite.Add db.Exec failed", zap.Error(err))
@@ -373,27 +372,27 @@ func (cs *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
 }
 
 // Edit Construction Site
-func (cs *ConstructionSite) Edit() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) Edit() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Check if the CS code exists
-	resStatus, err = cs.CheckCodeExist()
+	resStatus, err = csa.CheckCodeExist()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	// Update record in the cs table
-	sqlStr := `update cs set code=$1,name=$2,description=$3,cscid=$4,subdeptid=$5,
-	respdeptid=$6,resppersonid=$7,status=$8,finishflag=$9,finishdate=$10,
+	// Update record in the csa table
+	sqlStr := `update csa set code=$1,name=$2,description=$3,cscid=$4,subdeptid=$5,
+	respdeptid=$6,resppersonid=$7,status=$8,endflag=$9,enddate=$10,
 	longitude=$11,latitude=$12,udf1=$13,udf2=$14,udf3=$15,
 	udf4=$16,udf5=$17,udf6=$18,udf7=$19,udf8=$20,
 	udf9=$21,udf10=$22,modifierid=$23,
 	modifytime=current_timestamp,ts=current_timestamp
 	where id=$24 and ts=$25 and dr=0`
-	res, err := db.Exec(sqlStr, cs.Code, cs.Name, cs.Description, cs.Csc.ID, cs.Department.ID,
-		cs.RespDept.ID, cs.RespPerson.ID, cs.Status, cs.FinishFlag, cs.FinishDate,
-		cs.Longitude, cs.Latitude, cs.Udf1.ID, cs.Udf2.ID, cs.Udf3.ID,
-		cs.Udf4.ID, cs.Udf5.ID, cs.Udf6.ID, cs.Udf7.ID, cs.Udf8.ID,
-		cs.Udf9.ID, cs.Udf10.ID, cs.Modifier.ID,
-		cs.ID, cs.Ts)
+	res, err := db.Exec(sqlStr, csa.Code, csa.Name, csa.Description, csa.Csc.ID, csa.Department.ID,
+		csa.RespDept.ID, csa.RespPerson.ID, csa.Status, csa.EndFlag, csa.EndDate,
+		csa.Longitude, csa.Latitude, csa.Udf1.ID, csa.Udf2.ID, csa.Udf3.ID,
+		csa.Udf4.ID, csa.Udf5.ID, csa.Udf6.ID, csa.Udf7.ID, csa.Udf8.ID,
+		csa.Udf9.ID, csa.Udf10.ID, csa.Modifier.ID,
+		csa.ID, csa.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ConstructionSite.Edit db.Exec failed", zap.Error(err))
@@ -414,22 +413,22 @@ func (cs *ConstructionSite) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Delete from cache
-	cs.DelFromLocalCache()
+	csa.DelFromLocalCache()
 	return
 }
 
 // Delte Construction Site master data
-func (cs *ConstructionSite) Delete() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) Delete() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Check if the CS ID is refrenced
-	resStatus, err = cs.CheckUsed()
+	resStatus, err = csa.CheckUsed()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	// Update the delection field for this data in the cs table
-	sqlStr := `update cs set dr=1,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp 
+	// Update the delection field for this data in the csa table
+	sqlStr := `update csa set dr=1,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp 
 	where id=$2 and dr=0 and ts=$3`
-	res, err := db.Exec(sqlStr, cs.Modifier.ID, cs.ID, cs.Ts)
+	res, err := db.Exec(sqlStr, csa.Modifier.ID, csa.ID, csa.Ts)
 	if err != nil {
 		zap.L().Error("ConstructionSite.Delete db.Exec failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
@@ -450,7 +449,7 @@ func (cs *ConstructionSite) Delete() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Delete from cache
-	cs.DelFromLocalCache()
+	csa.DelFromLocalCache()
 
 	return i18n.StatusOK, nil
 }
@@ -467,7 +466,7 @@ func DeleteCSs(css *[]ConstructionSite, modifyUserId int32) (resStatus i18n.ResK
 	}
 	defer tx.Commit()
 
-	delSqlStr := `update cs set dr=1,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp
+	delSqlStr := `update csa set dr=1,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp
 	where id=$2 and dr=0 and ts=$3`
 	// Update operation preprocessing
 	stmt, err := tx.Prepare(delSqlStr)
@@ -479,15 +478,15 @@ func DeleteCSs(css *[]ConstructionSite, modifyUserId int32) (resStatus i18n.ResK
 	}
 	defer stmt.Close()
 
-	for _, cs := range *css {
+	for _, csa := range *css {
 		// Check if the Construction Site ID is refrenced.
-		resStatus, err = cs.CheckUsed()
+		resStatus, err = csa.CheckUsed()
 		if resStatus != i18n.StatusOK || err != nil {
 			tx.Rollback()
 			return
 		}
-		// Write the deletion field for this record in cs table
-		res, err1 := stmt.Exec(modifyUserId, cs.ID, cs.Ts)
+		// Write the deletion field for this record in csa table
+		res, err1 := stmt.Exec(modifyUserId, csa.ID, csa.Ts)
 		if err != nil {
 			zap.L().Error("DeleteCSs stmt.Exec failed", zap.Error(err1))
 			resStatus = i18n.StatusInternalError
@@ -510,17 +509,17 @@ func DeleteCSs(css *[]ConstructionSite, modifyUserId int32) (resStatus i18n.ResK
 			return i18n.StatusOtherEdit, nil
 		}
 		// Delete from cache
-		cs.DelFromLocalCache()
+		csa.DelFromLocalCache()
 	}
 	return i18n.StatusOK, nil
 }
 
 // Check if the Construction Site code exists
-func (cs *ConstructionSite) CheckCodeExist() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) CheckCodeExist() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var count int32
-	sqlStr := `select count(id) from cs where dr=0 and cscid=$1 and code=$2 and id <>$3`
-	err = db.QueryRow(sqlStr, cs.Csc.ID, cs.Code, cs.ID).Scan(&count)
+	sqlStr := `select count(id) from csa where dr=0 and cscid=$1 and code=$2 and id <>$3`
+	err = db.QueryRow(sqlStr, csa.Csc.ID, csa.Code, csa.ID).Scan(&count)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ConstructionSite.CheckCodeExist db.QueryRow failed", zap.Error(err))
@@ -528,22 +527,22 @@ func (cs *ConstructionSite) CheckCodeExist() (resStatus i18n.ResKey, err error) 
 	}
 
 	if count > 0 {
-		resStatus = i18n.StatusCSCodeExist
+		resStatus = i18n.StatusCSACodeExist
 		return
 	}
 	return
 }
 
 // Delete Construction Site from cache
-func (cs *ConstructionSite) DelFromLocalCache() {
-	number, _, _ := cache.Get(pub.CS, cs.ID)
+func (csa *ConstructionSite) DelFromLocalCache() {
+	number, _, _ := cache.Get(pub.CSA, csa.ID)
 	if number > 0 {
-		cache.Del(pub.CS, cs.ID)
+		cache.Del(pub.CSA, csa.ID)
 	}
 }
 
 // Check Construction Site ID is refrenced
-func (cs *ConstructionSite) CheckUsed() (resStatus i18n.ResKey, err error) {
+func (csa *ConstructionSite) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Defined the items that need to be checked
 	checkItems := []ArchiveCheckUsed{
@@ -566,7 +565,7 @@ func (cs *ConstructionSite) CheckUsed() (resStatus i18n.ResKey, err error) {
 	// Check item by item
 	var usedNum int32
 	for _, item := range checkItems {
-		err = db.QueryRow(item.SqlStr, cs.ID).Scan(&usedNum)
+		err = db.QueryRow(item.SqlStr, csa.ID).Scan(&usedNum)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("ConstructionSite.CheckUsed  "+item.Description+"failed", zap.Error(err))

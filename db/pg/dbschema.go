@@ -268,10 +268,10 @@ var tables []table = []table{
 		InitFunc:       initCSC,
 	},
 	{
-		TableName:   "cs",
-		Description: "Construction Site Master Data",
+		TableName:   "csa",
+		Description: "Construction Site Archive",
 		CreateSQL: `
-			create table if not exists cs(
+			create table if not exists csa(
 			id serial NOT NULL,
 			code varchar(64),
 			name varchar(64),
@@ -281,8 +281,8 @@ var tables []table = []table{
 			respdeptid int default 0,
 			resppersonid int default 0,
 			status smallint DEFAULT 0,
-			finishflag smallint DEFAULT 0,
-			finishdate varchar(16),
+			endflag smallint DEFAULT 0,
+			enddate varchar(16),
 			longitude numeric,
 			latitude numeric,
 			udf1 int default 0,

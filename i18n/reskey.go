@@ -44,7 +44,7 @@ const (
 	MenuDepartment     ResKey = "MenuDepartment"
 	MenuPosition       ResKey = "MenuPosition"
 	MenuCSC            ResKey = "MenuCSC"
-	MenuCS             ResKey = "MenuCS"
+	MenuCSA            ResKey = "MenuCSA"
 	MenuUDC            ResKey = "MenuUDC"
 	MenuUD             ResKey = "MenuUD"
 	MenuEPC            ResKey = "MenuEPC"
@@ -97,12 +97,12 @@ const (
 	StatusCSCFatherSelf    ResKey = "StatusCSCFatherSelf"
 	StatusCSCFatherCircle  ResKey = "StatusCSCFatherCircle"
 	StatusCSCLowLevelExist ResKey = "StatusCSCLowLevelExist"
-	// Construction Site (10600-10699)
-	StatusCSCodeExist ResKey = "StatusCSCodeExist"
+	// Construction Site Archive (10600-10699)
+	StatusCSACodeExist ResKey = "StatusCSACodeExist"
 	// User-defined Category (10700-10799)
 	StatusUDCNameExist ResKey = "StatusUDCNameExist"
 	// User-defined Data (10800-10899)
-	StatusUDACodeExist ResKey = "StatusUDCodeExist"
+	StatusUDACodeExist ResKey = "StatusUDACodeExist"
 	// Execution Project Category (10900-10999)
 	StatusEPCNameExist     ResKey = "StatusEPCNameExist"
 	StatusEPCFatherSelf    ResKey = "StatusEPCFatherSelf"
@@ -151,13 +151,13 @@ const (
 	StatusEPTUsed            ResKey = "StatusEPTUsed"
 	StatusUserUsed           ResKey = "StatusUserUsed"
 	StatusDeptLeaderUsed     ResKey = "StatusDeptLeaderUsed"
-	StatusCSUsed             ResKey = "StatusCSUsed"
+	StatusCSAUsed            ResKey = "StatusCSUsed"
 	StatusWOUsed             ResKey = "StatusWOUsed"
 	StatusEOUsed             ResKey = "StatusEOUsed"
 	StatusEOValueUsed        ResKey = "StatusEOValueUsed"
 	StatusEOErrorUsed        ResKey = "StatusEOErrorUsed"
 	StatusIRFUsed            ResKey = "StatusIRFUsed" // Issue Resolution Form
-	StatusCSRespUsed         ResKey = "StatusCSRespUsed"
+	StatusCSARespUsed        ResKey = "StatusCSARespUsed"
 	StatusWOEpUsed           ResKey = "StatusWOEpUsed"
 	StatusEOEpUsed           ResKey = "StatusEOEpUsed"
 	StatusEODpUsed           ResKey = "StatusEODpUsed"
@@ -203,7 +203,7 @@ const (
 	StatusCSCCreateUsed      ResKey = "StatusCSCCreateUsed"
 	StatusCSCModifyUsed      ResKey = "StatusCSCModifyUsed"
 	StatusCSCreateUsed       ResKey = "StatusCSCreateUsed"
-	StatusCSModifyUsed       ResKey = "StatusCSModifyUsed"
+	StatusCSAModifyUsed      ResKey = "StatusCSAModifyUsed"
 	StatusUDCCreateUsed      ResKey = "StatusUDCCreateUsed"
 	StatusUDCModifyUsed      ResKey = "StatusUDCModifyUsed"
 	StatusUDCreateUsed       ResKey = "StatusUDCreateUsed"

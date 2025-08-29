@@ -13,8 +13,8 @@ func CSORoute(g *gin.RouterGroup) {
 		// Get CSO list
 		CSOGroup.POST("/options", handlers.GetCSOsHandler)
 		// Modify CSO
-		CSOGroup.POST("/editoption", handlers.EditCSOHandler)
+		CSOGroup.POST("/edit", handlers.EditCSOHandler)
 		// Get CSO front-end cache
-		CSOGroup.POST("/optioncache", handlers.GetCSOCacheHandler)
+		CSOGroup.POST("/cache", handlers.GetCSOCacheHandler)
 	}
 }

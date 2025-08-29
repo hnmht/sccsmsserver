@@ -73,7 +73,7 @@ const (
 	File       DataType = "file"       // File metadata
 	CSC        DataType = "csc"        // Construction site Category
 	SimpCSC    DataType = "simpcsc"    // Simple Construction site Category
-	CS         DataType = "cs"         // Construction Site Master Data
+	CSA        DataType = "csa"        // Construction Site Master Data
 	UDC        DataType = "udc"        // User-defined Data Category
 	UDA        DataType = "uda"        // User-defined Archive Master Data
 	EPC        DataType = "epc"        // Execution Project Category

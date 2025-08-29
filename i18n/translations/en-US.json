@@ -202,9 +202,9 @@
             "message": "Construction Site Category"
         },
         {
-            "key": "MenuCS",
+            "key": "MenuCSA",
             "type": "string",
-            "message": "Construction Site"
+            "message": "Construction Site Archive"
         },
         {
             "key": "MenuUDC",
@@ -427,9 +427,9 @@
             "message": "Sub-category exist."
         },
         {
-            "key": "StatusCSCodeExist",
+            "key": "StatusCSACodeExist",
             "type": "string",
-            "message": "Construction site code already exists."
+            "message": "Construction Site code already exists."
         },
         {
             "key": "StatusUDCNameExist",
@@ -607,9 +607,9 @@
             "message": "Referenced by Department."
         },
         {
-            "key": "StatusCSUsed",
+            "key": "StatusCSAUsed",
             "type": "string",
-            "message": "Referenced by Construction Site."
+            "message": "Referenced by Construction Site Archive."
         },
         {
             "key": "StatusWOUsed",
@@ -637,7 +637,7 @@
             "message": "Referenced by Issue Resolution Form."
         },
         {
-            "key": "StatusCSRespUsed",
+            "key": "StatusCSARespUsed",
             "type": "string",
             "message": "Referenced by Construction Site owner."
         },
@@ -867,7 +867,7 @@
             "message": "Referenced by Construction Site creator."
         },
         {
-            "key": "StatusCSModifyUsed",
+            "key": "StatusCSAModifyUsed",
             "type": "string",
             "message": "Referenced by Construction Site editor."
         },
