@@ -219,7 +219,7 @@ func (csoc *ConstructionSiteOptionCache) GetCSOCache() (resStatus i18n.ResKey, e
 func (cso *ConstructionSiteOption) CheckIsModify() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var usedNumber int32
-	sqlStr := `select count(id) as usednum from cs where dr=0 and ` + cso.Code + `>0`
+	sqlStr := `select count(id) as usednum from csa where dr=0 and ` + cso.Code + `>0`
 	err = db.QueryRow(sqlStr).Scan(&usedNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError

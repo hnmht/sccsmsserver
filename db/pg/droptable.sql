@@ -9,7 +9,7 @@ drop table if exists filelist cascade;
 drop table if exists department cascade;
 drop table if exists position cascade;
 drop table if exists csc cascade;
-drop table if exists cs cascade;
+drop table if exists csa cascade;
 drop table if exists cso cascade;
 drop table if exists udc cascade;
 drop table if exists uda cascade;
