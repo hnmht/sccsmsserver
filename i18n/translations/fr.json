@@ -202,7 +202,7 @@
             "message": "Catégorie de chantier"
         },
         {
-            "key": "MenuCS",
+            "key": "MenuCSA",
             "type": "string",
             "message": "Chantier"
         },
@@ -607,7 +607,7 @@
             "message": "Référencé par le département."
         },
         {
-            "key": "StatusCSUsed",
+            "key": "StatusCSAUsed",
             "type": "string",
             "message": "Référencé par le chantier."
         },
@@ -637,7 +637,7 @@
             "message": "Référencé par le formulaire de résolution de problèmes."
         },
         {
-            "key": "StatusCSRespUsed",
+            "key": "StatusCSARespUsed",
             "type": "string",
             "message": "Référencé par le propriétaire du chantier."
         },
@@ -867,7 +867,7 @@
             "message": "Référencé par le créateur du chantier."
         },
         {
-            "key": "StatusCSModifyUsed",
+            "key": "StatusCSAModifyUsed",
             "type": "string",
             "message": "Référencé par l'éditeur du chantier."
         },

@@ -46,11 +46,11 @@ type SystemLanguage struct {
 
 // List of languages the system wil support
 var SupportLanguages []SystemLanguage = []SystemLanguage{
-	{Language: "en-US", Tag: language.AmericanEnglish, FileName: "en-US.json", Default: true},
-	{Language: "es-ES", Tag: language.EuropeanSpanish, FileName: "es-ES.json", Default: false},
-	{Language: "pt-PT", Tag: language.EuropeanPortuguese, FileName: "pt-PT.json", Default: false},
+	{Language: "en-us", Tag: language.AmericanEnglish, FileName: "en-us.json", Default: true},
+	{Language: "es-es", Tag: language.EuropeanSpanish, FileName: "es-es.json", Default: false},
+	{Language: "pt-pt", Tag: language.EuropeanPortuguese, FileName: "pt-pt.json", Default: false},
 	{Language: "fr", Tag: language.French, FileName: "fr.json", Default: false},
-	{Language: "zh-Hans", Tag: language.SimplifiedChinese, FileName: "zh-Hans.json", Default: false},
+	{Language: "zh-hans", Tag: language.SimplifiedChinese, FileName: "zh-hans.json", Default: false},
 }
 
 // Default language message printer

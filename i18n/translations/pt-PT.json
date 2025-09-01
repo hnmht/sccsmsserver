@@ -202,7 +202,7 @@
             "message": "Categoria de Canteiro de Obras"
         },
         {
-            "key": "MenuCS",
+            "key": "MenuCSA",
             "type": "string",
             "message": "Canteiro de Obras"
         },
@@ -427,7 +427,7 @@
             "message": "Sub-categoria existe."
         },
         {
-            "key": "StatusCSCodeExist",
+            "key": "StatusCSACodeExist",
             "type": "string",
             "message": "Código do canteiro de obras já existe."
         },
@@ -607,7 +607,7 @@
             "message": "Referenciado por Departamento."
         },
         {
-            "key": "StatusCSUsed",
+            "key": "StatusCSAUsed",
             "type": "string",
             "message": "Referenciado por Canteiro de Obras."
         },
@@ -637,7 +637,7 @@
             "message": "Referenciado por Formulário de Resolução de Problemas."
         },
         {
-            "key": "StatusCSRespUsed",
+            "key": "StatusCSARespUsed",
             "type": "string",
             "message": "Referenciado pelo proprietário do Canteiro de Obras."
         },
@@ -867,7 +867,7 @@
             "message": "Referenciado pelo criador do Canteiro de Obras."
         },
         {
-            "key": "StatusCSModifyUsed",
+            "key": "StatusCSAModifyUsed",
             "type": "string",
             "message": "Referenciado pelo editor do Canteiro de Obras."
         },

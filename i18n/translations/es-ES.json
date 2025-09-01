@@ -202,7 +202,7 @@
             "message": "Categoría de Obra"
         },
         {
-            "key": "MenuCS",
+            "key": "MenuCSA",
             "type": "string",
             "message": "Obra"
         },
@@ -607,7 +607,7 @@
             "message": "Referenciado por Departamento."
         },
         {
-            "key": "StatusCSUsed",
+            "key": "StatusCSAUsed",
             "type": "string",
             "message": "Referenciado por Obra."
         },
@@ -637,7 +637,7 @@
             "message": "Referenciado por Formulario de Resolución de Problemas."
         },
         {
-            "key": "StatusCSRespUsed",
+            "key": "StatusCSARespUsed",
             "type": "string",
             "message": "Referenciado por el propietario de la Obra."
         },
@@ -867,7 +867,7 @@
             "message": "Referenciado por el creador de la Obra."
         },
         {
-            "key": "StatusCSModifyUsed",
+            "key": "StatusCSAModifyUsed",
             "type": "string",
             "message": "Referenciado por el editor de la Obra."
         },
