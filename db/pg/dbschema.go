@@ -282,7 +282,7 @@ var tables []table = []table{
 			resppersonid int default 0,
 			status smallint DEFAULT 0,
 			endflag smallint DEFAULT 0,
-			enddate varchar(16),
+			enddate timestamp with time zone,
 			longitude numeric,
 			latitude numeric,
 			udf1 int default 0,
@@ -379,7 +379,7 @@ var tables []table = []table{
 		CreateSQL: `
 			create table if not exists epc(
 			id serial NOT NUll,
-			classname varchar(128),
+			name varchar(128),
 			description varchar(256),
 			fatherid int default 0,
 			status smallint default 0,
@@ -395,10 +395,10 @@ var tables []table = []table{
 		InitFunc:       initEPC,
 	},
 	{
-		TableName:   "ep",
+		TableName:   "epa",
 		Description: "Execution Project",
 		CreateSQL: `
-			create table if not exists ep (
+			create table if not exists epa (
 			id serial NOT NUll,
 			code varchar(128),
 			name varchar(128),
@@ -424,7 +424,7 @@ var tables []table = []table{
 			PRIMARY KEY(id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       initEP,
+		InitFunc:       initEPA,
 	},
 	{
 		TableName:   "ept_h",

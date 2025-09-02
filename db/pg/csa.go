@@ -28,7 +28,7 @@ type ConstructionSite struct {
 	RespPerson  Person             `db:"resppersonid" json:"respPerson"`
 	Status      int16              `db:"status" json:"status"`
 	EndFlag     int16              `db:"endflag" json:"endFlag"`
-	EndDate     string             `db:"enddate" json:"endDate"`
+	EndDate     time.Time          `db:"enddate" json:"endDate"`
 	Longitude   float64            `db:"longitude" json:"longitude"`
 	Latitude    float64            `db:"latitude" json:"latitude"`
 	Udf1        UserDefinedArchive `db:"udf1" json:"udf1"`
@@ -341,6 +341,18 @@ func (csa *ConstructionSite) GetInfoByID() (resStatus i18n.ResKey, err error) {
 // Add Construction Site
 func (csa *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
+
+	// Check if the EndDate field is a zero value to prevent writing
+	// a zero value to the dateabase.
+	if csa.EndDate.IsZero() {
+		csa.EndDate = time.Now()
+		// For CSA where work has been suspended,
+		// the suspended date must be filled in.
+		if csa.EndFlag == 1 {
+			resStatus = i18n.StatusCSAEndDateRequired
+			return
+		}
+	}
 	// Check if the CS Code exist
 	resStatus, err = csa.CheckCodeExist()
 	if resStatus != i18n.StatusOK || err != nil {
@@ -374,6 +386,17 @@ func (csa *ConstructionSite) Add() (resStatus i18n.ResKey, err error) {
 // Edit Construction Site
 func (csa *ConstructionSite) Edit() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
+	// Check if the EndDate field is a zero value to prevent writing
+	// a zero value to the dateabase.
+	if csa.EndDate.IsZero() {
+		csa.EndDate = time.Now()
+		// For CSA where work has been suspended,
+		// the suspended date must be filled in.
+		if csa.EndFlag == 1 {
+			resStatus = i18n.StatusCSAEndDateRequired
+			return
+		}
+	}
 	// Check if the CS code exists
 	resStatus, err = csa.CheckCodeExist()
 	if resStatus != i18n.StatusOK || err != nil {

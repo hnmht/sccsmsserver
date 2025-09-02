@@ -1,5 +1,5 @@
 {
-    "language": "es-es",
+    "language": "es-ES",
     "messages": [
         {
             "key": "CodeSuccess",
@@ -567,7 +567,7 @@
             "message": "Referenciado por datos maestros definidos por el usuario."
         },
         {
-            "key": "StatusEPUsed",
+            "key": "StatusEPAUsed",
             "type": "string",
             "message": "Referenciado por datos maestros de Proyecto de Ejecución."
         },

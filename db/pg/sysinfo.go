@@ -18,6 +18,8 @@ type ServerInfo struct {
 	MachineID    string               `db:"machineid" json:"machineID"`
 	PublicKey    string               `db:"publickey" json:"publicKey"`
 	DbVersion    string               `db:"dbversion" json:"dbVersion"`
+	TimeZone     string               `json:"timeZone"`
+	UTCOffset    string               `json:"utcOffset"`
 	Organization pub.OrganizationInfo `json:"organization"`
 	ServerSoft   pub.ServerSoftInfo   `json:"serverSoft"`
 }
@@ -145,11 +147,11 @@ func (info *ServerInfo) Init() (err error) {
 	// Retrieve server public information from the sysinfo table.
 	sqlStr := `select dbid,dbversion,publickey,organizationid,organizationcode,
 	organizationname,contactperson,contacttitle,phone,email,
-	registertime 
+	registertime, TO_CHAR(NOW(), 'OF'),current_setting('TIMEZONE') 
 	from sysinfo limit(1)`
 	err = db.QueryRow(sqlStr).Scan(&info.DbID, &info.DbVersion, &info.PublicKey, &info.Organization.OrganizationID, &info.Organization.OrganizationCode,
 		&info.Organization.OrganizationName, &info.Organization.ContactPerson, &info.Organization.ContactTitle, &info.Organization.Phone, &info.Organization.Email,
-		&info.Organization.RegisterTime)
+		&info.Organization.RegisterTime, &info.UTCOffset, &info.TimeZone)
 	if err != nil {
 		zap.L().Error("ServerInfo.Init db.QueryRow failed:", zap.Error(err))
 		return

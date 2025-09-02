@@ -1,5 +1,5 @@
 {
-    "language": "zh-hans",
+    "language": "zh-Hans",
     "messages": [
         {
             "key": "CodeSuccess",
@@ -427,9 +427,14 @@
             "message": "存在下级类别."
         },
         {
-            "key": "StatusCSCodeExist",
+            "key": "StatusCSACodeExist",
             "type": "string",
             "message": "现场档案编码已存在."
+        },
+        {
+            "key": "StatusCSAEndDateRequired",
+            "type": "string",
+            "message": "现场档案停工日期不能为空."
         },
         {
             "key": "StatusUDCNameExist",
@@ -567,7 +572,7 @@
             "message": "被自定义档案引用."
         },
         {
-            "key": "StatusEPUsed",
+            "key": "StatusEPAUsed",
             "type": "string",
             "message": "被执行项目引用."
         },

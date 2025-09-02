@@ -567,7 +567,7 @@
             "message": "Référencé par les données de base définies par l'utilisateur."
         },
         {
-            "key": "StatusEPUsed",
+            "key": "StatusEPAUsed",
             "type": "string",
             "message": "Référencé par les données de base du projet d'exécution."
         },

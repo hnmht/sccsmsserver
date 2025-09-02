@@ -98,7 +98,8 @@ const (
 	StatusCSCFatherCircle  ResKey = "StatusCSCFatherCircle"
 	StatusCSCLowLevelExist ResKey = "StatusCSCLowLevelExist"
 	// Construction Site Archive (10600-10699)
-	StatusCSACodeExist ResKey = "StatusCSACodeExist"
+	StatusCSACodeExist       ResKey = "StatusCSACodeExist"
+	StatusCSAEndDateRequired ResKey = "StatusCSAEndDateRequired"
 	// User-defined Category (10700-10799)
 	StatusUDCNameExist ResKey = "StatusUDCNameExist"
 	// User-defined Data (10800-10899)
@@ -143,7 +144,7 @@ const (
 	StatusPQExist ResKey = "StatusPQExist"
 	// Referenced （80000-89999）
 	StatusUDUsed             ResKey = "StatusUDUsed"
-	StatusEPUsed             ResKey = "StatusEPUsed"
+	StatusEPAUsed            ResKey = "StatusEPAUsed"
 	StatusEPDefaultUsed      ResKey = "StatusEPDefaultUsed"
 	StatusEPErrorUsed        ResKey = "StatusEPErrorUsed"
 	StatusEPTDefaultUsed     ResKey = "StatusEPTDefaultUsed"

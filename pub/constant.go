@@ -73,12 +73,12 @@ const (
 	File       DataType = "file"       // File metadata
 	CSC        DataType = "csc"        // Construction site Category
 	SimpCSC    DataType = "simpcsc"    // Simple Construction site Category
-	CSA        DataType = "csa"        // Construction Site Master Data
+	CSA        DataType = "csa"        // Construction Site Archive
 	UDC        DataType = "udc"        // User-defined Data Category
 	UDA        DataType = "uda"        // User-defined Archive Master Data
 	EPC        DataType = "epc"        // Execution Project Category
 	SimpEPC    DataType = "simpepc"    // Simple Execution Project Category
-	EP         DataType = "ep"         // Execution Project Master Data
+	EPA        DataType = "epa"        // Execution Project Archive
 	EPT        DataType = "ept"        // Execution Project Template
 	EPTHead    DataType = "epthead"    // Execution Project Template Header
 	EPTBody    DataType = "eptbody"    // Execution Project Template Body

@@ -1,5 +1,5 @@
 {
-    "language": "en-us",
+    "language": "en-US",
     "messages": [
         {
             "key": "CodeSuccess",
@@ -432,6 +432,11 @@
             "message": "Construction Site code already exists."
         },
         {
+            "key": "StatusCSAEndDateRequired",
+            "type": "string",
+            "message": "Construction Site Archive suspension date must be filled in."
+        },
+        {
             "key": "StatusUDCNameExist",
             "type": "string",
             "message": "User-defined category name already exists."
@@ -567,7 +572,7 @@
             "message": "Referenced by User Defined master data."
         },
         {
-            "key": "StatusEPUsed",
+            "key": "StatusEPAUsed",
             "type": "string",
             "message": "Referenced by Execution Project master data."
         },
