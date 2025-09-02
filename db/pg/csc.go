@@ -380,7 +380,7 @@ func (csc *CSC) Edit() (resStatus i18n.ResKey, err error) {
 		resStatus = i18n.StatusOtherEdit
 		return
 	}
-	// Delete from localcache
+	// Delete from cache
 	csc.DelFromLocalCache()
 	return
 }
@@ -397,7 +397,7 @@ func (csc *CSC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		},
 		{
 			Description:    "Refrenced by Construction Site",
-			SqlStr:         `select count(id) as usednum from cs where cscid = $1 and dr=0`,
+			SqlStr:         `select count(id) as usednum from csa where cscid = $1 and dr=0`,
 			UsedReturnCode: i18n.StatusCSAUsed,
 		},
 		/*
