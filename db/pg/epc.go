@@ -329,7 +329,7 @@ func (epc *EPC) Edit() (resStatus i18n.ResKey, err error) {
 		}
 		// Check for a circular dependency in the parent category
 		sepcs, res, err1 := GetSimpEPCList()
-		if resStatus != i18n.StatusOK || err != nil {
+		if resStatus != i18n.StatusOK || err1 != nil {
 			return res, err1
 		}
 		childrens := FindSimpEPCChildrens(sepcs, epc.ID)

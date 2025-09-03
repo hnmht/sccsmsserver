@@ -19,13 +19,16 @@ func Setup(mode string) *gin.Engine {
 	superGroup := r.Group(pub.APIPath)
 	{
 		AuthRoute(superGroup) // Auth
+		CSARoute(superGroup)  // Construction Site Archive
+		CSCRoute(superGroup)  // Construction Site Category
+		CSORoute(superGroup)  // Construction Site Options
 		// DashboardRoute(superGroup) //看板数据
 		// DCRoute(superGroup)        //文档类别
 		// DocRoute(superGroup)       //文档
 		// DDRoute(superGroup)        //dd问题处理单
 		DeptRoute(superGroup) // Department
 		// EDRoute(superGroup)        //ed执行单
-		// EICRoute(superGroup)       //eic执行项目类别
+		EPCRoute(superGroup) // Execution Project Category
 		// EIDRoute(superGroup)       //eid执行项目档案
 		// EITRoute(superGroup)       //eit执行模板
 		// EventRoute(superGroup)     //Event
@@ -35,16 +38,13 @@ func Setup(mode string) *gin.Engine {
 		// LPRoute(superGroup)        //劳保用品档案
 		// LQRoute(superGroup)        //劳保用品岗位定额
 		// MsgRoute(superGroup)       //消息
-		PositionRoute(superGroup) // Position
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
+		PositionRoute(superGroup) // Position
 		PubRoute(superGroup)      // System public information
 		// RepRoute(superGroup)       //报表
 		// RLRoute(superGroup)        //风险等级
 		RoleRoute(superGroup) // Role
-		CSARoute(superGroup)  // Construction Site Archive
-		CSCRoute(superGroup)  // Construction Site Category
-		CSORoute(superGroup)  // Construction Site Options
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录
 		UDARoute(superGroup)  // User-defined Archive
