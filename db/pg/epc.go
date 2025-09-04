@@ -22,10 +22,10 @@ type EPC struct {
 	Description string    `db:"description" json:"description"`
 	Father      SimpEPC   `db:"fatherid" json:"fatherID"`
 	Status      int16     `db:"status" json:"status"`
-	CreateDate  time.Time `db:"createtime" json:"createdate"`
-	Creator     Person    `db:"creator" json:"creator"`
-	ModifyDate  time.Time `db:"modifytime" json:"modifydate"`
-	Modifier    Person    `db:"modifier" json:"modifier"`
+	CreateDate  time.Time `db:"createtime" json:"createDate"`
+	Creator     Person    `db:"creatorid" json:"creator"`
+	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
+	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Ts          time.Time `db:"ts" json:"ts"`
 	Dr          int16     `db:"dr" json:"dr"`
 }
@@ -37,10 +37,10 @@ type SimpEPC struct {
 	Description string    `db:"description" json:"description"`
 	FatherID    int32     `db:"fatherid" json:"fatherID"`
 	Status      int16     `db:"status" json:"status"`
-	CreateDate  time.Time `db:"createtime" json:"createdate"`
-	Creator     Person    `db:"creator" json:"creator"`
-	ModifyDate  time.Time `db:"modifytime" json:"modifydate"`
-	Modifier    Person    `db:"modifier" json:"modifier"`
+	CreateDate  time.Time `db:"createtime" json:"createDate"`
+	Creator     Person    `db:"creatorid" json:"creator"`
+	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
+	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Ts          time.Time `db:"ts" json:"ts"`
 	Dr          int16     `db:"dr" json:"dr"`
 }
@@ -66,7 +66,7 @@ func (sepc *SimpEPC) GetInfoByID() (resStatus i18n.ResKey, err error) {
 	}
 	// Retrieve SimpEPC information from the epc table
 	sqlStr := `select name,description,fatherid,status,createtime,
-	creator,modifytime,modifier,ts,dr
+	creatorid,modifytime,modifierid,ts,dr
 	from epc where id=$1`
 	err = db.QueryRow(sqlStr, sepc.ID).Scan(&sepc.Name, &sepc.Description, &sepc.FatherID, &sepc.Status, &sepc.CreateDate,
 		&sepc.Creator.ID, &sepc.ModifyDate, &sepc.Modifier.ID, &sepc.Ts, &sepc.Dr)
@@ -102,7 +102,7 @@ func GetEPCList() (epcs []EPC, resStatus i18n.ResKey, err error) {
 	epcs = make([]EPC, 0)
 	// Retrive EPC list from the epc table
 	sqlStr := `select id,name,description,fatherid,status,
-	createtime,creator,modifytime,modifier,ts,
+	createtime,creatorid,modifytime,modifierid,ts,
 	dr
 	from epc 
 	where dr=0 order by ts desc`
@@ -156,7 +156,7 @@ func GetSimpEPCList() (sepcs []SimpEPC, resStatus i18n.ResKey, err error) {
 	sepcs = make([]SimpEPC, 0)
 	// Retrieve SimpEPC list from the epc table
 	sqlStr := `select id,name,description,fatherid,status,
-	createtime,creator,modifytime,modifier,ts,
+	createtime,creatorid,modifytime,modifierid,ts,
 	dr 
 	from epc 
 	where dr=0 order by ts desc`
@@ -220,7 +220,7 @@ func (sepcc *SimpEPCCache) GetSimpEPCCache() (resStatus i18n.ResKey, err error) 
 
 	// Retrieve all data greater than latest timestamp
 	sqlStr = `select id,name,description,fatherid,status,
-	createtime,creator,modifytime,modifier,ts,
+	createtime,creatorid,modifytime,modifierid,ts,
 	dr 
 	from epc 
 	where ts > $1 order by ts desc`
@@ -304,7 +304,7 @@ func (epc *EPC) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Write data into the epc table
-	sqlStr := `insert into epc(name,description,fatherid,status,creator)
+	sqlStr := `insert into epc(name,description,fatherid,status,creatorid)
 	values($1,$2,$3,$4,$5)
 	returning id`
 	err = db.QueryRow(sqlStr, epc.Name, epc.Description, epc.Father.ID, epc.Status, epc.Creator.ID).Scan(&epc.ID)
@@ -353,7 +353,7 @@ func (epc *EPC) Edit() (resStatus i18n.ResKey, err error) {
 	// Write the updates to the epc table
 	sqlStr := `update epc set
 	name=$1,description=$2,fatherid=$3,status=$4,modifytime=current_timestamp,
-	modifier=$5,ts=current_timestamp 
+	modifierid=$5,ts=current_timestamp 
 	where id=$6 and dr=0 and ts=$7`
 
 	res, err := db.Exec(sqlStr, epc.Name, epc.Description, epc.Father.ID, epc.Status,
@@ -397,32 +397,32 @@ func (epc *EPC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 		},
 		{
 			Description:    "Refrenced by EPA Default Value ",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '540' and dr=0 and defaultvalue=cast($1 as varchar)`,
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '540' and dr=0 and defaultvalue=cast($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPDefaultUsed,
 		},
 		{
 			Description:    "Refrenced by EPA Error Value",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '540' and dr=0 and errorvalue=cast($1 as varchar)`,
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '540' and dr=0 and errorvalue=cast($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPErrorUsed,
 		},
 		/* {
 			Description:    "被执行模板默认值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='540' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEITDefaultUsed,
 		},
 		{
 			Description:    "被执行模板错误值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEITErrorUsed,
 		},
 		{
 			Description:    "被执行单执行值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='540' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
+			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEDValueUsed,
 		},
 		{
 			Description:    "被执行单错误值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEDErrorUsed,
 		}, */
 	}
@@ -452,7 +452,7 @@ func (epc *EPC) Delete() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Write the updates to the epc table
-	sqlStr := `update epc set dr=1,modifytime=current_timestamp,modifier=$1,ts=current_timestamp where id=$2 and dr=0 and ts=$3`
+	sqlStr := `update epc set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp where id=$2 and dr=0 and ts=$3`
 	res, err := db.Exec(sqlStr, epc.Modifier.ID, epc.ID, epc.Ts)
 	if err != nil {
 		zap.L().Error("EPC.Delete stmt.Exec failed", zap.Error(err))
@@ -489,7 +489,7 @@ func DeleteEPCs(epcs *[]EPC, modifyUserID int32) (resStatus i18n.ResKey, err err
 		return
 	}
 	defer tx.Commit()
-	delSqlStr := `update epc set dr=1,modifytime=current_timestamp,modifier=$1,ts=current_timestamp where id=$2 and dr=0 and ts=$3`
+	delSqlStr := `update epc set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp where id=$2 and dr=0 and ts=$3`
 	stmt, err := tx.Prepare(delSqlStr)
 	if err != nil {
 		resStatus = i18n.StatusInternalError

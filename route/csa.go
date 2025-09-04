@@ -24,12 +24,5 @@ func CSARoute(g *gin.RouterGroup) {
 		CSAGroup.POST("/list", handlers.GetCSsHandler)
 		// Get CSA front-end cache
 		CSAGroup.POST("/cache", handlers.GetCSCacheHandler)
-
-		//获取选项列表
-		CSAGroup.POST("/options", handlers.GetCSOsHandler)
-		//修改选项
-		CSAGroup.POST("/editoption", handlers.EditCSOHandler)
-		//获取现场档案选项缓存
-		CSAGroup.POST("/optioncache", handlers.GetCSOCacheHandler)
 	}
 }

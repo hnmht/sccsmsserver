@@ -11,11 +11,10 @@ import (
 func Setup(mode string) *gin.Engine {
 	gin.SetMode(mode)
 	r := gin.New()
-	//全局中间件
-	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-	r.Use(Cors()) //允许浏览器跨域
+	r.Use(logger.GinLogger(), logger.GinRecovery(true)) //Global middleware
+	r.Use(Cors())                                       //Allow the browser to make cross-origin requests
 	// r.Use(IpBlackListMiddleWare()) //Ip黑名单
-	//全局路径
+	// Globle path
 	superGroup := r.Group(pub.APIPath)
 	{
 		AuthRoute(superGroup) // Auth
@@ -51,7 +50,6 @@ func Setup(mode string) *gin.Engine {
 		UDCRoute(superGroup)  // User-defined Category
 		UserRoute(superGroup) // User
 		// WORoute(superGroup)        //wo指令单
-
 	}
 	//ping
 	// r.POST("/ping", control.PubServerPing)
