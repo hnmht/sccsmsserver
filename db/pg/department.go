@@ -215,10 +215,10 @@ func GetSimpDepts() (depts []SimpDept, resStatus i18n.ResKey, err error) {
 
 // Get latest Department Master Data
 func (dc *SimpDeptCache) GetLatestSimpDepts() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	dc.DelDepts = make([]SimpDept, 0)
 	dc.NewDepts = make([]SimpDept, 0)
 	dc.UpdateDepts = make([]SimpDept, 0)
-	resStatus = i18n.StatusOK
 	// Get the lastest timestamp from department table
 	sqlStr := "select ts from department where ts > $1 order by ts desc limit(1)"
 	err = db.QueryRow(sqlStr, dc.QueryTs).Scan(&dc.ResultTs)
@@ -234,7 +234,7 @@ func (dc *SimpDeptCache) GetLatestSimpDepts() (resStatus i18n.ResKey, err error)
 		return
 	}
 
-	// Retrieve all data greater than the  latest timestamp.
+	// Retrieve all data greater than the QueryTs
 	sqlStr = `select id,code,name,fatherid,leader,
 	description,status,createtime,ts,dr 
 	from department 
@@ -359,7 +359,6 @@ func (dept *Department) Edit() (resStatus i18n.ResKey, err error) {
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-
 	// Update the record in the department table
 	sqlStr := `update department set code=$1,name=$2,fatherid=$3,leader=$4,description=$5,
 	status=$6,modifierid=$7,modifytime=now(),ts=current_timestamp where id = $8 and ts = $9`

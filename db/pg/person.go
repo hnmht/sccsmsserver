@@ -163,7 +163,7 @@ func (pc *PersonCache) GetLatestPersons() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("PersonCache.GetLatestPersons  db.QueryRow failed:", zap.Error(err))
 		return
 	}
-	// Retrieve all data greater than the latest timestamp.
+	// Retrieve all data greater than the QueryTs.
 	sqlStr = `select a.id,
 	a.code,
 	a.name,

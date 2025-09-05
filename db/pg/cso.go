@@ -146,7 +146,7 @@ func (csoc *ConstructionSiteOptionCache) GetCSOCache() (resStatus i18n.ResKey, e
 		resStatus = i18n.StatusInternalError
 		return
 	}
-	// Retrieve all data greater than the latest timestamp from cso table
+	// Retrieve all data greater than the QueryTs from cso table
 	sqlStr = `select id,code,name,displayname,udcid,
 	defaultvalueid,enable,createtime,creatorid,modifytime,
 	modifierid,ts,dr

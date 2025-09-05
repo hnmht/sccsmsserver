@@ -42,7 +42,7 @@ func Setup(mode string) *gin.Engine {
 		PositionRoute(superGroup) // Position
 		PubRoute(superGroup)      // System public information
 		// RepRoute(superGroup)       //报表
-		// RLRoute(superGroup)        //风险等级
+		RLRoute(superGroup)   // Risk Level
 		RoleRoute(superGroup) // Role
 		// TCRoute(superGroup)        //tc培训课程
 		// TRRoute(superGroup)        //tr培训记录

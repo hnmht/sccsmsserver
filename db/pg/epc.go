@@ -218,7 +218,7 @@ func (sepcc *SimpEPCCache) GetSimpEPCCache() (resStatus i18n.ResKey, err error) 
 		return
 	}
 
-	// Retrieve all data greater than latest timestamp
+	// Retrieve all data greater than the QueryTs
 	sqlStr = `select id,name,description,fatherid,status,
 	createtime,creatorid,modifytime,modifierid,ts,
 	dr 

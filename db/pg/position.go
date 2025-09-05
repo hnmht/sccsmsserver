@@ -166,7 +166,7 @@ func (pc *PositionCache) GetOPsCache() (resStatus i18n.ResKey, err error) {
 		resStatus = i18n.StatusInternalError
 		return
 	}
-	// Retrieve all data greater than the latest timestamp
+	// Retrieve all data greater than the QueryTs
 	sqlStr = `select id,name,description,status,createtime,
 	creatorid,modifytime,modifierid,ts,dr
 	from position 

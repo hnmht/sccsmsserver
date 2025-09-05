@@ -162,7 +162,7 @@ func (udac *UDACache) GetUDACache() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	// Retrieve all data greater than the latest timestamp
+	// Retrieve all data greater than the QueryTs
 	sqlStr = `select id,udcid,code,name,description,
 	fatherid,status,createtime,creatorid,modifierid,
 	modifytime,ts,dr 

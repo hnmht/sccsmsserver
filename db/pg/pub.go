@@ -4,6 +4,16 @@ import (
 	"sccsmsserver/i18n"
 )
 
+// SeaCloud Date Type struct
+type ScDataType struct {
+	ID        int32  `json:"id"`
+	TypeCode  string `json:"code"`
+	TypeName  string `json:"name"`
+	DataType  string `json:"dataType"`
+	FrontDb   string `json:"frontDb"`
+	InputMode string `json:"inputMode"`
+}
+
 // Data references check struct
 type DataReferenceCheck struct {
 	Description    string

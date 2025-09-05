@@ -123,7 +123,7 @@ func (csc *ConstructionSiteCache) GetCSCache() (resStatus i18n.ResKey, err error
 		return
 	}
 
-	// Retrieve all data greater than latest timestamp from csa table
+	// Retrieve all data greater than the QueryTs from csa table
 	sqlStr = `select id,code,name,description,cscid,
 	subdeptid,respdeptid,resppersonid,status,endflag,
 	enddate,longitude,latitude,createtime,creatorid,

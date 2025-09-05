@@ -105,7 +105,7 @@ func (udcc *UDCCache) GetUDCsCache() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	// Retrieve all data greater than the latest timestamp from usc table
+	// Retrieve all data greater than the QueryTs from usc table
 	sqlStr = `select a.id,a.name,a.description,a.islevel,a.status,
 	a.createtime,a.Creatorid,a.modifytime,a.modifierid,a.ts,
 	a.dr 
