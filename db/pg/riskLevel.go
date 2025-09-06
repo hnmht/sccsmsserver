@@ -47,11 +47,11 @@ func initRiskLevel() (isFinish bool, err error) {
 	}
 	// Step 3: Insert default Risk Level records.
 	sqlStrs := []string{
-		"insert into risklevel(id,name,description,color,creatorid) values(1,'Major Risk','System pre-set','red',10000)",
-		"insert into risklevel(id,name,description,color,creatorid) values(2,'Significant Risk','System pre-set','orange',10000)",
-		"insert into risklevel(id,name,description,color,creatorid) values(3,'General Risk','System pre-set','yellow',10000)",
-		"insert into risklevel(id,name,description,color,creatorid) values(4,'Low Risk','System pre-set','blue',10000)",
-		"insert into risklevel(id,name,description,color,creatorid) values(5,'No Risk','System pre-set','white',10000)",
+		"insert into risklevel(name,description,color,creatorid) values('Major Risk','System pre-set','red',10000)",
+		"insert into risklevel(name,description,color,creatorid) values('Significant Risk','System pre-set','orange',10000)",
+		"insert into risklevel(name,description,color,creatorid) values('General Risk','System pre-set','yellow',10000)",
+		"insert into risklevel(name,description,color,creatorid) values('Low Risk','System pre-set','blue',10000)",
+		"insert into risklevel(name,description,color,creatorid) values('No Risk','System pre-set','white',10000)",
 	}
 
 	for _, t := range sqlStrs {
@@ -110,7 +110,6 @@ func GetRLList() (rls []RiskLevel, resStatus i18n.ResKey, err error) {
 		// Append rl to rls slice
 		rls = append(rls, rl)
 	}
-
 	return
 }
 
@@ -426,21 +425,21 @@ func (rl *RiskLevel) CheckUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usednum from epa where  dr=0 and risklevelid=$1`,
 			UsedReturnCode: i18n.StatusEPAUsed,
 		},
-		{
-			Description:    "被执行模板引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where  dr=0 and risklevelid=$1`,
-			UsedReturnCode: i18n.StatusEPTUsed,
-		},
 		/*	{
-			 		Description:    "被执行单引用",
-					SqlStr:         `select count(id) from executedoc_b where  dr=0 and risklevelid=$1`,
-					UsedReturnCode: i18n.StatusEDUsed,
-				},
+				Description:    "Refrenced by Execution Project Template body",
+				SqlStr:         `select count(id) from ept_b where  dr=0 and risklevelid=$1`,
+				UsedReturnCode: i18n.StatusEPTUsed,
+			},
 				{
-					Description:    "被问题处理单引用",
-					SqlStr:         "select count(id) as usednum from disposedoc where dr=0  and risklevelid=$1",
-					UsedReturnCode: i18n.StatusDDUsed,
-				}, */
+				 		Description:    "被执行单引用",
+						SqlStr:         `select count(id) from executedoc_b where  dr=0 and risklevelid=$1`,
+						UsedReturnCode: i18n.StatusEDUsed,
+					},
+					{
+						Description:    "被问题处理单引用",
+						SqlStr:         "select count(id) as usednum from disposedoc where dr=0  and risklevelid=$1",
+						UsedReturnCode: i18n.StatusDDUsed,
+					}, */
 	}
 
 	// Check one by one

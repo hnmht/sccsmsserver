@@ -14,7 +14,7 @@ drop table if exists cso cascade;
 drop table if exists udc cascade;
 drop table if exists uda cascade;
 drop table if exists epc cascade;
-drop table if exists ep cascade;
+drop table if exists epa cascade;
 drop table if exists ept_h cascade;
 drop table if exists ept_b cascade;
 drop table if exists risklevel cascade;
