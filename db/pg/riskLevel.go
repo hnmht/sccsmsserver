@@ -415,14 +415,14 @@ func (rl *RiskLevel) DelFromLocalCache() {
 	}
 }
 
-// Check the Risk Levelv is reference
+// Check the Risk Levelv is referenced
 func (rl *RiskLevel) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Define a list of items to be checked.
 	checkItems := []ArchiveCheckUsed{
 		{
 			Description:    "Referenced by Execution Project Archive",
-			SqlStr:         `select count(id) as usednum from epa where  dr=0 and risklevelid=$1`,
+			SqlStr:         `select count(id) as usednum from epa where dr=0 and risklevelid=$1`,
 			UsedReturnCode: i18n.StatusEPAUsed,
 		},
 		/*	{

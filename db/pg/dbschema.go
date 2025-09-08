@@ -424,7 +424,7 @@ var tables []table = []table{
 			PRIMARY KEY(id)
 			);`,
 		AddFromVersion: "1.0.0",
-		InitFunc:       initEPA,
+		InitFunc:       initEP,
 	},
 	{
 		TableName:   "ept_h",

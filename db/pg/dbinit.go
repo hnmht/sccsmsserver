@@ -55,6 +55,22 @@ var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 9920, FatherID: 0, Title: "MenuAbout", Path: "/private/my/about", Icon: "Info", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 }
 
+// SeaCloud Data Type List
+var ScDataTypeList map[int32]ScDataType = map[int32]ScDataType{
+	301: {ID: 301, TypeCode: "ScTextInput", TypeName: "Tets", DataType: "string", FrontDb: "", InputMode: "Input"},
+	302: {ID: 302, TypeCode: "ScNumberInput", TypeName: "Number", DataType: "number", FrontDb: "", InputMode: "Input"},
+	306: {ID: 306, TypeCode: "ScDateInput", TypeName: "Date", DataType: "string", FrontDb: "", InputMode: "Input"},
+	307: {ID: 307, TypeCode: "ScDateTimeInput", TypeName: "DateTime", DataType: "string", FrontDb: "", InputMode: "Input"},
+	308: {ID: 401, TypeCode: "ScSelectGender", TypeName: "Gender", DataType: "int16", FrontDb: "", InputMode: "Select"},
+	404: {ID: 404, TypeCode: "ScSelectYesOrNo", TypeName: "Bool", DataType: "int16", FrontDb: "", InputMode: "Select"},
+	510: {ID: 510, TypeCode: "ScPersonSelect", TypeName: "Person", DataType: "Person", FrontDb: "person", InputMode: "Select"},
+	520: {ID: 520, TypeCode: "ScDeptSelect", TypeName: "Department", DataType: "SimpDept", FrontDb: "department", InputMode: "Select"},
+	525: {ID: 525, TypeCode: "ScCCSSelect", TypeName: "Construction Site Category", DataType: "CSC", FrontDb: "csc", InputMode: "Select"},
+	530: {ID: 530, TypeCode: "ScUDCSelect", TypeName: "User-define Category", DataType: "UDC", FrontDb: "udc", InputMode: "Select"},
+	540: {ID: 540, TypeCode: "ScEPCSelect", TypeName: "Execution Project Category", DataType: "EPC", FrontDb: "epc", InputMode: "Select"},
+	550: {ID: 550, TypeCode: "ScUDASelect", TypeName: "User-define Archive", DataType: "UDA", FrontDb: "uda", InputMode: "Select"},
+}
+
 // Default User Permissions List
 var PublicFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 1, FatherID: 0, Title: "MenuDashboard", Path: "/private/dashboard", Icon: "Home", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},

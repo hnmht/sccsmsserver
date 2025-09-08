@@ -27,8 +27,8 @@ func Setup(mode string) *gin.Engine {
 		// DDRoute(superGroup)        //dd问题处理单
 		DeptRoute(superGroup) // Department
 		// EDRoute(superGroup)        //ed执行单
+		EPARoute(superGroup) // Execution Project
 		EPCRoute(superGroup) // Execution Project Category
-		// EIDRoute(superGroup)       //eid执行项目档案
 		// EITRoute(superGroup)       //eit执行模板
 		// EventRoute(superGroup)     //Event
 		// FileRoute(superGroup)      //file文件
