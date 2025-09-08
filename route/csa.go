@@ -17,9 +17,9 @@ func CSARoute(g *gin.RouterGroup) {
 		// Check if the CSA code exists
 		CSAGroup.POST("/checkcode", handlers.CheckCSCodeExistHandler)
 		// Delete CSA
-		CSAGroup.POST("/delete", handlers.DeleteCSHandler)
+		CSAGroup.POST("/del", handlers.DeleteCSHandler)
 		// Batch delete CSA
-		CSAGroup.POST("/deletecss", handlers.DeleteCSsHandler)
+		CSAGroup.POST("/dels", handlers.DeleteCSsHandler)
 		// Get CSA list
 		CSAGroup.POST("/list", handlers.GetCSsHandler)
 		// Get CSA front-end cache

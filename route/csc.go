@@ -23,8 +23,8 @@ func CSCRoute(g *gin.RouterGroup) {
 		// Edit CSC
 		CSCGroup.POST("/edit", handlers.EditCSCHandler)
 		// Delete CSC
-		CSCGroup.POST("/delete", handlers.DeleteCSCHandler)
+		CSCGroup.POST("/del", handlers.DeleteCSCHandler)
 		// Batch delete CSC
-		CSCGroup.POST("/deletes", handlers.DeleteCSCsHandler)
+		CSCGroup.POST("/dels", handlers.DeleteCSCsHandler)
 	}
 }

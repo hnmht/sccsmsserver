@@ -17,9 +17,9 @@ func RLRoute(g *gin.RouterGroup) {
 		// Modify Risk Level
 		RLGroup.POST("/edit", handlers.EditRLHandler)
 		// Delete Risk Level
-		RLGroup.POST("/delete", handlers.DeleteRLHandler)
+		RLGroup.POST("/del", handlers.DeleteRLHandler)
 		// Batch datele Risk Level
-		RLGroup.POST("/deleterls", handlers.DeleteRLsHandler)
+		RLGroup.POST("/dels", handlers.DeleteRLsHandler)
 		// Check if the Risk Level name exists
 		RLGroup.POST("/checkname", handlers.CheckRLNameExistHandler)
 		// Get Risk Level front-end cache

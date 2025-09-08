@@ -15,13 +15,13 @@ func UserRoute(g *gin.RouterGroup) {
 		// Get Menu List
 		userGroup.POST("/getmenu", handlers.GetMenuHandler)
 		// Delete User
-		userGroup.POST("/delete", handlers.DeleteUserHandler)
+		userGroup.POST("/del", handlers.DeleteUserHandler)
 		// Batch Delete User
-		userGroup.POST("/deletemultiple", handlers.DeleteUsersHandler)
+		userGroup.POST("/dels", handlers.DeleteUsersHandler)
 		// Check if the user code exists
-		userGroup.POST("/validatecode", handlers.CheckUserCodeExistHandler)
+		userGroup.POST("/checkcode", handlers.CheckUserCodeExistHandler)
 		// Check if the user name exists
-		userGroup.POST("/validatename", handlers.CheckUserNameExistHandler)
+		userGroup.POST("/checkname", handlers.CheckUserNameExistHandler)
 		// Add User
 		userGroup.POST("/add", handlers.AddUserHandler)
 		// Edit User
@@ -29,7 +29,7 @@ func UserRoute(g *gin.RouterGroup) {
 		// Change user avatar
 		userGroup.POST("/changeavatar", handlers.ChangeUserAvatarHandler)
 		// Get user information based on token
-		userGroup.POST("/userInfo", handlers.UserInfoHandler)
+		userGroup.POST("/info", handlers.UserInfoHandler)
 		// User update VIA personal center
 		userGroup.POST("/modifyprofile", handlers.ModifyProfileHandler)
 	}

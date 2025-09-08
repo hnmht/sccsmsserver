@@ -13,15 +13,15 @@ func RoleRoute(g *gin.RouterGroup) {
 		// Get role list
 		roleGroup.POST("/list", middleware.JWTAuthMiddleware(), handlers.GetRolesHandler)
 		// Check the Role name exists
-		roleGroup.POST("/validatename", middleware.JWTAuthMiddleware(), handlers.CheckRoleNameExistHandler)
+		roleGroup.POST("/checkname", middleware.JWTAuthMiddleware(), handlers.CheckRoleNameExistHandler)
 		// Add role
 		roleGroup.POST("/add", middleware.JWTAuthMiddleware(), handlers.AddRoleHandler)
 		// Edit role
 		roleGroup.POST("/edit", middleware.JWTAuthMiddleware(), handlers.EditRoleHandler)
 		// Delete Role
-		roleGroup.POST("/delete", middleware.JWTAuthMiddleware(), handlers.DeleteRoleHandler)
+		roleGroup.POST("/del", middleware.JWTAuthMiddleware(), handlers.DeleteRoleHandler)
 		// Batch delete roles
-		roleGroup.POST("/deleteroles", middleware.JWTAuthMiddleware(), handlers.DeleteRolesHandler)
+		roleGroup.POST("/dels", middleware.JWTAuthMiddleware(), handlers.DeleteRolesHandler)
 		// Get role permissions
 		roleGroup.POST("/getmenus", middleware.JWTAuthMiddleware(), handlers.GetRoleMenusHandler)
 		// Modify role permissions

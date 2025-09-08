@@ -17,9 +17,9 @@ func PositionRoute(g *gin.RouterGroup) {
 		// Edit position
 		PositionGroup.POST("/edit", handlers.EditPositionHandler)
 		// Delete position
-		PositionGroup.POST("/delete", handlers.DeletePositionHandler)
+		PositionGroup.POST("/del", handlers.DeletePositionHandler)
 		// Batch delete positions
-		PositionGroup.POST("/batchdel", handlers.DeletePositionsHandler)
+		PositionGroup.POST("/dels", handlers.DeletePositionsHandler)
 		// Check name exists
 		PositionGroup.POST("/checkname", handlers.CheckPositionNameExistHandler)
 		// Get position master data front-end cache

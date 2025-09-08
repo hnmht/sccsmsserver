@@ -17,9 +17,9 @@ func UDCRoute(g *gin.RouterGroup) {
 		// Edit UDC
 		UDCGroup.POST("/edit", handlers.EditUDCHandler)
 		// Delete UDC
-		UDCGroup.POST("/delete", handlers.DeleteUDCHandler)
+		UDCGroup.POST("/del", handlers.DeleteUDCHandler)
 		// Batch delete UDC
-		UDCGroup.POST("/deleteudcs", handlers.DeleteUDCsHandler)
+		UDCGroup.POST("/dels", handlers.DeleteUDCsHandler)
 		// Check if the UDC name exists
 		UDCGroup.POST("/checkname", handlers.CheckUDCNameExistHandler)
 		// Get latest UDC front-end cache

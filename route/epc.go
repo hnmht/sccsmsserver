@@ -23,8 +23,8 @@ func EPCRoute(g *gin.RouterGroup) {
 		// Modify EPC
 		EPCGroup.POST("/edit", handlers.EditEPCHandler)
 		// Delete EPC
-		EPCGroup.POST("/delete", handlers.DeleteEPCHandler)
+		EPCGroup.POST("/del", handlers.DeleteEPCHandler)
 		// Batch delete EPC
-		EPCGroup.POST("/deletes", handlers.DeleteEPCsHandler)
+		EPCGroup.POST("/dels", handlers.DeleteEPCsHandler)
 	}
 }
