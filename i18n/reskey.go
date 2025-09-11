@@ -225,6 +225,10 @@ const (
 	StatusRoleModifyUsed     ResKey = "StatusRoleModifyUsed"
 	StatusTRDeptUsed         ResKey = "StatusTRDeptUsed"
 	StatusPPEIFDeptUsed      ResKey = "StatusPPEIFDeptUsed"
+
+	StatusDBIDEmpty      ResKey = "StatusDBIDEmpty"
+	StatusDBIDMissMatch  ResKey = "StatusDBIDMissMatch"
+	StatusFrontDBIDNoRow ResKey = "StatusFrontDBIDNoRow"
 	// Other (90000-99999)
 	StatusErrorUnknow              ResKey = "StatusErrorUnknow"
 	StatusResCodeError             ResKey = "StatusResCodeError"

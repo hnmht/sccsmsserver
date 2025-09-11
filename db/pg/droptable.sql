@@ -1,4 +1,5 @@
 drop table if exists sysinfo cascade;
+drop table if exists frontdb cascade;
 drop table if exists sysmenu cascade;
 drop table if exists sysrole cascade;
 drop table if exists sysuser cascade;

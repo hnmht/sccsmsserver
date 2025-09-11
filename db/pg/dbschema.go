@@ -42,10 +42,28 @@ var tables []table = []table{
 		InitFunc:       initSysInfo,
 	},
 	{
+		TableName:   "frontdb",
+		Description: "Front-end IndexedDb info",
+		CreateSQL: `
+		create table if not exists frontdb (
+			id serial NOT NULL,
+			dbid bigint,
+			frontdbid bigint,
+			cryptokey varchar(512) default '',
+			createtime timestamp with time zone default current_timestamp,
+			creatorid int DEFAULT 0,
+			dr smallint  DEFAULT 0,
+			ts timestamp with time zone default current_timestamp,
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       genericInitTable,
+	},
+	{
 		TableName:   "sysmenu",
 		Description: "System menus table",
 		CreateSQL: `
-			create table if not exists sysmenu (
+		create table if not exists sysmenu (
 			autoid serial NOT NULL,
 			id int NOT NULL,
 			fatherid int,

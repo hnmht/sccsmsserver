@@ -977,6 +977,21 @@
             "message": "被劳保用品发放单发放部门引用."
         },
         {
+            "key": "StatusDBIDEmpty",
+            "type": "string",
+            "message": "DBID字段为空."
+        },
+        {
+            "key": "StatusDBIDMissMatch",
+            "type": "string",
+            "message": "DBID字段不匹配."
+        },
+        {
+            "key": "StatusFrontDBIDNoRow",
+            "type": "string",
+            "message": "找不到匹配的前端数据库DBID,请删除前端数据库后重试."
+        },
+        {
             "key": "StatusErrorUnknown",
             "type": "string",
             "message": "不明原因错误."

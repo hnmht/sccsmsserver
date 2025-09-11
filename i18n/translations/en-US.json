@@ -365,7 +365,7 @@
             "key": "StatusUserNameExist",
             "type": "string",
             "message": "User name already exists."
-        },      
+        },
         {
             "key": "StatusUserMobileExist",
             "type": "string",
@@ -975,6 +975,21 @@
             "key": "StatusPPEIFDeptUsed",
             "type": "string",
             "message": "Referenced by the issuing department in the PPE Issuance Form."
+        },
+        {
+            "key": "StatusDBIDEmpty",
+            "type": "string",
+            "message": "DBID is empty."
+        },
+        {
+            "key": "StatusDBIDMissMatch",
+            "type": "string",
+            "message": "DBID mismatch."
+        },
+        {
+            "key": "StatusFrontDBIDNoRow",
+            "type": "string",
+            "message": "No Frontend DBID record found. Please delete the frontend database and try again."
         },
         {
             "key": "StatusErrorUnknown",

@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"strings"
 
 	"go.uber.org/zap"
@@ -112,4 +113,18 @@ func (thisRsa *Rsa) Decrypt(secretData []byte) ([]byte, error) {
 		buffer.Write(chunk)
 	}
 	return buffer.Bytes(), nil
+}
+
+// Generate AES Key
+func GenerateAESKey(length int) (key []byte, err error) {
+	if length != 16 && length != 24 && length != 32 {
+		err = errors.New("GenerateAESKey: Invalid length")
+		return
+	}
+	key = make([]byte, length)
+	_, err = rand.Read(key)
+	if err != nil {
+		return
+	}
+	return
 }

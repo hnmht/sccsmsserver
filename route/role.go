@@ -23,7 +23,7 @@ func RoleRoute(g *gin.RouterGroup) {
 		// Batch delete roles
 		roleGroup.POST("/dels", middleware.JWTAuthMiddleware(), handlers.DeleteRolesHandler)
 		// Get role permissions
-		roleGroup.POST("/getmenus", middleware.JWTAuthMiddleware(), handlers.GetRoleMenusHandler)
+		roleGroup.POST("/getmenu", middleware.JWTAuthMiddleware(), handlers.GetRoleMenusHandler)
 		// Modify role permissions
 		roleGroup.POST("/updaterolemenus", middleware.JWTAuthMiddleware(), handlers.UpdateRoleMenusHandler)
 	}
