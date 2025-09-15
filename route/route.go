@@ -34,12 +34,12 @@ func Setup(mode string) *gin.Engine {
 		// FileRoute(superGroup)      //file文件
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
-		// LPRoute(superGroup)        //劳保用品档案
 		// LQRoute(superGroup)        //劳保用品岗位定额
 		// MsgRoute(superGroup)       //消息
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
 		PositionRoute(superGroup) // Position
+		PPERoute(superGroup)      //劳保用品档案
 		PubRoute(superGroup)      // System public information
 		// RepRoute(superGroup)       //报表
 		RLRoute(superGroup)   // Risk Level

@@ -90,7 +90,7 @@ func GetPPEList() (ppes []PPE, resStatus i18n.ResKey, err error) {
 }
 
 // Get latest PPE front-end cache
-func (ppec *PPECache) GetLPsCache() (resStatus i18n.ResKey, err error) {
+func (ppec *PPECache) GetPPEsCache() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	ppec.DelItems = make([]PPE, 0)
 	ppec.NewItems = make([]PPE, 0)
@@ -105,7 +105,7 @@ func (ppec *PPECache) GetLPsCache() (resStatus i18n.ResKey, err error) {
 			resStatus = i18n.StatusOK
 			return
 		}
-		zap.L().Error("PPECache.GetLPsCache query latest ts failed", zap.Error(err))
+		zap.L().Error("PPECache.GetPPEsCache query latest ts failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
 		return
 	}
@@ -118,7 +118,7 @@ func (ppec *PPECache) GetLPsCache() (resStatus i18n.ResKey, err error) {
 		where ts > $1 order by ts desc`
 	rows, err := db.Query(sqlStr, ppec.QueryTs)
 	if err != nil {
-		zap.L().Error("PPECache.GetLPsCache  get Cache from database failed", zap.Error(err))
+		zap.L().Error("PPECache.GetPPEsCache  get Cache from database failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
 		return
 	}
@@ -131,7 +131,7 @@ func (ppec *PPECache) GetLPsCache() (resStatus i18n.ResKey, err error) {
 			&ppe.Description, &ppe.CreateDate, &ppe.Creator.ID, &ppe.ModifyDate, &ppe.Modifier.ID,
 			&ppe.Ts, &ppe.Dr)
 		if err != nil {
-			zap.L().Error("PPECache.GetLPsCache rows.next failed", zap.Error(err))
+			zap.L().Error("PPECache.GetPPEsCache rows.next failed", zap.Error(err))
 			resStatus = i18n.StatusInternalError
 			return
 		}
@@ -278,7 +278,7 @@ func (ppe *PPE) Edit() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// PPE Delete 删除劳保用品档案
+// Delete PPE master data
 func (ppe *PPE) Delete() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Check if the PPE id is refereced
@@ -333,13 +333,13 @@ func (ppe *PPE) CheckCodeExist() (resStatus i18n.ResKey, err error) {
 }
 
 // Batch Delete PPE master data
-func DeleteLPs(ppes *[]PPE, modifyUserId int32) (resStatus i18n.ResKey, err error) {
+func DeletePPEs(ppes *[]PPE, modifyUserId int32) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Begin a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("DeleteLPs db.begin failed", zap.Error(err))
+		zap.L().Error("DeletePPEs db.begin failed", zap.Error(err))
 		return
 	}
 	defer tx.Commit()
@@ -349,7 +349,7 @@ func DeleteLPs(ppes *[]PPE, modifyUserId int32) (resStatus i18n.ResKey, err erro
 	stmt, err := tx.Prepare(delSqlStr)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("DeleteLPs tx.Prepare failed", zap.Error(err))
+		zap.L().Error("DeletePPEs tx.Prepare failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
@@ -365,19 +365,19 @@ func DeleteLPs(ppes *[]PPE, modifyUserId int32) (resStatus i18n.ResKey, err erro
 		// Execute the update
 		result, err1 := stmt.Exec(modifyUserId, ppe.ID, ppe.Ts)
 		if err1 != nil {
-			zap.L().Error("DeleteLPs stmt.exec failed", zap.Error(err))
+			zap.L().Error("DeletePPEs stmt.exec failed", zap.Error(err))
 			tx.Rollback()
 			return i18n.StatusInternalError, err1
 		}
 		// Check the number of rows affected by the Update execution.
 		affected, err2 := result.RowsAffected()
 		if err2 != nil {
-			zap.L().Error("DeleteLPs check RowsAffected failed", zap.Error(err))
+			zap.L().Error("DeletePPEs check RowsAffected failed", zap.Error(err))
 			tx.Rollback()
 			return i18n.StatusInternalError, err2
 		}
 		if affected < 1 {
-			zap.L().Info("DeleteLPs other edit")
+			zap.L().Info("DeletePPEs other edit")
 			_ = tx.Rollback()
 			return i18n.StatusOtherEdit, nil
 		}
