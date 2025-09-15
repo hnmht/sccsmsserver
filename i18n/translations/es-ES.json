@@ -552,7 +552,7 @@
             "message": "El nombre del curso de capacitación ya existe."
         },
         {
-            "key": "StatusLPPECodeExist",
+            "key": "StatusPPECodeExist",
             "type": "string",
             "message": "El código de Equipo de Protección Personal ya existe."
         },

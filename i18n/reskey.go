@@ -139,7 +139,7 @@ const (
 	// Training Course(12000-12099)
 	StatusTCNameExist ResKey = "StatusTCNameExist"
 	// Personal Protective Equipment (12100-12199)
-	StatusLPPECodeExist ResKey = "StatusLPPECodeExist"
+	StatusPPECodeExist ResKey = "StatusPPECodeExist"
 	// PPE Quota (12200-12199)
 	StatusPQExist ResKey = "StatusPQExist"
 	// Referenced （80000-89999）

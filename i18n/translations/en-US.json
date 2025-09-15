@@ -557,7 +557,7 @@
             "message": "Training Course name already exists."
         },
         {
-            "key": "StatusLPPECodeExist",
+            "key": "StatusPPECodeExist",
             "type": "string",
             "message": "Personal Protection Equipment code already exists."
         },

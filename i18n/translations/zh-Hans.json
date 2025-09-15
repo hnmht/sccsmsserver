@@ -557,7 +557,7 @@
             "message": "培训课程名称已经存在."
         },
         {
-            "key": "StatusLPPECodeExist",
+            "key": "StatusPPECodeExist",
             "type": "string",
             "message": "劳保用品编码已经存在."
         },
