@@ -261,7 +261,7 @@ var tables []table = []table{
 			ts timestamp with time zone default current_timestamp,				
 			PRIMARY KEY(id)
 			);`,
-		AddFromVersion: "1.2.0",
+		AddFromVersion: "1.0.0",
 		InitFunc:       initPosition,
 	},
 	{
@@ -537,6 +537,28 @@ var tables []table = []table{
 			);`,
 		AddFromVersion: "1.0.0",
 		InitFunc:       initDocumentCategory,
+	},
+	{
+		TableName:   "tc",
+		Description: "Training Course",
+		CreateSQL: `
+			create table tc (
+			id serial NOT NUll,
+			code varchar(256) default '',
+			name varchar(256) default '',
+			classhour numeric default 0,
+			isexamine smallint default 1,
+			description varchar(2048) default '',			
+			createtime timestamp with time zone default current_timestamp,
+			creatorid int DEFAULT 0,
+			modifytime timestamp with time zone default current_timestamp,
+			modifierid int DEFAULT 0,
+			dr smallint default 0,			
+			ts timestamp with time zone default current_timestamp,				
+			PRIMARY KEY(id)
+			);`,
+		AddFromVersion: "1.0.0",
+		InitFunc:       genericInitTable,
 	},
 	{
 		TableName:   "ppe",

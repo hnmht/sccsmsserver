@@ -40,7 +40,7 @@ var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 1050, FatherID: 1000, Title: "MenuEPC", Path: "/private/masterData/executionProjectCategory", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1060, FatherID: 1000, Title: "MenuEP", Path: "/private/masterData/executionProject", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1070, FatherID: 1000, Title: "MenuRL", Path: "/private/masterData/riskLevel", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.1.0"},
-	SystemMenu{ID: 1080, FatherID: 1000, Title: "MenuPPE", Path: "/private/masterData/personalProtectionEquipment", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 1080, FatherID: 1000, Title: "MenuPPE", Path: "/private/masterData/personalProtectiveEquipment", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1100, FatherID: 0, Title: "MenuTemplate", Path: "/private/template", Icon: "FormatListNumbered", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 1110, FatherID: 1100, Title: "MenuEPT", Path: "/private/template/executionProjectTemplate", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 9000, FatherID: 0, Title: "MenuPermission", Path: "/private/permission", Icon: "People", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},

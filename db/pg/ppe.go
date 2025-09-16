@@ -30,7 +30,7 @@ type PPE struct {
 // Personal Protective Equipment data from front-end cache
 type PPECache struct {
 	QueryTs      time.Time `json:"queryTs"`
-	ResultNumber int32     `json:"resulNumber"`
+	ResultNumber int32     `json:"resultNumber"`
 	DelItems     []PPE     `json:"delItems"`
 	UpdateItems  []PPE     `json:"updateItems"`
 	NewItems     []PPE     `json:"newItems"`
