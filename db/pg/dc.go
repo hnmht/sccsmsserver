@@ -119,7 +119,7 @@ func GetDCList() (dcs []DC, resStatus i18n.ResKey, err error) {
 	dcs = make([]DC, 0)
 	// Retrieve Document Category list from the dc table
 	sqlStr := `select id,name,description,fatherid,status,
-	createtime,creatorid,modifytime,modifierid,ts,dr 
+	createtime,creatorid,modifytime,modifierid,ts,dr
 	from dc
 	where dr=0 order by ts desc`
 	rows, err := db.Query(sqlStr)
@@ -173,7 +173,7 @@ func GetSimpDCList() (sdcs []SimpDC, resStatus i18n.ResKey, err error) {
 	sdcs = make([]SimpDC, 0)
 	// Retrieve Document Category list from the dc table
 	sqlStr := `select id,name,description,fatherid,status,
-	createtime,creatorid,modifytime,modifierid,ts,dr 
+	createtime,creatorid,modifytime,modifierid,ts,dr
 	from dc
 	where dr=0 order by ts desc`
 	rows, err := db.Query(sqlStr)
@@ -236,7 +236,7 @@ func (sdcc *SimpDCCache) GetSimpDCCache() (resStatus i18n.ResKey, err error) {
 
 	// Retrieve all data that timestamp greater than QueryTs
 	sqlStr = `select id,name,description,fatherid,status,
-	createtime,creatorid,modifytime,modifierid,ts,dr 
+	createtime,creatorid,modifytime,modifierid,ts,dr
 	from dc
 	where ts > $1 order by ts desc`
 	rows, err := db.Query(sqlStr, sdcc.QueryTs)
@@ -318,8 +318,8 @@ func (dc *DC) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Inser record into the dc table
-	sqlStr := `insert into dc(name,description,fatherid,status,creatorid) 
-	values($1,$2,$3,$4,$5) 
+	sqlStr := `insert into dc(name,description,fatherid,status,creatorid)
+	values($1,$2,$3,$4,$5)
 	returning id`
 	err = db.QueryRow(sqlStr, dc.Name, dc.Description, dc.Father.ID, dc.Status, dc.Creator.ID).Scan(&dc.ID)
 	if err != nil {
@@ -405,11 +405,11 @@ func (dc *DC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usedNum from dc where fatherid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusDCLowLevelExist,
 		},
-		/* {
+		{
 			Description:    "被文档引用",
 			SqlStr:         `select count(id) as usedNum from document where dc_id=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusDocumentUsed,
-		}, */
+		},
 	}
 	// Check item by item
 	var usedNum int32
@@ -530,7 +530,7 @@ func DeleteDCs(dcs *[]DC, modifyUserID int32) (resStatus i18n.ResKey, err error)
 	return
 }
 
-// Find all child Document Category based on the Document Category ID.
+// Find all child Document Category based on the Document Category
 func FindSimpDCChildrens(sdcs []SimpDC, id int32) []SimpDC {
 	childrens := make([]SimpDC, 0)
 	for _, sdc := range sdcs {

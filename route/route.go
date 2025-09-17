@@ -22,7 +22,7 @@ func Setup(mode string) *gin.Engine {
 		CSCRoute(superGroup)  // Construction Site Category
 		CSORoute(superGroup)  // Construction Site Options
 		// DashboardRoute(superGroup) //看板数据
-		// DCRoute(superGroup)        //文档类别
+		DCRoute(superGroup) // Document Category
 		// DocRoute(superGroup)       //文档
 		// DDRoute(superGroup)        //dd问题处理单
 		DeptRoute(superGroup) // Department
