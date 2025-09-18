@@ -14,7 +14,7 @@ import (
 
 // File details
 type File struct {
-	ID               int32     `db:"id" json:"ID"`
+	ID               int32     `db:"id" json:"id"`
 	Hash             string    `db:"hash" json:"hash"`
 	MinioFileName    string    `db:"miniofilename" json:"minioFileName"`
 	OriginFileName   string    `db:"originfilename" json:"originFileName"`
@@ -32,7 +32,7 @@ type File struct {
 	DateTimeOriginal string    `db:"datetimeoriginal" json:"dateTimeOriginal"`
 	UpLoadDate       time.Time `db:"uploaddate" json:"uploadTime"`
 	Source           string    `db:"source" json:"source"`
-	CreatorID        int32     `db:" creatorid" json:"creatorid"`
+	CreatorID        int32     `db:" creatorid" json:"creatorID"`
 	CreatorName      string    `json:"creatorName"`
 	Dr               int16     `db:"dr" json:"dr"`
 	Ts               time.Time `db:"ts" json:"ts"`
@@ -40,20 +40,21 @@ type File struct {
 
 // Voucher File details
 type VoucherFile struct {
-	ID         int32     `db:"id" json:"id"`                   //行id
-	BillBid    int32     `db:"billbid" json:"billbid"`         //单据表体id
-	BIllHid    int32     `db:"billhid" json:"billhid"`         //单据表头id
-	File       File      `db:"file_id" json:"file"`            //文件id
-	CreateDate time.Time `db:"create_time" json:"createdate"`  //创建日期
-	CreateUser Person    `db:"createuserid" json:"createuser"` //创建人
-	ModifyDate time.Time `db:"modify_time" json:"modifydate"`  //更新日期
-	ModifyUser Person    `db:"modifyuserid" json:"modifyuser"` //更新人
-	Ts         time.Time `db:"ts" json:"ts"`                   //时间戳
-	Dr         int16     `db:"dr" json:"dr"`                   //删除标志
+	ID         int32     `db:"id" json:"id"`
+	BillBID    int32     `db:"billbid" json:"billBID"`
+	BillHID    int32     `db:"billhid" json:"billHID"`
+	File       File      `db:"fileid" json:"file"`
+	CreateDate time.Time `db:"createtime" json:"createDate"`
+	CreateUser Person    `db:"creatorid" json:"creator"`
+	ModifyDate time.Time `db:"modifytime" json:"modifyDate"`
+	Modifier   Person    `db:"modifierid" json:"modifier"`
+	Ts         time.Time `db:"ts" json:"ts"`
+	Dr         int16     `db:"dr" json:"dr"`
 }
 
 // Get File information by file ID.
 func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Get file information from cache
 	number, fb, _ := cache.Get(pub.File, file.ID)
 	if number > 0 {
@@ -101,71 +102,78 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("file getFileInfoByID cache.Set failed", zap.Error(err))
 		return
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-/*
-// Add 将文件信息写入filelist表
-func (file *File) Add() (err error) {
-	//向数据库filelist表中写入记录预处理
+// Add File record to database
+func (file *File) Add() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Add Record to files table
 	sqlStr := `insert into filelist(miniofilename,originfilename,filekey,filetype,isimage,
 	model,longitude,latitude,size,datetimeoriginal,
-	uploaddate,createuserid,filehash,source)
+	uploaddate,creatorid,filehash,source)
 	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) returning id`
-	stmt, err := db.Prepare(sqlStr)
-	if err != nil {
-		zap.L().Error("File.Add db.Perpare failed", zap.Error(err))
-		return
-	}
-	defer stmt.Close()
-
-	//向数据库中写入记录
-	err = stmt.QueryRow(file.MinioFileName, file.OriginFileName, file.FileKey, file.FileType, file.IsImage,
+	err = db.QueryRow(sqlStr, file.MinioFileName, file.OriginFileName, file.FileKey, file.FileType, file.IsImage,
 		file.Model, file.Longitude, file.Latitude, file.Size, file.DateTimeOriginal,
-		file.UpLoadDate, file.CreateUserID, file.FileHash, file.Source).Scan(&file.FileId)
+		file.UpLoadDate, file.CreatorID, file.Hash, file.Source).Scan(&file.ID)
 	if err != nil {
 		zap.L().Error("file.Add stmt.QueryRow failed", zap.Error(err))
+		resStatus = i18n.StatusInternalError
 		return
 	}
-	//获取文件url
-	fileUrl, err := minio.GetFileUrl(file.MinioFileName, durtion)
+	// Request Minio server to get file URL
+	fileUrl, err := minio.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("file.Add minio.GetFileUrl failed", zap.Error(err))
+		return
+	}
 	file.FileUrl = fileUrl
 	return
 }
 
-// GetFileInfoByHash 根据文件hash获取文件信息
-func (file *File) GetFileInfoByHash() (err error) {
-	//获取文件信息
+// Get File information by file hash.
+func (file *File) GetFileInfoByHash() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Get file information from filelist table
 	sqlStr := `select id,miniofilename,originfilename,filetype,isimage,
 	model,longitude,latitude,size,datetimeoriginal,
-	source,uploaddate,createuserid,ts
+	source,uploaddate,creatorid,ts
 	from filelist where filehash=$1 limit 1`
-	err = db.QueryRow(sqlStr, file.FileHash).Scan(&file.FileId, &file.MinioFileName, &file.OriginFileName, &file.FileType, &file.IsImage,
+	err = db.QueryRow(sqlStr, file.Hash).Scan(&file.ID, &file.MinioFileName, &file.OriginFileName, &file.FileType, &file.IsImage,
 		&file.Model, &file.Longitude, &file.Latitude, &file.Size, &file.DateTimeOriginal,
-		&file.Source, &file.UpLoadDate, &file.CreateUserID, &file.Ts)
-
+		&file.Source, &file.UpLoadDate, &file.CreatorID, &file.Ts)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			file.FileId = 0
+			file.ID = 0
 			file.FileUrl = ""
-			return nil
+			return
 		}
+		resStatus = i18n.StatusInternalError
 		zap.L().Error("file GetFileInfoByHash db.queryrow failed")
-		return err
+		return
 	}
-	//获取文件url
-	fileUrl, err := minio.GetFileUrl(file.MinioFileName, durtion)
+	// Request Minio server to get file URL
+	fileUrl, err := minio.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("file.GetFileInfoByHash minio.GetFileUrl failed", zap.Error(err))
+		return
+	}
 	file.FileUrl = fileUrl
 	return
 }
 
-// GetFilesByHash 根据hash批量获取文件信息
-func GetFilesByHash(files []File) (fileArr []File, resStatus pub.ResStatus, err error) {
+// Get file array by file hash array
+func GetFilesByHash(files []File) (fileArr []File, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	fileArr = make([]File, 0)
 	for _, file := range files {
-		file.GetFileInfoByHash()
+		resStatus, err = file.GetFileInfoByHash()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
 		fileArr = append(fileArr, file)
 	}
-	resStatus = pub.StatusOK
 	return
 }
-*/

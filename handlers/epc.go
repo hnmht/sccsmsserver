@@ -26,7 +26,6 @@ func GetSimpEPCCacheHandler(c *gin.Context) {
 	err := c.ShouldBind(sepcc)
 	if err != nil {
 		zap.L().Error("GetSimpEPCCacheHandler invalid param", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}

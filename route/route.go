@@ -31,7 +31,7 @@ func Setup(mode string) *gin.Engine {
 		EPCRoute(superGroup) // Execution Project Category
 		// EITRoute(superGroup)       //eit执行模板
 		// EventRoute(superGroup)     //Event
-		// FileRoute(superGroup)      //file文件
+		FileRoute(superGroup) // File
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
 		// LQRoute(superGroup)        //劳保用品岗位定额

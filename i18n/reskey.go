@@ -12,7 +12,6 @@ const (
 	CodeInternalError ResKey = "CodeInternalError"
 	CodeClientUnknown ResKey = "CodeClientUnknown"
 	CodeClientEmpty   ResKey = "CodeClientEmpty"
-
 	// Menu Name
 	MenuDashboard      ResKey = "MenuDashboard"
 	MenuCalendar       ResKey = "MenuCalendar"
