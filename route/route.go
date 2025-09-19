@@ -44,7 +44,7 @@ func Setup(mode string) *gin.Engine {
 		// RepRoute(superGroup)       //报表
 		RLRoute(superGroup)   // Risk Level
 		RoleRoute(superGroup) // Role
-		// TCRoute(superGroup)        //tc培训课程
+		TCRoute(superGroup)   // Training Course
 		// TRRoute(superGroup)        //tr培训记录
 		UDARoute(superGroup)  // User-defined Archive
 		UDCRoute(superGroup)  // User-defined Category

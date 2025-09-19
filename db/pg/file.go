@@ -45,7 +45,7 @@ type VoucherFile struct {
 	BillHID    int32     `db:"billhid" json:"billHID"`
 	File       File      `db:"fileid" json:"file"`
 	CreateDate time.Time `db:"createtime" json:"createDate"`
-	CreateUser Person    `db:"creatorid" json:"creator"`
+	Creator    Person    `db:"creatorid" json:"creator"`
 	ModifyDate time.Time `db:"modifytime" json:"modifyDate"`
 	Modifier   Person    `db:"modifierid" json:"modifier"`
 	Ts         time.Time `db:"ts" json:"ts"`
