@@ -3,7 +3,6 @@ package pg
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"sccsmsserver/cache"
 	"sccsmsserver/i18n"
 	"sccsmsserver/pkg/minio"
@@ -175,7 +174,6 @@ func GetFilesByHash(files []File) (fileArr []File, resStatus i18n.ResKey, err er
 		if err != nil || resStatus != i18n.StatusOK {
 			return
 		}
-		fmt.Println(file)
 		fileArr = append(fileArr, file)
 	}
 	return

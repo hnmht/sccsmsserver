@@ -141,10 +141,10 @@ func (tc *TC) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	// Update or add attachments in the TC_file table
 	// If ID is not 0, update the existing attachment;
-	updateFileSql := `update TrainCourse_file set modifierid=$1,modifytime=current_timestamp,dr=$2,ts=current_timestamp
+	updateFileSql := `update tc_file set modifierid=$1,modifytime=current_timestamp,dr=$2,ts=current_timestamp
 		where id=$3 and billhid=$4 and dr=0 and ts=$5`
 	// If ID is 0, add a new attachment
-	addFileSql := `insert into TrainCourse_file(billhid,fileid,creatorid) values($1,$2,$3) returning id`
+	addFileSql := `insert into tc_file(billhid,fileid,creatorid) values($1,$2,$3) returning id`
 	// Prepare to update attachments
 	updateFileStmt, err := tx.Prepare(updateFileSql)
 	if err != nil {
