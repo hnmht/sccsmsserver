@@ -31,7 +31,7 @@ func Close() {
 func Set(key string, v []byte) (err error) {
 	err = localCache.Set(key, v)
 	if err != nil {
-		msg := fmt.Sprintf("%s%s", key, " Set LocalCache.set falied:")
+		msg := fmt.Sprintf("%s%s", key, "Set LocalCache.set falied:")
 		zap.L().Error(msg, zap.Error(err))
 	}
 	return
@@ -45,7 +45,7 @@ func Get(key string) (exist int32, v []byte, err error) {
 		if err == bigcache.ErrEntryNotFound {
 			return exist, v, nil
 		}
-		msg := fmt.Sprintf("%s%s", key, " Get LocalCache.get falied: ")
+		msg := fmt.Sprintf("%s%s", key, "Get LocalCache.get falied: ")
 		zap.L().Error(msg, zap.Error(err))
 		return
 	}

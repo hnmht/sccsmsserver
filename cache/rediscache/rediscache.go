@@ -45,6 +45,7 @@ func Set(key string, v []byte, durtion time.Duration) (err error) {
 		msg := fmt.Sprintf("%s%s", key, " Set redis rdb.SetEx falied:")
 		zap.L().Error(msg, zap.Error(err))
 	}
+
 	return
 }
 

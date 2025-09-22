@@ -2,7 +2,9 @@ package pg
 
 import (
 	"database/sql"
+	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"sccsmsserver/cache"
 	"sccsmsserver/i18n"
 	"sccsmsserver/pkg/minio"
@@ -94,7 +96,7 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	file.FileUrl = fileUrl
-	// Write into cache
+	// Write File into cache
 	jsonB, _ := json.Marshal(file)
 	err = cache.Set(pub.File, file.ID, jsonB)
 	if err != nil {
@@ -102,6 +104,17 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("file getFileInfoByID cache.Set failed", zap.Error(err))
 		return
 	}
+	// Write FileHash into cache
+	buf := make([]byte, 4)
+	binary.BigEndian.PutUint32(buf, uint32(file.ID))
+	hashString := fmt.Sprintf("%s%s%s", pub.FileHash, ":", file.Hash)
+	err = cache.SetOther(hashString, buf)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("file getFileInfoByID cache.SetOther failed", zap.Error(err))
+		return
+	}
+
 	return
 }
 
@@ -135,6 +148,16 @@ func (file *File) Add() (resStatus i18n.ResKey, err error) {
 // Get File information by file hash.
 func (file *File) GetFileInfoByHash() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
+	// Get file ID from cache
+	hashString := fmt.Sprintf("%s%s%s", pub.FileHash, ":", file.Hash)
+	number, fb, _ := cache.GetOther(hashString)
+	if number > 0 {
+		// If file ID is in cache, get file information by file ID
+		file.ID = int32(binary.BigEndian.Uint32(fb))
+		resStatus, err = file.GetFileInfoByID()
+		return
+	}
+	// If file ID isn't in cache, retrieve it from databases
 	// Get file information from filelist table
 	sqlStr := `select id,miniofilename,originfilename,filetype,isimage,
 	model,longitude,latitude,size,datetimeoriginal,

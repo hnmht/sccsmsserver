@@ -71,6 +71,7 @@ const (
 	Department DataType = "department" // Department Profile
 	SimpDept   DataType = "simpdept"   // Simple Department Profile
 	File       DataType = "file"       // File metadata
+	FileHash   DataType = "filehash"   // File metadata by hash
 	CSC        DataType = "csc"        // Construction site Category
 	SimpCSC    DataType = "simpcsc"    // Simple Construction site Category
 	CSA        DataType = "csa"        // Construction Site Archive
