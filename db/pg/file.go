@@ -185,6 +185,25 @@ func (file *File) GetFileInfoByHash() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	file.FileUrl = fileUrl
+
+	// Write File into cache
+	jsonB, _ := json.Marshal(file)
+	err = cache.Set(pub.File, file.ID, jsonB)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("file GetFileInfoByHash cache.Set failed", zap.Error(err))
+		return
+	}
+	// Write FileHash into cache
+	buf := make([]byte, 4)
+	binary.BigEndian.PutUint32(buf, uint32(file.ID))
+	err = cache.SetOther(hashString, buf)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("file GetFileInfoByHash cache.SetOther failed", zap.Error(err))
+		return
+	}
+
 	return
 }
 
