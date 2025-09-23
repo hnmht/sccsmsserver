@@ -66,7 +66,6 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 			zap.L().Error("GetPersonInfoByID json.Unmarshal failed", zap.Error(err))
 			return
 		}
-		resStatus = i18n.StatusOK
 		return
 	}
 	// If file information isn't in cache, retrieve it from databases
@@ -159,13 +158,9 @@ func (file *File) GetFileInfoByHash() (resStatus i18n.ResKey, err error) {
 	}
 	// If file ID isn't in cache, retrieve it from databases
 	// Get file information from filelist table
-	sqlStr := `select id,miniofilename,originfilename,filetype,isimage,
-	model,longitude,latitude,size,datetimeoriginal,
-	source,uploaddate,creatorid,ts
+	sqlStr := `select id 
 	from filelist where filehash=$1 limit 1`
-	err = db.QueryRow(sqlStr, file.Hash).Scan(&file.ID, &file.MinioFileName, &file.OriginFileName, &file.FileType, &file.IsImage,
-		&file.Model, &file.Longitude, &file.Latitude, &file.Size, &file.DateTimeOriginal,
-		&file.Source, &file.UpLoadDate, &file.CreatorID, &file.Ts)
+	err = db.QueryRow(sqlStr, file.Hash).Scan(&file.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			err = nil
@@ -177,30 +172,9 @@ func (file *File) GetFileInfoByHash() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("file GetFileInfoByHash db.queryrow failed")
 		return
 	}
-	// Request Minio server to get file URL
-	fileUrl, err := minio.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
-	if err != nil {
-		resStatus = i18n.StatusInternalError
-		zap.L().Error("file.GetFileInfoByHash minio.GetFileUrl failed", zap.Error(err))
-		return
-	}
-	file.FileUrl = fileUrl
-
-	// Write File into cache
-	jsonB, _ := json.Marshal(file)
-	err = cache.Set(pub.File, file.ID, jsonB)
-	if err != nil {
-		resStatus = i18n.StatusInternalError
-		zap.L().Error("file GetFileInfoByHash cache.Set failed", zap.Error(err))
-		return
-	}
-	// Write FileHash into cache
-	buf := make([]byte, 4)
-	binary.BigEndian.PutUint32(buf, uint32(file.ID))
-	err = cache.SetOther(hashString, buf)
-	if err != nil {
-		resStatus = i18n.StatusInternalError
-		zap.L().Error("file GetFileInfoByHash cache.SetOther failed", zap.Error(err))
+	// Get file information by file ID
+	resStatus, err = file.GetFileInfoByID()
+	if err != nil || resStatus != i18n.StatusOK {
 		return
 	}
 

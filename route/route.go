@@ -11,8 +11,8 @@ import (
 func Setup(mode string) *gin.Engine {
 	gin.SetMode(mode)
 	r := gin.New()
-	r.Use(logger.GinLogger(), logger.GinRecovery(true)) //Global middleware
-	r.Use(Cors())                                       //Allow the browser to make cross-origin requests
+	r.Use(logger.GinLogger(), logger.GinRecovery(true)) // Global middleware
+	r.Use(Cors())                                       // Allow the browser to make cross-origin requests
 	// r.Use(IpBlackListMiddleWare()) //Ip黑名单
 	// Globle path
 	superGroup := r.Group(pub.APIPath)
