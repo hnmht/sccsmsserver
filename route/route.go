@@ -29,7 +29,7 @@ func Setup(mode string) *gin.Engine {
 		// EDRoute(superGroup)        //ed执行单
 		EPARoute(superGroup) // Execution Project
 		EPCRoute(superGroup) // Execution Project Category
-		// EITRoute(superGroup)       //eit执行模板
+		EPTRoute(superGroup) // Execution Project Template
 		// EventRoute(superGroup)     //Event
 		FileRoute(superGroup) // File
 		// LandPageRoute(superGroup)  //landingPage首页定义

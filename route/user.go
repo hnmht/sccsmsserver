@@ -8,7 +8,7 @@ import (
 )
 
 func UserRoute(g *gin.RouterGroup) {
-	userGroup := g.Group("/user", middleware.JWTAuthMiddleware())
+	userGroup := g.Group("/user", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Get User list
 		userGroup.POST("/list", handlers.GetUsersHandler)

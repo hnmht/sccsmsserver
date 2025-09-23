@@ -8,11 +8,11 @@ import (
 )
 
 func PersonRoute(g *gin.RouterGroup) {
-	personGroup := g.Group("/person")
+	personGroup := g.Group("/person", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Get Person Master Data list
-		personGroup.POST("/list", middleware.JWTAuthMiddleware(), handlers.GetPersonsHandler)
+		personGroup.POST("/list", handlers.GetPersonsHandler)
 		// Get Latest Person Master data for front-end caching
-		personGroup.POST("/cache", middleware.JWTAuthMiddleware(), handlers.GetPersonsCacheHandler)
+		personGroup.POST("/cache", handlers.GetPersonsCacheHandler)
 	}
 }

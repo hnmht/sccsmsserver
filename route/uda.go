@@ -8,7 +8,7 @@ import (
 )
 
 func UDARoute(g *gin.RouterGroup) {
-	UDAGroup := g.Group("/uda", middleware.JWTAuthMiddleware())
+	UDAGroup := g.Group("/uda", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Add UDA
 		UDAGroup.POST("/add", handlers.AddUDAHandler)

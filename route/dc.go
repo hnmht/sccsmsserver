@@ -8,7 +8,7 @@ import (
 )
 
 func DCRoute(g *gin.RouterGroup) {
-	DCGroup := g.Group("/dc", middleware.JWTAuthMiddleware())
+	DCGroup := g.Group("/dc", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Get Document Categories List
 		DCGroup.POST("/list", handlers.GetDCListHandler)
