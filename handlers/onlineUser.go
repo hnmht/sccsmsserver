@@ -21,6 +21,7 @@ func RemoveOnlineUserHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("RemoveOnlineUserHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// remove from cache
 	resStatus, _ := ou.Del()

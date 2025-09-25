@@ -125,8 +125,8 @@ func DeleteDCsHandler(c *gin.Context) {
 	err := c.ShouldBind(dcs)
 	if err != nil {
 		zap.L().Error("DeleteDCsHandler invaid parms", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)

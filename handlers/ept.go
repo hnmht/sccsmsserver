@@ -16,6 +16,7 @@ func AddEPTHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("AddEPTHandler invalid params", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get the operator id
 	operatorID, resStatus := GetCurrentUser(c)
@@ -39,6 +40,7 @@ func EditEPTHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("EditEPTHandler invalid params", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get the operator id
 	operatorID, resStatus := GetCurrentUser(c)
@@ -62,6 +64,7 @@ func DeleteEPTHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteEPTHandler invalid params", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get the operator id
 	operatorID, resStatus := GetCurrentUser(c)
@@ -85,6 +88,7 @@ func CheckEPTCodeExistHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("CheckEPTCodeExistHandler invalid params", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Check if the code exists
 	resStatus, _ := ept.CheckCodeExist()
@@ -123,8 +127,8 @@ func DeleteEPTsHandler(c *gin.Context) {
 	err := c.ShouldBind(epts)
 	if err != nil {
 		zap.L().Error("DeleteEPTsHandler invalid params", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get the operator id
 	operatorID, resStatus := GetCurrentUser(c)

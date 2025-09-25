@@ -83,7 +83,6 @@ func CheckCSCodeExistHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
-
 	// Check
 	resStatus, _ := cs.CheckCodeExist()
 	// Response
@@ -107,7 +106,6 @@ func DeleteCSHandler(c *gin.Context) {
 		return
 	}
 	cs.Modifier.ID = operationID
-
 	// Delete
 	resStatus, _ = cs.Delete()
 	// Response

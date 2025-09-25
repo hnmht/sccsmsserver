@@ -53,8 +53,8 @@ func AddEPHandler(c *gin.Context) {
 	err := c.ShouldBind(eid)
 	if err != nil {
 		zap.L().Error("AddEPHandler invaid parms", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	opeartorID, resStatus := GetCurrentUser(c)
@@ -77,8 +77,8 @@ func EditEPHandler(c *gin.Context) {
 	err := c.ShouldBind(eid)
 	if err != nil {
 		zap.L().Error("EditEPHandler invaid parms", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	opeartorID, resStatus := GetCurrentUser(c)
@@ -102,7 +102,6 @@ func DeleteEPHandler(c *gin.Context) {
 	err := c.ShouldBind(eid)
 	if err != nil {
 		zap.L().Error("DeleteEPHandler invalid param", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}

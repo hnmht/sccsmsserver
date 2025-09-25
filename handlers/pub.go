@@ -20,6 +20,7 @@ func GenerateFrontendDBID(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteOPsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get operator id
 	operatorID, resStatus := GetCurrentUser(c)
@@ -42,6 +43,7 @@ func GetFrontendDBInfo(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteOPsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get front-end DB info
 	resStatus, _ := f.GetInfo()

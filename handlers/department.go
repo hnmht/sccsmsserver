@@ -81,6 +81,7 @@ func EditDeptHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("EditDeptHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
@@ -104,6 +105,7 @@ func DelDeptHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DelDeptHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
@@ -126,6 +128,7 @@ func DelDeptsHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DelDeptsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)

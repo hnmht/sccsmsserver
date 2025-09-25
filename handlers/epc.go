@@ -78,7 +78,6 @@ func EditEPCHandler(c *gin.Context) {
 	err := c.ShouldBind(epc)
 	if err != nil {
 		zap.L().Error("EditEPCHandler invalid param", zap.Error(err))
-
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
@@ -128,6 +127,7 @@ func DeleteEPCsHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteEPCsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Operator ID
 	operatorID, resStatus := GetCurrentUser(c)
