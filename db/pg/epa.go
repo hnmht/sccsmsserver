@@ -31,7 +31,7 @@ type ExecutionProject struct {
 	ErrorValue       string             `db:"errorvalue" json:"errorValue"`
 	ErrorValueDisp   string             `db:"errorvaluedisp" json:"errorValueDisp"`
 	IsRequireFile    int16              `db:"isrequirefile" json:"isRequireFile"`
-	IsOnsitePhoto    int16              `db:"isonsitephoto" json:"isOnsitePhoto"`
+	IsOnsitePhoto    int16              `db:"isonsitephoto" json:"isOnSitePhoto"`
 	RiskLevel        RiskLevel          `db:"risklevelid" json:"riskLevel"`
 	CreateDate       time.Time          `db:"createtime" json:"createDate"`
 	Creator          Person             `db:"creatorid" json:"creator"`

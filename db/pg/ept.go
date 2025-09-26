@@ -40,7 +40,7 @@ type EPTRow struct {
 	ErrorValue       string           `db:"errorvalue" json:"errorValue"`
 	ErrorValueDisp   string           `db:"errorvaluedisp" json:"errorValueDisp"`
 	IsRequireFile    int16            `db:"isrequirefile" json:"isRequireFile"`
-	IsOnsitePhoto    int16            `db:"isonsitephoto" json:"isOnsitePhoto"`
+	IsOnsitePhoto    int16            `db:"isonsitephoto" json:"isOnSitePhoto"`
 	RiskLevel        RiskLevel        `db:"risklevelid" json:"riskLevel"`
 	CreateDate       time.Time        `db:"createtime" json:"createDate"`
 	Creator          Person           `db:"creatorid" json:"creator"`
@@ -54,7 +54,7 @@ type EPTRow struct {
 type EPTCache struct {
 	QueryTs      time.Time `json:"queryTs"`
 	ResultNumber int32     `json:"resultNumber"`
-	DelItems     []EPT     `json:"delTtems"`
+	DelItems     []EPT     `json:"delItems"`
 	UpdateItems  []EPT     `json:"updateItems"`
 	NewItems     []EPT     `json:"newItems"`
 	ResultTs     time.Time `json:"resultTs"`
@@ -690,7 +690,7 @@ func (ept *EPT) CheckUsed() (resStatus i18n.ResKey, err error) {
 		},
 		{
 			Description:    "Referenced by Execution Orders",
-			SqlStr:         `select count(id) as usednumber from executionorder_b where dr=0 and eptid=$1`,
+			SqlStr:         `select count(id) as usednumber from executionorder_h where dr=0 and eptid=$1`,
 			UsedReturnCode: i18n.StatusEOUsed,
 		},
 	}

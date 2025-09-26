@@ -123,6 +123,7 @@ func DeleteRLsHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteRLsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get Opeartor ID
 	modifyUserId, resStatus := GetCurrentUser(c)

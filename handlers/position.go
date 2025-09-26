@@ -17,7 +17,6 @@ func AddPositionHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
-
 	// Get operator id
 	operatorID, resStatus := GetCurrentUser(c)
 	if resStatus != i18n.StatusOK {
@@ -121,6 +120,7 @@ func DeletePositionsHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("DeleteOPsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
+		return
 	}
 	// Get operator id
 	operatorID, resStatus := GetCurrentUser(c)
