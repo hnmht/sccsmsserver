@@ -298,7 +298,6 @@ func (ept *EPT) GetEPTHeaderByHid() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
-
 	return
 }
 

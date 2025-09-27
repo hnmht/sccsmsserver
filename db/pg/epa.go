@@ -3,6 +3,8 @@ package pg
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"sccsmsserver/cache"
 	"sccsmsserver/i18n"
 	"sccsmsserver/pub"
@@ -90,7 +92,10 @@ func GetEPList() (epList []ExecutionProject, resStatus i18n.ResKey, err error) {
 			}
 		}
 		// Get Result Type detail
-		ep.ResultType.GetDataTypeInfoByID()
+		resStatus, err = ep.ResultType.GetDataTypeInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
 		// Get UDC detail
 		if ep.UDC.ID > 0 {
 			resStatus, err = ep.UDC.GetUDCInfoByID()
@@ -182,8 +187,10 @@ func (epac *EPCache) GetEPCache() (resStatus i18n.ResKey, err error) {
 			}
 		}
 		// Get Result Type detail
-		ep.ResultType.GetDataTypeInfoByID()
-
+		resStatus, err = ep.ResultType.GetDataTypeInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
 		// Get UDC detail
 		if ep.UDC.ID > 0 {
 			resStatus, err = ep.UDC.GetUDCInfoByID()
@@ -329,12 +336,21 @@ func (ep *ExecutionProject) Edit() (resStatus i18n.ResKey, err error) {
 
 // Get ScDataType Detail by id
 func (sct *ScDataType) GetDataTypeInfoByID() (resStatus i18n.ResKey, err error) {
-	var s = ScDataTypeList[sct.ID]
-	sct.TypeCode = s.TypeCode
-	sct.TypeName = s.TypeName
-	sct.DataType = s.DataType
-	sct.FrontDb = s.FrontDb
-	sct.InputMode = s.InputMode
+	resStatus = i18n.StatusOK
+	// Get Value
+	s, exists := ScDataTypeList[sct.ID]
+	if exists {
+		sct.TypeCode = s.TypeCode
+		sct.TypeName = s.TypeName
+		sct.DataType = s.DataType
+		sct.FrontDb = s.FrontDb
+		sct.InputMode = s.InputMode
+	} else {
+		resStatus = i18n.StatusInternalError
+		err = errors.New("ScDataType not found")
+		zap.L().Error(fmt.Sprintf(`%s%d%s`, "ScDateType GetDataTypeInfoByID Get ID=", sct.ID, "Failed:"), zap.Error(err))
+		return
+	}
 	return
 }
 
@@ -487,8 +503,10 @@ func (ep *ExecutionProject) GetInfoByID() (resStatus i18n.ResKey, err error) {
 		}
 	}
 	// Get ResultTpe detail
-	ep.ResultType.GetDataTypeInfoByID()
-
+	resStatus, err = ep.ResultType.GetDataTypeInfoByID()
+	if err != nil || resStatus != i18n.StatusOK {
+		return
+	}
 	// Get UDC detail
 	if ep.UDC.ID > 0 {
 		resStatus, err = ep.UDC.GetUDCInfoByID()

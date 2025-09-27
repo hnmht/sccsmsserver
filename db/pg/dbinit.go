@@ -61,7 +61,7 @@ var ScDataTypeList map[int32]ScDataType = map[int32]ScDataType{
 	302: {ID: 302, TypeCode: "ScNumberInput", TypeName: "Number", DataType: "number", FrontDb: "", InputMode: "Input"},
 	306: {ID: 306, TypeCode: "ScDateInput", TypeName: "Date", DataType: "string", FrontDb: "", InputMode: "Input"},
 	307: {ID: 307, TypeCode: "ScDateTimeInput", TypeName: "DateTime", DataType: "string", FrontDb: "", InputMode: "Input"},
-	308: {ID: 401, TypeCode: "ScSelectGender", TypeName: "Gender", DataType: "int16", FrontDb: "", InputMode: "Select"},
+	401: {ID: 401, TypeCode: "ScSelectGender", TypeName: "Gender", DataType: "int16", FrontDb: "", InputMode: "Select"},
 	404: {ID: 404, TypeCode: "ScSelectYesOrNo", TypeName: "Bool", DataType: "int16", FrontDb: "", InputMode: "Select"},
 	510: {ID: 510, TypeCode: "ScPersonSelect", TypeName: "Person", DataType: "Person", FrontDb: "person", InputMode: "Select"},
 	520: {ID: 520, TypeCode: "ScDeptSelect", TypeName: "Department", DataType: "SimpDept", FrontDb: "department", InputMode: "Select"},
