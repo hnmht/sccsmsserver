@@ -569,21 +569,21 @@ func (csa *ConstructionSite) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Defined the items that need to be checked
 	checkItems := []ArchiveCheckUsed{
-		/* {
+		{
 			Description:    "Refrenced by Work Order",
-			SqlStr:         `select count(id) as usednumber from workorder_b where dr=0 and si_id=$1`,
+			SqlStr:         `select count(id) as usednumber from workorder_b where dr=0 and csaid=$1`,
 			UsedReturnCode: i18n.StatusWOUsed,
 		},
 		{
-			Description:    "被执行单引用",
-			SqlStr:         `select count(id) as usednumber from executedoc_h where dr=0 and si_id=$1`,
-			UsedReturnCode: i18n.StatusEDUsed,
+			Description:    "Refreneced by Execution Order Header",
+			SqlStr:         `select count(id) as usednumber from executionorder_h where dr=0 and csaid=$1`,
+			UsedReturnCode: i18n.StatusEOUsed,
 		},
 		{
-			Description:    "被问题处理单单引用",
-			SqlStr:         `select count(id) as usednumber from disposedoc where dr=0 and si_id=$1`,
-			UsedReturnCode: i18n.StatusDDUsed,
-		}, */
+			Description:    "Refrenece by Issue Resolution Form",
+			SqlStr:         `select count(id) as usednumber from issueresolutionform where dr=0 and csaid=$1`,
+			UsedReturnCode: i18n.StatusIRFUsed,
+		},
 	}
 	// Check item by item
 	var usedNum int32

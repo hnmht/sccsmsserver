@@ -652,7 +652,7 @@
             "message": "Referenciado pelo executor principal da ordem de execução."
         },
         {
-            "key": "StatusEODpUsed",
+            "key": "StatusEOIssueOwnerUsed",
             "type": "string",
             "message": "Referenciado pelo manipulador do corpo da Ordem de Execução."
         },
@@ -672,12 +672,12 @@
             "message": "Referenciado pelo revisor da Ordem de Execução."
         },
         {
-            "key": "StatusIRFEpUsed",
+            "key": "StatusIRFIssueOwnerUsed",
             "type": "string",
             "message": "Referenciado pelo executor do Formulário de Resolução de Problemas."
         },
         {
-            "key": "StatusIRFDpUsed",
+            "key": "StatusIRFFixerUsed",
             "type": "string",
             "message": "Referenciado pelo manipulador do Formulário de Resolução de Problemas."
         },
@@ -862,7 +862,7 @@
             "message": "Referenciado pelo editor da Categoria de Canteiro de Obras."
         },
         {
-            "key": "StatusCSCreateUsed",
+            "key": "StatusCSACreateUsed",
             "type": "string",
             "message": "Referenciado pelo criador do Canteiro de Obras."
         },

@@ -560,16 +560,16 @@ func (ep *ExecutionProject) CheckUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usednumber from ept_b where dr=0 and epaid=$1`,
 			UsedReturnCode: i18n.StatusEPAUsed,
 		},
-		/* 	{
-			Description:    "被执行单引用",
-			SqlStr:         `select count(id) as usednumber from executedoc_b where dr=0 and epaid=$1`,
-			UsedReturnCode: i18n.StatusEDUsed,
+		{
+			Description:    "Referecnced by Execution Order",
+			SqlStr:         `select count(id) as usednumber from executionorder_b where dr=0 and epaid=$1`,
+			UsedReturnCode: i18n.StatusEOUsed,
 		},
 		{
-			Description:    "被问题处理单单引用",
-			SqlStr:         `select count(id) as usednumber from disposedoc where dr=0 and epaid=$1`,
-			UsedReturnCode: i18n.StatusDDUsed,
-		}, */
+			Description:    "Referenced by Issue Resolution Form",
+			SqlStr:         `select count(id) as usednumber from issueresolutionform where dr=0 and epaid=$1`,
+			UsedReturnCode: i18n.StatusIRFUsed,
+		},
 	}
 	// Check one by one
 	var usedNum int32

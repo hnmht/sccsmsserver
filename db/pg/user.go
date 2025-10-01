@@ -645,337 +645,332 @@ func (user *User) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         "select count(id) from sysuser where dr = 0 and modifierid=$1",
 			UsedReturnCode: i18n.StatusUserModifyUsed,
 		},
-		/* 		{
-		   			Description:    "被指令单创建人引用",
-		   			SqlStr:         "select count(id) from workorder_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusWOCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被指令单修改人引用",
-		   			SqlStr:         "select count(id) from workorder_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusWOModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被指令单确认人引用",
-		   			SqlStr:         "select count(id) from workorder_h where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusWOConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单创建人引用",
-		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEOCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单修改人引用",
-		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusEOModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单确认人引用",
-		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusEOConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被问题处理单创建人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusIRFCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被问题处理单修改人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusIRFModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被问题处理单确认人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusIRFConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被文档类别创建人引用",
-		   			SqlStr:         "select count(id) from documentclass where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusDCCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被文档类别修改人引用",
-		   			SqlStr:         "select count(id) from documentclass where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusDCModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被文档创建人引用",
-		   			SqlStr:         "select count(id) from document where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusDocumentCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被文档修改人引用",
-		   			SqlStr:         "select count(id) from document where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusDocumentModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被培训课程创建人引用",
-		   			SqlStr:         "select count(id) from traincourse where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusTCCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被培训课程修改人引用",
-		   			SqlStr:         "select count(id) from traincourse where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusTCModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被培训记录主讲人引用",
-		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and lecturer_id=$1",
-		   			UsedReturnCode: i18n.StatusTRLecturerUsed,
-		   		},
-		   		{
-		   			Description:    "被培训记录学员引用",
-		   			SqlStr:         "select count(id) from trainrecord_b where dr = 0 and student_id=$1",
-		   			UsedReturnCode: i18n.StatusTRStudentUsed,
-		   		},
-		   		{
-		   			Description:    "被培训记录创建人引用",
-		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusTRCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被培训记录修改人引用",
-		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusTRModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被培训记录确认人引用",
-		   			SqlStr:         "select count(id) from trainrecord_h where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusTRConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被岗位定额创建人引用",
-		   			SqlStr:         "select count(id) from lpaquota_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusPQCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被岗位定额修改人引用",
-		   			SqlStr:         "select count(id) from lpaquota_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusPQModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被岗位定额确认人引用",
-		   			SqlStr:         "select count(id) from lpaquota_h where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusPQConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品发放单领用人引用",
-		   			SqlStr:         "select count(id) from lpaissuedoc_b where dr = 0 and recipient_id=$1",
-		   			UsedReturnCode: i18n.StatusPPEIFRecipientUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品发放单确认人引用",
-		   			SqlStr:         "select count(id) from lpaissuedoc_h where dr = 0 and confirmuserid=$1",
-		   			UsedReturnCode: i18n.StatusPPEIFConfirmUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品发放单修改人引用",
-		   			SqlStr:         "select count(id) from lpaissuedoc_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusPPEIFModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品发放单创建人引用",
-		   			SqlStr:         "select count(id) from lpaissuedoc_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusPPEIFCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被岗位档案创建人引用",
-		   			SqlStr:         "select count(id) from operatingpost where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusPositionCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被岗位档案修改人引用",
-		   			SqlStr:         "select count(id) from operatingpost where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusPositionModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被现场档案类别创建人引用",
-		   			SqlStr:         "select count(id) from sceneitemclass where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusCSCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被现场档案类别修改人引用",
-		   			SqlStr:         "select count(id) from sceneitemclass where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusCSModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被现场档案创建人引用",
-		   			SqlStr:         "select count(id) from sceneitem where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusCSCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被现场档案修改人引用",
-		   			SqlStr:         "select count(id) from sceneitem where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusCSModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被自定义档案类别创建人引用",
-		   			SqlStr:         "select count(id) from userdefineclass where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusUDCCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被自定义档案类别修改人引用",
-		   			SqlStr:         "select count(id) from userdefineclass where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusUDCModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被自定义档案创建人引用",
-		   			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusUDCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被自定义档案修改人引用",
-		   			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusUDModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被执行项目类别创建人引用",
-		   			SqlStr:         "select count(id) from exectiveitemclass where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEPCCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被执行项目类别修改人引用",
-		   			SqlStr:         "select count(id) from exectiveitemclass where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusEPCModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被执行项目创建人引用",
-		   			SqlStr:         "select count(id) from exectiveitem where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEPCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被执行项目修改人引用",
-		   			SqlStr:         "select count(id) from exectiveitem where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusEPModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被风险等级创建人引用",
-		   			SqlStr:         "select count(id) from risklevel where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusRLCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被风险等级修改人引用",
-		   			SqlStr:         "select count(id) from risklevel where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusRLModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品创建人引用",
-		   			SqlStr:         "select count(id) from laborprotection where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusPPECreateUsed,
-		   		},
-		   		{
-		   			Description:    "被劳保用品修改人引用",
-		   			SqlStr:         "select count(id) from laborprotection where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusPPEModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被执行模板创建人引用",
-		   			SqlStr:         "select count(id) from exectivetemplate_h where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEPTCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被执行模板修改人引用",
-		   			SqlStr:         "select count(id) from exectivetemplate_h where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusEPTModifyUsed,
-		   		},
+		{
+			Description:    "Referenced by Work Order creator",
+			SqlStr:         "select count(id) from workorder_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusWOCreateUsed,
+		},
+		{
+			Description:    "Referenced by Work Order modifier",
+			SqlStr:         "select count(id) from workorder_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusWOModifyUsed,
+		},
+		{
+			Description:    "Referenced by Worder Order confirmer",
+			SqlStr:         "select count(id) from workorder_h where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusWOConfirmUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order creator",
+			SqlStr:         "select count(id) from executionorder_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEOCreateUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order modifier",
+			SqlStr:         "select count(id) from executionorder_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusEOModifyUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order confirmer",
+			SqlStr:         "select count(id) from executionorder_h where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusEOConfirmUsed,
+		},
+		{
+			Description:    "Referenced by Issue Resolution Form creator",
+			SqlStr:         "select count(id) from issueresolutionform where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusIRFCreateUsed,
+		},
+		{
+			Description:    "Referenced by Issue Resolution Form modifier",
+			SqlStr:         "select count(id) from issueresolutionform where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusIRFModifyUsed,
+		},
+		{
+			Description:    "Referenced by Issue Resolution Form confirmer",
+			SqlStr:         "select count(id) from issueresolutionform where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusIRFConfirmUsed,
+		},
+		{
+			Description:    "Referenced by Document Category creator",
+			SqlStr:         "select count(id) from dc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusDCCreateUsed,
+		},
+		{
+			Description:    "Referenced by Document Category modifier",
+			SqlStr:         "select count(id) from dc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusDCModifyUsed,
+		},
+		{
+			Description:    "Referenced by Document creator",
+			SqlStr:         "select count(id) from document where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusDocumentCreateUsed,
+		},
+		{
+			Description:    "Referenced by Document modifier",
+			SqlStr:         "select count(id) from document where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusDocumentModifyUsed,
+		},
+		{
+			Description:    "Referenced by Training Course creator",
+			SqlStr:         "select count(id) from tc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusTCCreateUsed,
+		},
+		{
+			Description:    "Referenced by Training Course modifier",
+			SqlStr:         "select count(id) from tc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusTCModifyUsed,
+		},
+		{
+			Description:    "Referenced by Training Record lecturer",
+			SqlStr:         "select count(id) from trainingrecord_h where dr = 0 and lecturerid=$1",
+			UsedReturnCode: i18n.StatusTRLecturerUsed,
+		},
+		{
+			Description:    "Referenced by Training Record student",
+			SqlStr:         "select count(id) from trainingrecord_b where dr = 0 and studentid=$1",
+			UsedReturnCode: i18n.StatusTRStudentUsed,
+		},
+		{
+			Description:    "Referenced by Training Record creator",
+			SqlStr:         "select count(id) from trainingrecord_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusTRCreateUsed,
+		},
+		{
+			Description:    "Referenced by Training Record modifier",
+			SqlStr:         "select count(id) from trainingrecord_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusTRModifyUsed,
+		},
+		{
+			Description:    "Referenced by Training Record confirmer",
+			SqlStr:         "select count(id) from trainingrecord_h where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusTRConfirmUsed,
+		},
+		{
+			Description:    "Referenced by PPE Position Quota creator",
+			SqlStr:         "select count(id) from ppequotas_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusPQCreateUsed,
+		},
+		{
+			Description:    "Referenced by PPE Position Quota modifier",
+			SqlStr:         "select count(id) from ppequotas_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusPQModifyUsed,
+		},
+		{
+			Description:    "Referenced by PPE Position Quota confirmer",
+			SqlStr:         "select count(id) from ppequotas_h where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusPQConfirmUsed,
+		},
+		{
+			Description:    "Referenced by PPE Issuance Form recipient",
+			SqlStr:         "select count(id) from ppeissuanceform_b where dr = 0 and recipientid=$1",
+			UsedReturnCode: i18n.StatusPPEIFRecipientUsed,
+		},
+		{
+			Description:    "Referenced by PPE Issuance Form confirmer",
+			SqlStr:         "select count(id) from ppeissuanceform_h where dr = 0 and confirmerid=$1",
+			UsedReturnCode: i18n.StatusPPEIFConfirmUsed,
+		},
+		{
+			Description:    "Referenced by PPE Issuance Form modifier",
+			SqlStr:         "select count(id) from ppeissuanceform_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusPPEIFModifyUsed,
+		},
+		{
+			Description:    "Referenced by PPE Issuance Form creator",
+			SqlStr:         "select count(id) from ppeissuanceform_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusPPEIFCreateUsed,
+		},
+		{
+			Description:    "Referenced by Position creator",
+			SqlStr:         "select count(id) from position where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusPositionCreateUsed,
+		},
+		{
+			Description:    "Referenced by Position modifier",
+			SqlStr:         "select count(id) from position where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusPositionModifyUsed,
+		},
+		{
+			Description:    "Referenced by Construction Site Category creator",
+			SqlStr:         "select count(id) from csc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusCSCCreateUsed,
+		},
+		{
+			Description:    "Referenced by Construction Site Category modifier",
+			SqlStr:         "select count(id) from csc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusCSCModifyUsed,
+		},
+		{
+			Description:    "Referenced by Construction Site creator",
+			SqlStr:         "select count(id) from csa where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusCSACreateUsed,
+		},
+		{
+			Description:    "Referenced by Construction Site modifier",
+			SqlStr:         "select count(id) from csa where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusCSAModifyUsed,
+		},
+		{
+			Description:    "Referenced by User-defined Category",
+			SqlStr:         "select count(id) from udc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusUDCCreateUsed,
+		},
+		{
+			Description:    "Referenced by User-defined Catedory modifier",
+			SqlStr:         "select count(id) from udc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusUDCModifyUsed,
+		},
+		{
+			Description:    "Referenced by User-defined Archive creator",
+			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusUDCreateUsed,
+		},
+		{
+			Description:    "Referenced by User-defined Archive modifier",
+			SqlStr:         "select count(id) from userdefinedoc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusUDModifyUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Category creator",
+			SqlStr:         "select count(id) from epc where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEPCCreateUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Category modifier",
+			SqlStr:         "select count(id) from epc where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusEPCModifyUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project creator",
+			SqlStr:         "select count(id) from epa where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEPCreateUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project modifier",
+			SqlStr:         "select count(id) from epa where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusEPModifyUsed,
+		},
+		{
+			Description:    "Referenced by Risk Level creator",
+			SqlStr:         "select count(id) from risklevel where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusRLCreateUsed,
+		},
+		{
+			Description:    "Referenced by Risk Level modifier",
+			SqlStr:         "select count(id) from risklevel where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusRLModifyUsed,
+		},
+		{
+			Description:    "Referenced by PPE creator",
+			SqlStr:         "select count(id) from ppe where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusPPECreateUsed,
+		},
+		{
+			Description:    "Referenced by PPE modifier",
+			SqlStr:         "select count(id) from ppe where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusPPEModifyUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Template creator",
+			SqlStr:         "select count(id) from ept_h where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEPTCreateUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Template modifier",
+			SqlStr:         "select count(id) from ept_h where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusEPTModifyUsed,
+		},
 
-		   		{
-		   			Description:    "被部门档案负责人引用",
-		   			SqlStr:         "select count(id) from department where dr = 0 and leader=$1",
-		   			UsedReturnCode: i18n.StatusDeptLeaderUsed,
-		   		},
-		   		{
-		   			Description:    "被部门档案创建人引用",
-		   			SqlStr:         "select count(id) from department where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusDeptCreateUsed,
-		   		},
-		   		{
-		   			Description:    "被部门档案修改人引用",
-		   			SqlStr:         "select count(id) from department where dr = 0 and modifierid=$1",
-		   			UsedReturnCode: i18n.StatusDeptModifyUsed,
-		   		},
-		   		{
-		   			Description:    "被现场档案负责人引用",
-		   			SqlStr:         "select count(id) from sceneitem where dr = 0 and respperson_id=$1",
-		   			UsedReturnCode: i18n.StatusCSRespUsed,
-		   		},
-		   		{
-		   			Description:    "执行项目默认值引用",
-		   			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '510' and dr=0 and defaultvalue=cast($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEPDefaultUsed,
-		   		},
-		   		{
-		   			Description:    "执行项目错误值引用",
-		   			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '510' and dr=0 and errorvalue=cast($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEPErrorUsed,
-		   		},
-		   		{
-		   			Description:    "执行模板默认值引用",
-		   			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='510' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEPTDefaultUsed,
-		   		},
-		   		{
-		   			Description:    "执行模板错误值引用",
-		   			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='510' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEPTErrorUsed,
-		   		},
-		   		{
-		   			Description:    "被指令单表体执行人引用",
-		   			SqlStr:         "select count(id) from workorder_b where dr = 0 and ep_id=$1",
-		   			UsedReturnCode: i18n.StatusWOEpUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单表头执行人引用",
-		   			SqlStr:         "select count(id) from executedoc_h where dr = 0 and ep_id=$1",
-		   			UsedReturnCode: i18n.StatusEOEpUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单表体处理人引用",
-		   			SqlStr:         "select count(id) from executedoc_b where dr = 0 and hp_id=$1",
-		   			UsedReturnCode: i18n.StatusEODpUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单执行值引用",
-		   			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='510' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEOValueUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单错误值引用",
-		   			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='510' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-		   			UsedReturnCode: i18n.StatusEOErrorUsed,
-		   		},
-		   		{
-		   			Description:    "被问题处理单执行人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and ep_id=$1",
-		   			UsedReturnCode: i18n.StatusIRFEpUsed,
-		   		},
-		   		{
-		   			Description:    "被问题处理单处理人引用",
-		   			SqlStr:         "select count(id) from disposedoc where dr = 0 and dp_id=$1",
-		   			UsedReturnCode: i18n.StatusIRFDpUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单批注接收人引用",
-		   			SqlStr:         "select count(id) from executedoc_comment where dr = 0 and sendto_id=$1",
-		   			UsedReturnCode: i18n.StatusEOCommentUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单批注人引用",
-		   			SqlStr:         "select count(id) from executedoc_comment where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEOCommentUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单审阅人引用",
-		   			SqlStr:         "select count(id) from executedoc_review where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEOCommentUsed,
-		   		},
-		   		{
-		   			Description:    "被执行单审阅人引用",
-		   			SqlStr:         "select count(id) from executedoc_review where dr = 0 and createuserid=$1",
-		   			UsedReturnCode: i18n.StatusEOCommentUsed,
-		   		}, */
+		{
+			Description:    "Referenced by Department leader",
+			SqlStr:         "select count(id) from department where dr = 0 and leader=$1",
+			UsedReturnCode: i18n.StatusDeptLeaderUsed,
+		},
+		{
+			Description:    "Referenced by Department creator",
+			SqlStr:         "select count(id) from department where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusDeptCreateUsed,
+		},
+		{
+			Description:    "Referenced by Department modifier",
+			SqlStr:         "select count(id) from department where dr = 0 and modifierid=$1",
+			UsedReturnCode: i18n.StatusDeptModifyUsed,
+		},
+		{
+			Description:    "Referenced by Construction Site Response Person",
+			SqlStr:         "select count(id) from csa where dr = 0 and resppersonid=$1",
+			UsedReturnCode: i18n.StatusCSARespUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Default Value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '510' and dr=0 and defaultvalue=cast($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPDefaultUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Error Value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '510' and dr=0 and errorvalue=cast($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPErrorUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Template Default Value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='510' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTDefaultUsed,
+		},
+		{
+			Description:    "Referenced by Execution Project Template Error Value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='510' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTErrorUsed,
+		},
+		{
+			Description:    "Referenced by Work Order body executor",
+			SqlStr:         "select count(id) from workorder_b where dr = 0 and executorid=$1",
+			UsedReturnCode: i18n.StatusWOEpUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order header executor",
+			SqlStr:         "select count(id) from executionorder_h where dr = 0 and executorid=$1",
+			UsedReturnCode: i18n.StatusEOEpUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order body issueowner",
+			SqlStr:         "select count(id) from executionorder_b where dr = 0 and issueownerid=$1",
+			UsedReturnCode: i18n.StatusEOIssueOwnerUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order body execution value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='510' and dr=0) and dr=0 and executionvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOValueUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order body error value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='510' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOErrorUsed,
+		},
+		{
+			Description:    "Referenced by Issue Resolution Form issueowner",
+			SqlStr:         "select count(id) from issueresolutionform where dr = 0 and issueownerid=$1",
+			UsedReturnCode: i18n.StatusIRFIssueOwnerUsed,
+		},
+		{
+			Description:    "Referenced by Issue Resolution Form fixer",
+			SqlStr:         "select count(id) from issueresolutionform where dr = 0 and fixerid=$1",
+			UsedReturnCode: i18n.StatusIRFFixerUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order Comment receiver",
+			SqlStr:         "select count(id) from executionorder_comment where dr = 0 and sendtoid=$1",
+			UsedReturnCode: i18n.StatusEOCommentUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order Comment creator",
+			SqlStr:         "select count(id) from executionorder_comment where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEOCommentUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order review creator",
+			SqlStr:         "select count(id) from executionorder_review where dr = 0 and creatorid=$1",
+			UsedReturnCode: i18n.StatusEOReviewUsed,
+		},
 	}
 
 	// Check item by item

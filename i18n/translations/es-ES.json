@@ -652,7 +652,7 @@
             "message": "Referenciado por el ejecutor principal de la Orden de Ejecución."
         },
         {
-            "key": "StatusEODpUsed",
+            "key": "StatusEOIssueOwnerUsed",
             "type": "string",
             "message": "Referenciado por el encargado del cuerpo de la Orden de Ejecución."
         },
@@ -672,12 +672,12 @@
             "message": "Referenciado por el revisor de la Orden de Ejecución."
         },
         {
-            "key": "StatusIRFEpUsed",
+            "key": "StatusIRFIssueOwnerUsed",
             "type": "string",
             "message": "Referenciado por el ejecutor del Formulario de Resolución de Problemas."
         },
         {
-            "key": "StatusIRFDpUsed",
+            "key": "StatusIRFFixerUsed",
             "type": "string",
             "message": "Referenciado por el encargado del Formulario de Resolución de Problemas."
         },
@@ -862,7 +862,7 @@
             "message": "Referenciado por el editor de la Categoría de Obra."
         },
         {
-            "key": "StatusCSCreateUsed",
+            "key": "StatusCSACreateUsed",
             "type": "string",
             "message": "Referenciado por el creador de la Obra."
         },

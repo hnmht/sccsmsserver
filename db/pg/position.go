@@ -412,11 +412,11 @@ func (p *Position) CheckUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         "select count(id) as usednum from sysuser where dr=0 and positionid=$1",
 			UsedReturnCode: i18n.StatusUserUsed,
 		},
-		/* {
-			Description:    "被劳保用品岗位定额表头引用",
-			SqlStr:         "select count(id) as usednum from lpaquota_h where dr=0 and positionid=$1",
-			UsedReturnCode: i18n.StatusLPAQuotaHUsed,
-		}, */
+		{
+			Description:    "Referenced by Personal Protective Equipment",
+			SqlStr:         "select count(id) as usednum from ppequotas_h where dr=0 and positionid=$1",
+			UsedReturnCode: i18n.StatusPQPositionUsed,
+		},
 	}
 	// Check item by item
 	var usedNum int32

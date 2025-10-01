@@ -657,7 +657,7 @@
             "message": "被执行单表头执行人引用."
         },
         {
-            "key": "StatusEODpUsed",
+            "key": "StatusEOIssueOwnerUsed",
             "type": "string",
             "message": "被执行单表体处理人引用."
         },
@@ -677,12 +677,12 @@
             "message": "被执行单审阅人引用."
         },
         {
-            "key": "StatusIRFEpUsed",
+            "key": "StatusIRFIssueOwnerUsed",
             "type": "string",
             "message": "被问题处理单执行人引用."
         },
         {
-            "key": "StatusIRFDpUsed",
+            "key": "StatusIRFFixerUsed",
             "type": "string",
             "message": "被问题处理单处理人引用."
         },
@@ -812,6 +812,11 @@
             "message": "被岗位定额修改人引用."
         },
         {
+            "key": "StatusPQPositionUsed",
+            "type": "string",
+            "message": "被岗位定额岗位引用."
+        },
+        {
             "key": "StatusPQConfirmUsed",
             "type": "string",
             "message": "被岗位定额确认人引用."
@@ -835,6 +840,11 @@
             "key": "StatusPPEIFRecipientUsed",
             "type": "string",
             "message": "被劳保用品发放单领用人引用."
+        },
+        {
+            "key": "StatusPPEIFUsed",
+            "type": "string",
+            "message": "被劳保用品发放单引用."
         },
         {
             "key": "StatusDeptCreateUsed",

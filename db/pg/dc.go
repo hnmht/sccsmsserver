@@ -405,11 +405,11 @@ func (dc *DC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usedNum from dc where fatherid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusDCLowLevelExist,
 		},
-		/* {
-			Description:    "被文档引用",
-			SqlStr:         `select count(id) as usedNum from document where dc_id=$1 and dr=0`,
+		{
+			Description:    "Referenced by Document",
+			SqlStr:         `select count(id) as usedNum from document where dcid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusDocumentUsed,
-		}, */
+		},
 	}
 	// Check item by item
 	var usedNum int32

@@ -400,38 +400,38 @@ func (csc *CSC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usednum from csa where cscid = $1 and dr=0`,
 			UsedReturnCode: i18n.StatusCSAUsed,
 		},
-		/*
-			{
-				Description:    "被执行项目默认值引用",
-				SqlStr:         `select count(id) as usednum from cs where resulttypeid = '525' and dr=0 and defaultvalue=cast($1 as varchar)`,
-				UsedReturnCode: i18n.StatusEIDDefaultUsed,
-			},
-			{
-				Description:    "被执行项目错误值引用",
-				SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '525' and dr=0 and errorvalue=cast($1 as varchar)`,
-				UsedReturnCode: i18n.StatusEIDErrorUsed,
-			},
 
-				{
-					Description:    "被执行模板默认值引用",
-					SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
-					UsedReturnCode: i18n.StatusEITDefaultUsed,
-				},
-				{
-					Description:    "被执行模板错误值引用",
-					SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-					UsedReturnCode: i18n.StatusEITErrorUsed,
-				},
-				{
-					Description:    "被执行单执行值引用",
-					SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
-					UsedReturnCode: i18n.StatusEDValueUsed,
-				},
-				{
-					Description:    "被执行单错误值引用",
-					SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-					UsedReturnCode: i18n.StatusEDErrorUsed,
-				}, */
+		{
+			Description:    "Refrenced by Execution Project default Value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '525' and dr=0 and defaultvalue=cast($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPDefaultUsed,
+		},
+		{
+			Description:    "Refrenced by Execution Project error value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '525' and dr=0 and errorvalue=cast($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPErrorUsed,
+		},
+
+		{
+			Description:    "Refrenced by Execution Project Templete default value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='525' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTDefaultUsed,
+		},
+		{
+			Description:    "Refrenced by Execution Project Templete Error Value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTErrorUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order body executive value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='525' and dr=0) and dr=0 and executionvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOValueUsed,
+		},
+		{
+			Description:    "Referenced by Execution Order body error value ",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='525' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOErrorUsed,
+		},
 	}
 	// Check item by item
 	var usedNum int32

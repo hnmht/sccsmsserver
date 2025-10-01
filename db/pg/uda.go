@@ -405,46 +405,46 @@ func (uda *UserDefinedArchive) CheckCodeExist() (resStatus i18n.ResKey, err erro
 func (uda *UserDefinedArchive) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	checkItems := []ArchiveCheckUsed{
-		/* {
-			Description:    "执行项目档案默认值",
-			SqlStr:         `select count(id) as usednumber from exectiveitem where resulttypeid='550' and dr=0 and defaultvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEIDDefaultUsed,
+		{
+			Description:    "Referenced by EPA default value",
+			SqlStr:         `select count(id) as usednumber from epa where resulttypeid='550' and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPDefaultUsed,
 		},
 		{
-			Description:    "执行项目档案错误值",
-			SqlStr:         `select count(id) as usednumber from exectiveitem where resulttypeid='550' and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEIDErrorUsed,
+			Description:    "Referenced by EPA error value",
+			SqlStr:         `select count(id) as usednumber from epa where resulttypeid='550' and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPErrorUsed,
 		},
 		{
-			Description:    "执行模板默认值",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='550' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITDefaultUsed,
+			Description:    "Referenced by EPT body default value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='550' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTDefaultUsed,
 		},
 		{
-			Description:    "执行模板错误值",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='550' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITErrorUsed,
+			Description:    "Referenced by EPT body error value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='550' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTErrorUsed,
 		},
 		{
-			Description:    "被执行单执行值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='550' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDValueUsed,
+			Description:    "Referenced by Execution Order exective value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='550' and dr=0) and dr=0 and executionvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOValueUsed,
 		},
 		{
-			Description:    "被执行单错误值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='550' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDErrorUsed,
+			Description:    "Referenced by Execution Order error value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='550' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOErrorUsed,
 		},
 		{
-			Description:    "被现场档案引用",
-			SqlStr:         "select count(id) as usednum from sceneitem where dr=0 and (udf1=$1 or udf2=$1 or udf3=$1 or udf4=$1 or udf5=$1 or udf6=$1 or udf7=$1 or udf8=$1 or udf9=$1 or udf10=$1)",
-			UsedReturnCode: i18n.StatusSIUsed,
+			Description:    "Referenced by Construction Site",
+			SqlStr:         "select count(id) as usednum from csa where dr=0 and (udf1=$1 or udf2=$1 or udf3=$1 or udf4=$1 or udf5=$1 or udf6=$1 or udf7=$1 or udf8=$1 or udf9=$1 or udf10=$1)",
+			UsedReturnCode: i18n.StatusCSAUsed,
 		},
 		{
-			Description:    "被现场档案默认值引用",
-			SqlStr:         "select count(id) as usednum from sceneitemoption where dr=0  and defaultvalue_id = $1",
-			UsedReturnCode: i18n.StatusSIOUsed,
-		}, */
+			Description:    "Referenced by Construction Site Option",
+			SqlStr:         "select count(id) as usednum from cso where dr=0  and defaultvalueid = $1",
+			UsedReturnCode: i18n.StatusCSOUsed,
+		},
 	}
 	// Check item by item
 	var usedNum int32

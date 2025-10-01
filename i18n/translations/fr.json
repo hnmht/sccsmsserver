@@ -652,7 +652,7 @@
             "message": "Référencé par l'exécuteur en chef de l'ordre d'exécution."
         },
         {
-            "key": "StatusEODpUsed",
+            "key": "StatusEOIssueOwnerUsed",
             "type": "string",
             "message": "Référencé par le gestionnaire du corps de l'ordre d'exécution."
         },
@@ -672,12 +672,12 @@
             "message": "Référencé par le réviseur de l'ordre d'exécution."
         },
         {
-            "key": "StatusIRFEpUsed",
+            "key": "StatusIRFIssueOwnerUsed",
             "type": "string",
             "message": "Référencé par l'exécuteur du formulaire de résolution de problèmes."
         },
         {
-            "key": "StatusIRFDpUsed",
+            "key": "StatusIRFFixerUsed",
             "type": "string",
             "message": "Référencé par le gestionnaire du formulaire de résolution de problèmes."
         },
@@ -862,7 +862,7 @@
             "message": "Référencé par l'éditeur de la catégorie de chantier."
         },
         {
-            "key": "StatusCSCreateUsed",
+            "key": "StatusCSACreateUsed",
             "type": "string",
             "message": "Référencé par le créateur du chantier."
         },

@@ -400,11 +400,11 @@ func (ppe *PPE) CheckUsed() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Define the items to be checked
 	checkItems := []ArchiveCheckUsed{
-		/* {
-			Description:    "用户档案引用",
-			SqlStr:         "select count(id) as usednum from sysuser where dr=0 and op_id=$1",
-			UsedReturnCode: i18n.StatusUserUsed,
-		}, */
+		{
+			Description:    "Referenced by PPE Issuance From body",
+			SqlStr:         "select count(id) as usednum from ppeissuanceform_b where dr=0 and ppeid=$1",
+			UsedReturnCode: i18n.StatusPPEIFUsed,
+		},
 	}
 	// Check item by item
 	var usedNum int32

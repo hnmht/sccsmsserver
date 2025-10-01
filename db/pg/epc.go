@@ -405,26 +405,26 @@ func (epc *EPC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '540' and dr=0 and errorvalue=cast($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPErrorUsed,
 		},
-		/* {
-			Description:    "被执行模板默认值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITDefaultUsed,
+		{
+			Description:    "Referenced by EPT body default value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTDefaultUsed,
 		},
 		{
-			Description:    "被执行模板错误值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEITErrorUsed,
+			Description:    "Referenced by EPT body error value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEPTErrorUsed,
 		},
 		{
-			Description:    "被执行单执行值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDValueUsed,
+			Description:    "Referenced by Execution Order body exective value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and executionvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOValueUsed,
 		},
 		{
-			Description:    "被执行单错误值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
-			UsedReturnCode: i18n.StatusEDErrorUsed,
-		}, */
+			Description:    "Referenced by Execution Order body error value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='540' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			UsedReturnCode: i18n.StatusEOErrorUsed,
+		},
 	}
 	// Item by item check
 	var usedNum int32

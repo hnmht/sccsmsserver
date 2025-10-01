@@ -552,72 +552,72 @@ func (dept *Department) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 			SqlStr:         `select count(id) as usernum from sysuser where deptid = $1 and dr=0`,
 			UsedReturnCode: i18n.StatusUserUsed,
 		},
-		/* {
-			Description:    "被执行项目默认值引用",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '520' and dr=0 and defaultvalue=cast($1 as varchar)`,
+		{
+			Description:    "Referenced by Execution Project default value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '520' and dr=0 and defaultvalue=cast($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPDefaultUsed,
 		},
 		{
-			Description:    "被执行项目错误值引用",
-			SqlStr:         `select count(id) as usednum from exectiveitem where resulttypeid = '520' and dr=0 and errorvalue=cast($1 as varchar)`,
+			Description:    "Referenced by Execution Project error value",
+			SqlStr:         `select count(id) as usednum from epa where resulttypeid = '520' and dr=0 and errorvalue=cast($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPErrorUsed,
 		},
 		{
-			Description:    "被执行模板默认值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='520' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
+			Description:    "Referenced by Execution Project Template default value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='520' and dr=0) and dr=0 and defaultvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPTDefaultUsed,
 		},
 		{
-			Description:    "被执行模板错误值引用",
-			SqlStr:         `select count(id) from exectivetemplate_b where eid_id in (select id from exectiveitem where resulttypeid='520' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			Description:    "Referenced by Execution Project Template error value",
+			SqlStr:         `select count(id) from ept_b where epaid in (select id from epa where resulttypeid='520' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEPTErrorUsed,
 		},
 		{
-			Description:    "被现场档案所属部门引用",
-			SqlStr:         `select count(id) from sceneitem where subdept_id=$1 and dr=0`,
-			UsedReturnCode: i18n.StatusCSUsed,
+			Description:    "Referenced by Construction Site department",
+			SqlStr:         `select count(id) from csa where subdeptid=$1 and dr=0`,
+			UsedReturnCode: i18n.StatusCSAUsed,
 		},
 		{
-			Description:    "被现场档案责任部门引用",
-			SqlStr:         `select count(id) from sceneitem where respdept_id=$1 and dr=0`,
-			UsedReturnCode: i18n.StatusCSUsed,
+			Description:    "Referenced by Construction responsible department",
+			SqlStr:         `select count(id) from csa where respdeptid=$1 and dr=0`,
+			UsedReturnCode: i18n.StatusCSAUsed,
 		},
 		{
-			Description:    "被指令单引用",
-			SqlStr:         `select count(id) from workorder_h where dept_id=$1 and dr=0`,
+			Description:    "Referenced by Work Order department",
+			SqlStr:         `select count(id) from workorder_h where deptid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusWOUsed,
 		},
 		{
-			Description:    "被执行单引用",
-			SqlStr:         `select count(id) from executedoc_h where dept_id=$1 and dr=0`,
+			Description:    "Referenced by Execution Order department",
+			SqlStr:         `select count(id) from executionorder_h where deptid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusEOUsed,
 		},
 		{
-			Description:    "被执行单执行值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='520' and dr=0) and dr=0 and exectivevalue=CAST($1 as varchar)`,
+			Description:    "Referenced by Execution Order body execution value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='520' and dr=0) and dr=0 and executionvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEOValueUsed,
 		},
 		{
-			Description:    "被执行单错误值引用",
-			SqlStr:         `select count(id) from executedoc_b where eid_id in (select id from exectiveitem where resulttypeid='520' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
+			Description:    "Referenced by Execution Order body error value",
+			SqlStr:         `select count(id) from executionorder_b where epaid in (select id from epa where resulttypeid='520' and dr=0) and dr=0 and errorvalue=CAST($1 as varchar)`,
 			UsedReturnCode: i18n.StatusEOErrorUsed,
 		},
 		{
-			Description:    "被问题处理单引用",
-			SqlStr:         `select count(id) from disposedoc where dept_id=$1 and dr=0`,
+			Description:    "Referenced by Issue Resolution Form",
+			SqlStr:         `select count(id) from issueresolutionform where deptid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusIRFUsed,
 		},
 
 		{
-			Description:    "被培训记录表头部门引用",
-			SqlStr:         `select count(id) from trainrecord_h where dept_id=$1 and dr=0`,
+			Description:    "Referenced by Training Record header department",
+			SqlStr:         `select count(id) from trainingrecord_h where deptid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusTRDeptUsed,
 		},
 		{
-			Description:    "被劳保用品发放单发放部门引用",
-			SqlStr:         `select count(id) from lpaissuedoc_h where dept_id=$1 and dr=0`,
+			Description:    "Referenced by PPE Issuance Form department",
+			SqlStr:         `select count(id) from ppeissuanceform_h where deptid=$1 and dr=0`,
 			UsedReturnCode: i18n.StatusPPEIFDeptUsed,
-		}, */
+		},
 	}
 
 	// Check item by item
