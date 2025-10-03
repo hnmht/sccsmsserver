@@ -3,6 +3,7 @@ package pg
 import (
 	"database/sql"
 	"encoding/base64"
+	"fmt"
 	"sccsmsserver/i18n"
 	"sccsmsserver/pkg/mysf"
 	"sccsmsserver/pkg/security"
@@ -123,3 +124,48 @@ func (f *FrontDBInfo) GetInfo() (resStatus i18n.ResKey, err error) {
 	}
 	return
 }
+
+// Get the latest voucher sequence number
+func GetLatestSerialNo(tx *sql.Tx, voucherType string, voucherDate string) (serialno string, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Query the latest sequence for the current voucher type
+	var sn int32
+	sqlString := "select serialno from serialno where vouchertype=$1 and datestring=$2"
+	err = tx.QueryRow(sqlString, voucherType, voucherDate).Scan(&sn)
+	if err != nil && err != sql.ErrNoRows {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetLatestSerialNo db.QueryRow failed", zap.Error(err))
+		return
+	}
+	// If no data is queried, then create a new record for the current voucher type
+	// and insert it into the database
+	if err == sql.ErrNoRows {
+		sqlString = `insert into serialno(datestring,vouchertype) values($1,$2)`
+		_, err = tx.Exec(sqlString, voucherDate, voucherType)
+		if err != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetLatestSerial db.exec Insert failed", zap.Error(err))
+			return
+		}
+	}
+	// Update the serial number for the current voucher type in the database
+	sqlString = `update serialno set serialno = serialno + 1 where datestring = $1 and vouchertype = $2`
+	_, err = tx.Exec(sqlString, voucherDate, voucherType)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetLatestSerial db.Exec Update failed", zap.Error(err))
+		return
+	}
+	serialno = fmt.Sprintf("%v%v%04d", voucherType, voucherDate, sn+1)
+
+	return
+}
+
+/* // Cancel the voucher serial number
+func CancelSerialNo(voucherType string, voucherDate string) {
+	sqlStr := `update serialno set serialno = serialno-1 where dateString= $1 and vouchertype= $2`
+	_, err := db.Exec(sqlStr, voucherType, voucherDate)
+	if err != nil {
+		zap.L().Error("UpdateSerialNo db.Exec failed", zap.Error(err))
+	}
+} */
