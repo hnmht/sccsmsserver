@@ -1247,7 +1247,7 @@ func (wor *WorkOrderRow) CancelComplete() (resStatus i18n.ResKey, err error) {
 	}
 
 	// if the Work Order Header status is "completed", then chang it to "executing"
-	if headStatus == 3 { //如果状态为完成态则将其修改为执行态
+	if headStatus == 3 {
 		headSql := `update workorder_h set status=2,ts=current_timestamp where id=$1 and dr=0 and status=3`
 		headUpdateRes, headErr := tx.Exec(headSql, wor.HID)
 		if headErr != nil {

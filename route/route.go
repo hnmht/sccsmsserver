@@ -49,7 +49,7 @@ func Setup(mode string) *gin.Engine {
 		UDARoute(superGroup)  // User-defined Archive
 		UDCRoute(superGroup)  // User-defined Category
 		UserRoute(superGroup) // User
-		// WORoute(superGroup)        //wo指令单
+		WORoute(superGroup)   // Work Order
 	}
 	//ping
 	// r.POST("/ping", control.PubServerPing)
