@@ -13,15 +13,15 @@ import (
 type WorkOrder struct {
 	HID         int32          `db:"id" json:"id"`
 	BillNumber  string         `db:"billnumber" json:"billNumber"`
-	BillDate    string         `db:"billdate" json:"billDate"`
+	BillDate    time.Time      `db:"billdate" json:"billDate"`
 	Department  SimpDept       `db:"deptid" json:"department"`
 	Description string         `db:"description" json:"description"`
 	Status      int16          `db:"status" json:"status"`
-	WorkDate    string         `db:"workdate" json:"workDate"`
+	WorkDate    time.Time      `db:"workdate" json:"workDate"`
 	Body        []WorkOrderRow `json:"body"`
 	CreateDate  time.Time      `db:"createtime" json:"createDate"`
 	Creator     Person         `db:"creatorid" json:"creator"`
-	ConfirmDate time.Time      `db:"confirmtime" json:"confirmdate"`
+	ConfirmDate time.Time      `db:"confirmtime" json:"confirmDate"`
 	Confirmer   Person         `db:"confirmerid" json:"confirmer"`
 	ModifyDate  time.Time      `db:"modifytime" json:"modifyDate"`
 	Modifier    Person         `db:"modifierid" json:"modifier"`
@@ -38,8 +38,8 @@ type WorkOrderRow struct {
 	Executor     Person           `db:"executorid" json:"executor"`
 	Description  string           `db:"description" json:"description"`
 	EPT          EPT              `db:"eptid" json:"ept"`
-	StartTime    string           `db:"starttime" json:"startTime"`
-	EndTime      string           `db:"endtime" json:"endTime"`
+	StartTime    time.Time        `db:"starttime" json:"startTime"`
+	EndTime      time.Time        `db:"endtime" json:"endTime"`
 	Status       int16            `db:"status" json:"status"`
 	EOID         int32            `db:"eoid" json:"eoID"`
 	EONumber     string           `db:"eonumber" json:"eoNumber"`
@@ -416,7 +416,7 @@ func (wo *WorkOrder) Add() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 	// Get the latest Serial Number
-	billNo, resStatus, err := GetLatestSerialNo(tx, "WO", wo.BillDate)
+	billNo, resStatus, err := GetLatestSerialNo(tx, "WO", wo.BillDate.Format("20060102"))
 	if resStatus != i18n.StatusOK || err != nil {
 		tx.Rollback()
 		return
