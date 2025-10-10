@@ -19,6 +19,7 @@ type TC struct {
 	ClassHour   float64       `db:"classhour" json:"classHour"`
 	IsExamine   int16         `db:"isexamine" json:"isExamine"`
 	Description string        `db:"description" json:"description"`
+	Status      int16         `db:"status" json:"status"`
 	Files       []VoucherFile `json:"files"`
 	CreateDate  time.Time     `db:"createtime" json:"createDate"`
 	Creator     Person        `db:"creatorid" json:"creator"`
@@ -56,10 +57,10 @@ func (tc *TC) Add() (resStatus i18n.ResKey, err error) {
 	defer tx.Commit()
 
 	// Insert the main record to the TC table
-	headSql := `insert into tc(name,classhour,isexamine,description,creatorid)
-	 	values($1,$2,$3,$4,$5)
+	headSql := `insert into tc(name,classhour,isexamine,description,status,creatorid)
+	 	values($1,$2,$3,$4,$5,$6)
 		returning id`
-	err = tx.QueryRow(headSql, tc.Name, tc.ClassHour, tc.IsExamine, tc.Description, tc.Creator.ID).Scan(&tc.ID)
+	err = tx.QueryRow(headSql, tc.Name, tc.ClassHour, tc.IsExamine, tc.Description, tc.Status, tc.Creator.ID).Scan(&tc.ID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("TC.Add tx.QueryRow failed", zap.Error(err))
@@ -114,10 +115,10 @@ func (tc *TC) Edit() (resStatus i18n.ResKey, err error) {
 	defer tx.Commit()
 	// Update the main record in the TC table
 	editDocSql := `update tc set code=$1,name=$2,classhour=$3,isexamine=$4,description=$5,
-		modifytime=current_timestamp,modifierid=$6,ts=current_timestamp
-		where id=$7 and dr=0 and ts=$8`
+		status=$6,modifytime=current_timestamp,modifierid=$7,ts=current_timestamp
+		where id=$8 and dr=0 and ts=$9`
 	editDocRes, err := tx.Exec(editDocSql, &tc.Code, &tc.Name, &tc.ClassHour, &tc.IsExamine, &tc.Description,
-		&tc.Modifier.ID,
+		&tc.Status, &tc.Modifier.ID,
 		&tc.ID, &tc.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -425,12 +426,12 @@ func (tc *TC) GetDetailByID() (resStatus i18n.ResKey, err error) {
 	}
 	// If not in cache, get from database
 	sqlStr := `select code,name,classhour,isexamine,description,
-		createtime,creatorid,modifytime,modifierid,ts,
-		dr
+		status,createtime,creatorid,modifytime,modifierid,
+		ts,dr
 		from tc where id=$1`
 	err = db.QueryRow(sqlStr, tc.ID).Scan(&tc.Code, &tc.Name, &tc.ClassHour, &tc.IsExamine, &tc.Description,
-		&tc.CreateDate, &tc.Creator.ID, &tc.ModifyDate, &tc.Modifier.ID, &tc.Ts,
-		&tc.Dr)
+		&tc.Status, &tc.CreateDate, &tc.Creator.ID, &tc.ModifyDate, &tc.Modifier.ID,
+		&tc.Ts, &tc.Dr)
 	if err != nil {
 		zap.L().Error("TC.GetDetailByID db.QueryRow failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError

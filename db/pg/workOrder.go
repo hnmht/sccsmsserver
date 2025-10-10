@@ -906,7 +906,7 @@ func (wo *WorkOrder) UnConfirm(confirmUserID int32) (resStatus i18n.ResKey, err 
 	defer tx.Commit()
 
 	// Update the header confirmation flag
-	confirmHeadSql := `update workorder_h set status=0,confirmerid=0,ts=current_timestamp 
+	confirmHeadSql := `update workorder_h set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	headRes, err := tx.Exec(confirmHeadSql, wo.HID, wo.Ts)
 	if err != nil {
@@ -930,7 +930,7 @@ func (wo *WorkOrder) UnConfirm(confirmUserID int32) (resStatus i18n.ResKey, err 
 	}
 
 	// Prepare the SQL statement for update the body row confirmation flag
-	confirmRowSql := `update workorder_b set status=0,confirmerid=0,ts=current_timestamp 
+	confirmRowSql := `update workorder_b set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {

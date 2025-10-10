@@ -21,7 +21,7 @@ type EPT struct {
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`
 	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
-	Modifier    Person    `db:"modifierid" json:"modifierid"`
+	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Ts          time.Time `db:"ts" json:"ts"`
 	Dr          int16     `db:"dr" json:"dr"`
 }

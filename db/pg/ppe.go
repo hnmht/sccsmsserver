@@ -18,6 +18,7 @@ type PPE struct {
 	Name        string    `db:"name" json:"name"`
 	Model       string    `db:"model" json:"model"`
 	Unit        string    `db:"unit" json:"unit"`
+	Status      int16     `db:"status" json:"status"`
 	Description string    `db:"description" json:"description"`
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`
@@ -44,7 +45,7 @@ func GetPPEList() (ppes []PPE, resStatus i18n.ResKey, err error) {
 	// Retrieve data from ppe table
 	sqlStr := `select id,code,name,model,unit,
 		description,createtime,creatorid,modifytime,modifierid,
-		ts,dr
+		ts,dr,status 
 		from ppe  
 		where dr=0 order by ts desc`
 	rows, err := db.Query(sqlStr)
@@ -60,7 +61,7 @@ func GetPPEList() (ppes []PPE, resStatus i18n.ResKey, err error) {
 		var ppe PPE
 		err = rows.Scan(&ppe.ID, &ppe.Code, &ppe.Name, &ppe.Model, &ppe.Unit,
 			&ppe.Description, &ppe.CreateDate, &ppe.Creator.ID, &ppe.ModifyDate, &ppe.Modifier.ID,
-			&ppe.Ts, &ppe.Dr)
+			&ppe.Ts, &ppe.Dr, &ppe.Status)
 		if err != nil {
 			zap.L().Error("GetPPEList from rows failed", zap.Error(err))
 			resStatus = i18n.StatusInternalError
@@ -113,7 +114,7 @@ func (ppec *PPECache) GetPPEsCache() (resStatus i18n.ResKey, err error) {
 	// Retrieve all data that timestamp greater than QueryTs
 	sqlStr = `select id,code,name,model,unit,
 		description,createtime,creatorid,modifytime,modifierid,
-		ts,dr	
+		ts,dr,status 	
 		from ppe 
 		where ts > $1 order by ts desc`
 	rows, err := db.Query(sqlStr, ppec.QueryTs)
@@ -129,7 +130,7 @@ func (ppec *PPECache) GetPPEsCache() (resStatus i18n.ResKey, err error) {
 		var ppe PPE
 		err = rows.Scan(&ppe.ID, &ppe.Code, &ppe.Name, &ppe.Model, &ppe.Unit,
 			&ppe.Description, &ppe.CreateDate, &ppe.Creator.ID, &ppe.ModifyDate, &ppe.Modifier.ID,
-			&ppe.Ts, &ppe.Dr)
+			&ppe.Ts, &ppe.Dr, &ppe.Status)
 		if err != nil {
 			zap.L().Error("PPECache.GetPPEsCache rows.next failed", zap.Error(err))
 			resStatus = i18n.StatusInternalError
@@ -179,11 +180,11 @@ func (ppe *PPE) Add() (resStatus i18n.ResKey, err error) {
 	}
 	// Insert a record to ppe table
 	sqlStr := `insert into ppe(code,name,model,unit,description,
-		creatorid) 
-		values($1,$2,$3,$4,$5,$6) 
+		creatorid,status) 
+		values($1,$2,$3,$4,$5,$6,$7) 
 		returning id`
 	err = db.QueryRow(sqlStr, ppe.Code, ppe.Name, ppe.Model, ppe.Unit, ppe.Description,
-		ppe.Creator.ID).Scan(&ppe.ID)
+		ppe.Creator.ID, ppe.Status).Scan(&ppe.ID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("PPE.Add db.QueryRow failed", zap.Error(err))
@@ -205,12 +206,12 @@ func (ppe *PPE) GetInfoByID() (resStatus i18n.ResKey, err error) {
 	// If PPE infromation is not in cahce, retrieve it from database
 	sqlStr := `select code,name,model,unit,description,
 	createtime,creatorid,modifytime,modifierid,ts,
-	dr 
+	dr,status  
 	from ppe
 	where id = $1`
 	err = db.QueryRow(sqlStr, ppe.ID).Scan(&ppe.Code, &ppe.Name, &ppe.Model, &ppe.Unit, &ppe.Description,
 		&ppe.CreateDate, &ppe.Creator.ID, &ppe.ModifyDate, &ppe.Modifier.ID, &ppe.Ts,
-		&ppe.Dr)
+		&ppe.Dr, &ppe.Status)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("PPE.GetInfoByID db.QueryRow failed", zap.Error(err))
@@ -248,10 +249,10 @@ func (ppe *PPE) Edit() (resStatus i18n.ResKey, err error) {
 	// Update the record in the ppe table
 	sqlStr := `update ppe set 
 		code=$1,name=$2,model=$3,unit=$4,description=$5,
-		modifierid=$6,modifytime=current_timestamp,ts=current_timestamp 
-		where id=$7 and ts=$8 and dr=0`
+		status=$6,modifierid=$7,modifytime=current_timestamp,ts=current_timestamp 
+		where id=$8 and ts=$9 and dr=0`
 	res, err := db.Exec(sqlStr, ppe.Code, ppe.Name, ppe.Model, ppe.Unit, ppe.Description,
-		ppe.Modifier.ID,
+		ppe.Status, ppe.Modifier.ID,
 		ppe.ID, ppe.Ts)
 	if err != nil {
 		zap.L().Error("PPE.Edit db.exec failed", zap.Error(err))

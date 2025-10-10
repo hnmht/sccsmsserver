@@ -16,6 +16,7 @@ type Role struct {
 	Description string    `db:"description" json:"description" `
 	SystemFlag  int16     `db:"systemflag" json:"systemFlag" `
 	AllUserFlag int16     `db:"alluserflag" json:"allUserFlag"`
+	Status      int16     `db:"status" json:"status"`
 	Member      []Person  `json:"member"`
 	CreateDate  time.Time `db:"createtime" json:"createDate"`
 	Creator     Person    `db:"creatorid" json:"creator"`
@@ -41,8 +42,8 @@ func initSysrole() (isFinish bool, err error) {
 		return
 	}
 	// Step 3: Insert a record for the system default role 'systemadmin' into the sysrole table.
-	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag) 
-	values(10000,'systemadmin','System default',1,0)`
+	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag,creatorid) 
+	values(10000,'systemadmin','System default',1,0,10000)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
 		isFinish = false
@@ -58,8 +59,8 @@ func initSysrole() (isFinish bool, err error) {
 		return
 	}
 	// Step 6: Insert a record for the system default role 'public' into the sysrole table.
-	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag) 
-	values(10001,'public','system default',1,1)`
+	sqlStr = `insert into sysrole(id,name,description,systemflag,alluserflag,creatorid) 
+	values(10001,'public','system default',1,1,10000)`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
 		isFinish = false
