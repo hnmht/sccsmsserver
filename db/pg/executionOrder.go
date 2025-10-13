@@ -105,7 +105,7 @@ type ReferExecutionOrder struct {
 	IsFinish           int16            `db:"b.isfinish" json:"isFinish"`
 	BillNumber         string           `db:"h.billnumber" json:"billNumber"`
 	BillDate           time.Time        `db:"h.billdate" json:"billDate"`
-	Department         SimpDept         `db:"h.dept_id" json:"department"`
+	Department         SimpDept         `db:"h.deptid" json:"department"`
 	CSA                ConstructionSite `db:"h.csaid" json:"csa"`
 	Executor           Person           `db:"h.executorid" json:"executor"`
 }
@@ -117,7 +117,7 @@ type ExecutionOrderComment struct {
 	BID        int32     `db:"bid" json:"bid"`
 	RowNUmber  int32     `db:"rownumber" json:"rowNumber"`
 	BillNumber string    `db:"billnumber" json:"billNumber"`
-	SendTo     Person    `db:"sendto_id" json:"sendTo"`
+	SendTo     Person    `db:"sendtoid" json:"sendTo"`
 	IsRead     int16     `db:"isread" json:"isRead"`
 	ReadTime   time.Time `db:"readtime" json:"readTime"`
 	Content    string    `db:"content" json:"content"`
@@ -144,7 +144,7 @@ type ExecutionOrderReview struct {
 	Dr             int16     `db:"dr" json:"dr"`
 }
 
-// Execution Order  Comments Params
+// Execution Order Comments Params
 type EOCommentsParams struct {
 	HID      int32                   `json:"hid"`
 	Comments []ExecutionOrderComment `json:"comments"`
@@ -164,19 +164,20 @@ type EOListPaging struct {
 	PerPage int32            `json:"perPage"`
 }
 
-// GetReferEDs 获取参照执行单列表
-func GetReferEDs(queryString string) (reds []ReferExecutionOrder, resStatus i18n.ResKey, err error) {
-	reds = make([]ReferExecutionOrder, 0)
+// Get the list of execution orders to be referenced
+func GetReferEOs(queryString string) (reos []ReferExecutionOrder, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	reos = make([]ReferExecutionOrder, 0)
 	var build strings.Builder
-	//拼接检查sql
+	// Assemble the SQL for checking
 	build.WriteString(`select count(b.id) as rownumber
-	from executedoc_b as b
-	left join executedoc_h as h on b.hid = h.id
-	left join exectiveitem as epa on b.epaid = epa.id
+	from executionorder_b as b
+	left join executionorder_h as h on b.hid = h.id
+	left join epa as epa on b.epaid = epa.id
 	left join sysuser as issueowner on b.issueownerid = issueowner.id
 	left join sysuser as epuser on h.executorid = epuser.id
 	left join sysuser as creator on h.creatorid = creator.id
-	left join department as dept on h.dept_id = dept.id
+	left join department as dept on h.deptid = dept.id
 	where (b.ishandle=1 and b.dr = 0 and b.isfinish=0 and b.status=1)`)
 	if queryString != "" {
 		build.WriteString(" and (")
@@ -184,36 +185,36 @@ func GetReferEDs(queryString string) (reds []ReferExecutionOrder, resStatus i18n
 		build.WriteString(")")
 	}
 	checkSql := build.String()
-	//检查
+	// Check
 	var rowNumber int32
 	err = db.QueryRow(checkSql).Scan(&rowNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDRefer db.QueryRow(checkSql) failed", zap.Error(err))
+		zap.L().Error("GetReferEOs db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 { //如果查询数据量为0
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
 	}
-	if rowNumber > setting.Conf.PqConfig.MaxRecord { //查询数据量大于最大记录数
+	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
 	}
-	build.Reset() //清空build
-	//拼接正式sql
+	build.Reset()
+	// Assemble the SQL for data retrieval
 	build.WriteString(`select b.id,b.hid,b.rownumber,b.epaid,b.executionvalue,
 	b.executionvaluedisp,b.description,b.ishandle,b.issueownerid,b.handlestarttime,
 	b.handleendtime,b.status,b.risklevelid, b.isfinish,b.dr,
-	b.ts,h.billnumber,h.billdate,h.dept_id,h.csaid,
+	b.ts,h.billnumber,h.billdate,h.deptid,h.csaid,
 	h.executorid 
-	from executedoc_b as b
-	left join executedoc_h as h on b.hid = h.id
-	left join exectiveitem as epa on b.epaid = epa.id
+	from executionorder_b as b
+	left join executionorder_h as h on b.hid = h.id
+	left join epa as epa on b.epaid = epa.id
 	left join sysuser as issueowner on b.issueownerid = issueowner.id
 	left join sysuser as epuser on h.executorid = epuser.id
 	left join sysuser as creator on h.creatorid = creator.id
-	left join department as dept on h.dept_id = dept.id
+	left join department as dept on h.deptid = dept.id
 	where (b.ishandle=1 and b.dr = 0 and b.isfinish=0 and (b.status=1 or b.status=2))`)
 	if queryString != "" {
 		build.WriteString(" and (")
@@ -221,89 +222,88 @@ func GetReferEDs(queryString string) (reds []ReferExecutionOrder, resStatus i18n
 		build.WriteString(")")
 	}
 	refSql := build.String()
-	//获取执行单参照列表
+	// Retrieve the list of Execution Orders to be referenced
 	edRef, err := db.Query(refSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDRefer db.Query failed", zap.Error(err))
+		zap.L().Error("GetReferEOs db.Query failed", zap.Error(err))
 		return
 	}
 	defer edRef.Close()
-
-	//提取数据
+	// Extract data row by row
 	for edRef.Next() {
-		var red ReferExecutionOrder
-		err = edRef.Scan(&red.BID, &red.HID, &red.RowNumber, &red.EPA.ID, &red.ExecutionValue,
-			&red.ExecutionValueDisp, &red.Description, &red.IsHandle, &red.IssueOwner.ID, &red.HandleStartTime,
-			&red.HandleEndTime, &red.Status, &red.RiskLevel.ID, &red.IsFinish, &red.Dr,
-			&red.Ts, &red.BillNumber, &red.BillDate, &red.Department.ID, &red.CSA.ID,
-			&red.Executor.ID)
+		var reo ReferExecutionOrder
+		err = edRef.Scan(&reo.BID, &reo.HID, &reo.RowNumber, &reo.EPA.ID, &reo.ExecutionValue,
+			&reo.ExecutionValueDisp, &reo.Description, &reo.IsHandle, &reo.IssueOwner.ID, &reo.HandleStartTime,
+			&reo.HandleEndTime, &reo.Status, &reo.RiskLevel.ID, &reo.IsFinish, &reo.Dr,
+			&reo.Ts, &reo.BillNumber, &reo.BillDate, &reo.Department.ID, &reo.CSA.ID,
+			&reo.Executor.ID)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetEDRefer edRef.Next() edRef.Scan() failed", zap.Error(err))
+			zap.L().Error("GetReferEOs edRef.Next() edRef.Scan() failed", zap.Error(err))
 			return
 		}
-		//填充执行项目信息
-		if red.EPA.ID > 0 {
-			resStatus, err = red.EPA.GetInfoByID()
+		// Get Execution Project details
+		if reo.EPA.ID > 0 {
+			resStatus, err = reo.EPA.GetInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充部门信息
-		if red.Department.ID > 0 {
-			resStatus, err = red.Department.GetSimpDeptInfoByID()
+		// Get Department details
+		if reo.Department.ID > 0 {
+			resStatus, err = reo.Department.GetSimpDeptInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充风险等级信息
-		if red.RiskLevel.ID > 0 {
-			resStatus, err = red.RiskLevel.GetRLInfoByID()
+		// Get Risk Level details
+		if reo.RiskLevel.ID > 0 {
+			resStatus, err = reo.RiskLevel.GetRLInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充现场档案信息
-		if red.CSA.ID > 0 {
-			resStatus, err = red.CSA.GetInfoByID()
+		// Get Construction Site details
+		if reo.CSA.ID > 0 {
+			resStatus, err = reo.CSA.GetInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充执行人信息
-		if red.Executor.ID > 0 {
-			resStatus, err = red.Executor.GetPersonInfoByID()
+		// Get Executor deatils
+		if reo.Executor.ID > 0 {
+			resStatus, err = reo.Executor.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充处理人信息
-		if red.IssueOwner.ID > 0 {
-			resStatus, err = red.IssueOwner.GetPersonInfoByID()
+		// Get Issue Owner details
+		if reo.IssueOwner.ID > 0 {
+			resStatus, err = reo.IssueOwner.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//获取附件
-		red.EOFiles, resStatus, err = GetEDRFiles(red.BID)
+		// Get files details
+		reo.EOFiles, resStatus, err = GetEORowFiles(reo.BID)
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
-
-		reds = append(reds, red)
+		reos = append(reos, reo)
 	}
 
-	return reds, i18n.StatusOK, nil
+	return
 }
 
-// GetEDList 获取执行单列表
-func GetEDList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey, err error) {
+// Get Execution Order list
+func GetEOList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	var build strings.Builder
-	//拼接检查sql
+	// Assemble the SQL for checking
 	build.WriteString(`select count(h.id) as rownumber
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0) `)
@@ -313,33 +313,33 @@ func GetEDList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey,
 		build.WriteString(")")
 	}
 	checkSql := build.String()
-	//检查
+	// Check
 	var rowNumber int32
 	err = db.QueryRow(checkSql).Scan(&rowNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.QueryRow(checkSql) failed", zap.Error(err))
+		zap.L().Error("GetEOList db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 { //如果查询数据量为0
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
 	}
-	if rowNumber > setting.Conf.PqConfig.MaxRecord { //查询数据量大于最大记录数
+	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
 	}
-	build.Reset() //清空build
+	build.Reset()
 
-	//拼接正式sql
-	build.WriteString(`select h.id,h.billnumber,h.billdate,h.dept_id,h.description,
+	// Assemble the SQL for data retrieval
+	build.WriteString(`select h.id,h.billnumber,h.billdate,h.deptid,h.description,
 	h.status,h.sourcetype,h.sourcebillnumber,h.sourcehid,h.sourcerownumber,
 	h.sourcebid,h.starttime,h.endtime,h.csaid,h.executorid,
 	h.eptid,h.allowaddrow,h.allowdelrow,h.createtime,h.creatorid,
 	h.confirmtime,h.confirmerid,h.modifytime,h.modifierid,h.dr,
 	h.ts 
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0)`)
@@ -349,15 +349,15 @@ func GetEDList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey,
 		build.WriteString(")")
 	}
 	headSql := build.String()
-	//获取指令单列表
+	// Retrieve Execution Order list from database
 	headRows, err := db.Query(headSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.Query failed", zap.Error(err))
+		zap.L().Error("GetEOList db.Query failed", zap.Error(err))
 		return
 	}
 	defer headRows.Close()
-	//提取数据
+	// Extract data row by row
 	for headRows.Next() {
 		var eo ExecutionOrder
 		err = headRows.Scan(&eo.HID, &eo.BillNumber, &eo.BillDate, &eo.Department.ID, &eo.Description,
@@ -368,28 +368,28 @@ func GetEDList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey,
 			&eo.Ts)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetEDList headRows.Next failed", zap.Error(err))
+			zap.L().Error("GetEOList headRows.Next failed", zap.Error(err))
 			return
 		}
-		//填充信息
+		// Get Execution Order Header details
 		resStatus, err = eo.FillHead()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 		eos = append(eos, eo)
 	}
-	resStatus = i18n.StatusOK
 	return
 }
 
-// GetEDReviewList 获取审阅执行单列表
-func GetEDReviewList(queryString string, useID int32) (eos []ExecutionOrder, resStatus i18n.ResKey, err error) {
+// Get the list of Execution Order to be reviewed
+func GetEOReviewList(queryString string, useID int32) (eos []ExecutionOrder, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	eos = make([]ExecutionOrder, 0)
 	var build strings.Builder
-	//拼接检查sql
+	// Assemble the SQL for check
 	build.WriteString(`select count(h.id) as rownumber
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0) `)
@@ -399,36 +399,36 @@ func GetEDReviewList(queryString string, useID int32) (eos []ExecutionOrder, res
 		build.WriteString(")")
 	}
 	checkSql := build.String()
-	//检查
+	// Check the number of rows
 	var rowNumber int32
 	err = db.QueryRow(checkSql).Scan(&rowNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.QueryRow(checkSql) failed", zap.Error(err))
+		zap.L().Error("GetEOReviewList db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 { //如果查询数据量为0
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
 	}
-	if rowNumber > setting.Conf.PqConfig.MaxRecord { //查询数据量大于最大记录数
+	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
 	}
-	build.Reset() //清空build
+	build.Reset()
 
-	//拼接正式sql
-	build.WriteString(`select h.id,h.billnumber,h.billdate,h.dept_id,h.description,
+	// Assemble the SQL for data retrieve
+	build.WriteString(`select h.id,h.billnumber,h.billdate,h.deptid,h.description,
 	h.status,h.sourcetype,h.sourcebillnumber,h.sourcehid,h.sourcerownumber,
 	h.sourcebid,h.starttime,h.endtime,h.csaid,h.executorid,
 	h.eptid,h.allowaddrow,h.allowdelrow,h.createtime,h.creatorid,
 	h.confirmtime,h.confirmerid,h.modifytime,h.modifierid,h.dr,
 	h.ts,
-	(select count(b.id) as errnumber from executedoc_b as b where b.hid = h.id and b.dr=0 and b.isissue=1),
-	(select count(r.id) as reviewednumber from executedoc_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1),
-	(select coalesce( sum(r.consumeseconds),0) as reviewedseconds  from executedoc_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1)
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	(select count(b.id) as errnumber from executionorder_b as b where b.hid = h.id and b.dr=0 and b.isissue=1),
+	(select count(r.id) as reviewednumber from executionorder_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1),
+	(select coalesce( sum(r.consumeseconds),0) as reviewedseconds  from executionorder_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1)
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0)`)
@@ -438,15 +438,15 @@ func GetEDReviewList(queryString string, useID int32) (eos []ExecutionOrder, res
 		build.WriteString(")")
 	}
 	headSql := build.String()
-	//获取指令单列表
+	// Retrieve Execution Order from database
 	headRows, err := db.Query(headSql, useID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.Query failed", zap.Error(err))
+		zap.L().Error("GetEOReviewList db.Query failed", zap.Error(err))
 		return
 	}
 	defer headRows.Close()
-	//提取数据
+
 	for headRows.Next() {
 		var eo ExecutionOrder
 		err = headRows.Scan(&eo.HID, &eo.BillNumber, &eo.BillDate, &eo.Department.ID, &eo.Description,
@@ -457,29 +457,28 @@ func GetEDReviewList(queryString string, useID int32) (eos []ExecutionOrder, res
 			&eo.Ts, &eo.IssueNumber, &eo.ReviewedNumber, &eo.ReviewedSeconds)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetEDList headRows.Next failed", zap.Error(err))
+			zap.L().Error("GetEOReviewList headRows.Next failed", zap.Error(err))
 			return
 		}
-		//填充信息
+		// Get Execution Order Header details
 		resStatus, err = eo.FillHead()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 		eos = append(eos, eo)
 	}
-
-	resStatus = i18n.StatusOK
 	return
 }
 
-// GetEDRReviesListPaging 获取审阅执行单分页列表
-func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPaging, resStatus i18n.ResKey, err error) {
+// Get the list of Execution Orders to be reviewed by pagination
+func GetEOReviewListPagination(con PagingQueryParams, userID int32) (edsp EOListPaging, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	edsp.EOs = make([]ExecutionOrder, 0)
 	var build strings.Builder
-	//拼接检查sql
+	// Assemble the SQL for checking
 	build.WriteString(`select count(h.id) as rownumber
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0) `)
@@ -490,22 +489,22 @@ func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPag
 	}
 	checkSql := build.String()
 
-	//检查
+	// Check
 	err = db.QueryRow(checkSql).Scan(&edsp.Count)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.QueryRow(checkSql) failed", zap.Error(err))
+		zap.L().Error("GetEOReviewListPagination db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if edsp.Count == 0 { //如果查询数据量为0
+	if edsp.Count == 0 {
 		resStatus = i18n.StatusResNoData
 		return
 	}
-	if edsp.Count > setting.Conf.PqConfig.MaxRecord { //查询数据量大于最大记录数
+	if edsp.Count > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
 	}
-	//重新计算分页
+	// Recalculate pagination
 	if con.PerPage > edsp.Count {
 		con.Page = 0
 	} else {
@@ -514,20 +513,20 @@ func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPag
 			con.Page = totalPage - 1
 		}
 	}
-	build.Reset() //清空build
+	build.Reset()
 
-	//拼接正式sql
-	build.WriteString(`select h.id,h.billnumber,h.billdate,h.dept_id,h.description,
+	// Assemble the SQL for data retrieve
+	build.WriteString(`select h.id,h.billnumber,h.billdate,h.deptid,h.description,
 	h.status,h.sourcetype,h.sourcebillnumber,h.sourcehid,h.sourcerownumber,
 	h.sourcebid,h.starttime,h.endtime,h.csaid,h.executorid,
 	h.eptid,h.allowaddrow,h.allowdelrow,h.createtime,h.creatorid,
 	h.confirmtime,h.confirmerid,h.modifytime,h.modifierid,h.dr,
 	h.ts,
-	(select count(b.id) as errnumber from executedoc_b as b where b.hid = h.id and b.dr=0 and b.isissue=1),
-	(select count(r.id) as reviewednumber from executedoc_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1),
-	(select coalesce( sum(r.consumeseconds),0) as reviewedseconds  from executedoc_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1)
-	from executedoc_h as h
-	left join department on h.dept_id = department.id
+	(select count(b.id) as errnumber from executionorder_b as b where b.hid = h.id and b.dr=0 and b.isissue=1),
+	(select count(r.id) as reviewednumber from executionorder_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1),
+	(select coalesce( sum(r.consumeseconds),0) as reviewedseconds  from executionorder_review as r where r.hid = h.id and r.dr=0 and r.creatorid=$1)
+	from executionorder_h as h
+	left join department on h.deptid = department.id
 	left join sysuser as creator on h.creatorid = creator.id
 	left join sysuser as modifier on h.modifierid = modifier.id
 	where (h.dr = 0)`)
@@ -539,15 +538,15 @@ func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPag
 	build.WriteString(" order by h.id limit $2 offset $3")
 	headSql := build.String()
 
-	//获取指令单列表
+	// Get Execution Order from database
 	headRows, err := db.Query(headSql, userID, con.PerPage, con.Page*con.PerPage)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDList db.Query failed", zap.Error(err))
+		zap.L().Error("GetEOReviewListPagination db.Query failed", zap.Error(err))
 		return
 	}
 	defer headRows.Close()
-	//提取数据
+	// Extract data row by row
 	for headRows.Next() {
 		var eo ExecutionOrder
 		err = headRows.Scan(&eo.HID, &eo.BillNumber, &eo.BillDate, &eo.Department.ID, &eo.Description,
@@ -558,10 +557,10 @@ func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPag
 			&eo.Ts, &eo.IssueNumber, &eo.ReviewedNumber, &eo.ReviewedSeconds)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetEDList headRows.Next failed", zap.Error(err))
+			zap.L().Error("GetEOReviewListPagination headRows.Next failed", zap.Error(err))
 			return
 		}
-		//填充信息
+		// Get Execution Order details
 		resStatus, err = eo.FillHead()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
@@ -571,104 +570,104 @@ func GetEDRReviewListPaging(con PagingQueryParams, userID int32) (edsp EOListPag
 	edsp.Page = con.Page
 	edsp.PerPage = con.PerPage
 
-	resStatus = i18n.StatusOK
 	return
 }
 
-// ExecutionOrder.FillHeadStruct 填充表头结构体
+// Fill in the detailed information of the Execution Order Header
 func (eo *ExecutionOrder) FillHead() (resStatus i18n.ResKey, err error) {
-	//填充部门信息
+	resStatus = i18n.StatusOK
+	// Get Department details
 	if eo.Department.ID > 0 {
 		resStatus, err = eo.Department.GetSimpDeptInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充现场档案
+	// Get Construction Site details
 	if eo.CSA.ID > 0 {
 		resStatus, err = eo.CSA.GetInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充执行人
+	// Get Executor details
 	if eo.Executor.ID > 0 {
 		resStatus, err = eo.Executor.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充执行模板
+	// Get Execution Project Template details
 	if eo.EPT.HID > 0 {
 		resStatus, err = eo.EPT.GetEPTHeaderByHid()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充创建人
+	// Get Creator details
 	if eo.Creator.ID > 0 {
 		resStatus, err = eo.Creator.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充确认人
+	// Get Confirmer details
 	if eo.Confirmer.ID > 0 {
 		resStatus, err = eo.Confirmer.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-	//填充修改人
+	// Get Modifier details
 	if eo.Modifier.ID > 0 {
 		resStatus, err = eo.Modifier.GetPersonInfoByID()
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
 	}
-
-	return i18n.StatusOK, nil
+	return
 }
 
-// GetEDRFiles 获取执行单表体附件
-func GetEDRFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, err error) {
-	voucherFiles = make([]VoucherFile, 0) //解决返回文件为空问题
+// Get the Execution Order Row attachments
+func GetEORowFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	voucherFiles = make([]VoucherFile, 0)
+	// Retrieve the attachments from executionorder_file table
 	attachSql := `select id,billbid,billhid,fileid,createtime,
 	creatorid,modifytime,modifierid,dr,ts 
-	from executedoc_file where billbid=$1 and dr=0`
-	//填充附件
+	from executionorder_file where billbid=$1 and dr=0`
 	fileRows, err := db.Query(attachSql, bid)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetEDRFiles db.query(attachsql) failed", zap.Error(err))
+		zap.L().Error("GetEORowFiles db.query(attachsql) failed", zap.Error(err))
 		return
 	}
 	defer fileRows.Close()
-
+	// Extract data row by row
 	for fileRows.Next() {
 		var f VoucherFile
 		fileErr := fileRows.Scan(&f.ID, &f.BillBID, &f.BillHID, &f.File.ID, &f.CreateDate,
 			&f.Creator.ID, &f.ModifyDate, &f.Modifier.ID, &f.Dr, &f.Ts)
 		if fileErr != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetEDRFiles fileRows.Scan failed", zap.Error(fileErr))
+			zap.L().Error("GetEORowFiles fileRows.Scan failed", zap.Error(fileErr))
 			return
 		}
-		//填充文件信息
+		// get File details
 		if f.File.ID > 0 {
 			resStatus, err = f.File.GetFileInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充创建人
+		// Get Creator details
 		if f.Creator.ID > 0 {
 			resStatus, err = f.Creator.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充更新人
+		// Get Modifier details
 		if f.Modifier.ID > 0 {
 			resStatus, err = f.Modifier.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
@@ -677,19 +676,21 @@ func GetEDRFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, 
 		}
 		voucherFiles = append(voucherFiles, f)
 	}
-	resStatus = i18n.StatusOK
+
 	return
 }
 
-// ExecutionOrder.FillBody 填充表体
+// Fill in the detailed information of the Execution Order body
 func (eo *ExecutionOrder) FillBody() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Retrieve data from database
 	bodySql := `select id,hid,rownumber,epaid,allowdelrow,
 	executionvalue,executionvaluedisp,description,epadescription,ischeckerror,
 	errorvalue,errorvaluedisp,isrequirefile,isonsitephoto,isissue,
 	isrectify,ishandle,issueownerid,handlestarttime,handleendtime,
 	status,isfromept,risklevelid,createtime,creatorid,
 	confirmtime,confirmerid,modifytime,modifierid,dr,
-	ts from executedoc_b
+	ts from executionorder_b
 	where hid=$1 and dr=0 order by rownumber asc`
 	bodyRows, err := db.Query(bodySql, eo.HID)
 	if err != nil {
@@ -698,11 +699,8 @@ func (eo *ExecutionOrder) FillBody() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer bodyRows.Close()
-
-	var bodyRowNumber int32
-
+	// Extract data row by row
 	for bodyRows.Next() {
-		bodyRowNumber++
 		var edr ExecutionOrderRow
 		err = bodyRows.Scan(&edr.BID, &edr.HID, &edr.RowNumber, &edr.EPA.ID, &edr.AllowDelRow,
 			&edr.ExecutionValue, &edr.ExecutionValueDisp, &edr.Description, &edr.EpaDescription, &edr.IsCheckError,
@@ -716,14 +714,14 @@ func (eo *ExecutionOrder) FillBody() (resStatus i18n.ResKey, err error) {
 			resStatus = i18n.StatusInternalError
 			return
 		}
-		//填充风险等级
+		// Get Risk Level details
 		if edr.RiskLevel.ID > 0 {
 			resStatus, err = edr.RiskLevel.GetRLInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充后续问题处理人
+		// Get IssueOwner details
 		if edr.IssueOwner.ID > 0 {
 			resStatus, err = edr.IssueOwner.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
@@ -731,29 +729,29 @@ func (eo *ExecutionOrder) FillBody() (resStatus i18n.ResKey, err error) {
 			}
 		}
 
-		//填充制单人
+		// Get Creator details
 		if edr.Creator.ID > 0 {
 			resStatus, err = edr.Creator.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充确认人
+		// Get Confirmer details
 		if edr.Confirmer.ID > 0 {
 			resStatus, err = edr.Confirmer.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充修改人
+		// Get Modifier details
 		if edr.Modifier.ID > 0 {
 			resStatus, err = edr.Modifier.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充附件
-		edr.Files, resStatus, err = GetEDRFiles(edr.BID)
+		// Get Attachments
+		edr.Files, resStatus, err = GetEORowFiles(edr.BID)
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
@@ -763,11 +761,12 @@ func (eo *ExecutionOrder) FillBody() (resStatus i18n.ResKey, err error) {
 	return i18n.StatusOK, nil
 }
 
-// ExecutionOrder.GetDetailByHID 根据hid获取执行单详情
+// Get Execution Order details by HID
 func (eo *ExecutionOrder) GetDetailByHID() (resStatus i18n.ResKey, err error) {
-	//检查单据是否已经被删除
+	resStatus = i18n.StatusOK
+	// Check if the Execution Order has already been deleted
 	var rowNumber int32
-	checkSql := `select count(id) as rownumber from executedoc_h where id=$1 and dr=0`
+	checkSql := `select count(id) as rownumber from executionorder_h where id=$1 and dr=0`
 	err = db.QueryRow(checkSql, eo.HID).Scan(&rowNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -778,11 +777,12 @@ func (eo *ExecutionOrder) GetDetailByHID() (resStatus i18n.ResKey, err error) {
 		resStatus = i18n.StatusDataDeleted
 		return
 	}
-
+	// Get the Execution Order Body details
 	resStatus, err = eo.FillBody()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
+
 	return
 }
 
@@ -809,8 +809,8 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 	}
 	eo.BillNumber = billNo
 
-	//增加表头项目
-	headSql := `insert into executedoc_h(billnumber,billdate,dept_id,description,status,
+	// Insert data into the executionorder_h table
+	headSql := `insert into executionorder_h(billnumber,billdate,deptid,description,status,
 	sourcetype,sourcebillnumber,sourcehid,sourcerownumber,sourcebid,
 	starttime,endtime,csaid,executorid,eptid,
 	allowaddrow,allowdelrow,creatorid) 
@@ -827,8 +827,8 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	//表体预处理
-	bodySql := `insert into executedoc_b(hid,rownumber,epaid,allowdelrow,executionvalue,
+	// Prepare write the body row to the executionorder_b table
+	bodySql := `insert into executionorder_b(hid,rownumber,epaid,allowdelrow,executionvalue,
 		executionvaluedisp,description,epadescription,ischeckerror,errorvalue,
 		errorvaluedisp,	isrequirefile,isonsitephoto,isissue,isrectify, 
 		ishandle,issueownerid,handlestarttime,handleendtime,status,
@@ -843,8 +843,8 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer bodyStmt.Close()
-	//附件插入预处理
-	fileSql := `insert into executedoc_file(billbid,billhid,fileid,creatorid) 
+	// Prepare write the body row attachment to the executionorder_file table
+	fileSql := `insert into executionorder_file(billbid,billhid,fileid,creatorid) 
 	values($1,$2,$3,$4) returning id`
 	fileStmt, err := tx.Prepare(fileSql)
 	if err != nil {
@@ -854,12 +854,13 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer fileStmt.Close()
+	// Write data to the database row by row
 	for _, row := range eo.Body {
 		var isFinish int16
 		if row.IsIssue == 1 && row.IsRectify == 1 {
 			isFinish = 1
 		}
-		//写入表体行
+		// Write row data to the executionorder_b table
 		err = bodyStmt.QueryRow(eo.HID, row.RowNumber, row.EPA.ID, row.AllowDelRow, row.ExecutionValue,
 			row.ExecutionValueDisp, row.Description, row.EpaDescription, row.IsCheckError, row.ErrorValue,
 			row.ErrorValueDisp, row.IsRequireFile, row.IsOnsitePhoto, row.IsIssue, row.IsRectify,
@@ -871,7 +872,7 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 			tx.Rollback()
 			return
 		}
-		//写入附件记录
+		// Write row attachments to the executionorder_file table
 		if len(row.Files) > 0 {
 			for _, file := range row.Files {
 				err = fileStmt.QueryRow(row.BID, eo.HID, file.File.ID, eo.Creator.ID).Scan(&file.ID)
@@ -885,7 +886,8 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 		}
 	}
 
-	//如果数据来自于指令单,需要回写指令单status为执行态
+	// If the data comes from the Work Order,
+	// then the work Order status needs to be written back as 2 (executing)
 	if eo.SourceBid > 0 {
 		wor := new(WorkOrderRow)
 		wor.BID = eo.SourceBid
@@ -900,23 +902,25 @@ func (eo *ExecutionOrder) Add() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+
+	return
 }
 
-// ExecutionOrder.Edit 编辑执行单
+// Edit Execution Order
 func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
-	//检查表体行数
+	resStatus = i18n.StatusOK
+	// Check the number of rows in the Execution Order body
 	if len(eo.Body) == 0 {
 		resStatus = i18n.StatusVoucherNoBody
 		return
 	}
-	//检查创建人和编辑人是否为同一人
+	// Check if the creator and modifier are the same person
 	if eo.Creator.ID != eo.Modifier.ID {
 		resStatus = i18n.StatusVoucherOnlyCreateEdit
 		return
 	}
 
-	//创建事务
+	// Create a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -925,11 +929,10 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 
-	//修改表头项目
-	editHeadSql := `update executedoc_h set billdate=$1,dept_id=$2,description=$3,starttime=$4,endtime=$5,
+	// Modify Construction Order Header in the executionorder_h table
+	editHeadSql := `update executionorder_h set billdate=$1,deptid=$2,description=$3,starttime=$4,endtime=$5,
 	csaid=$6,executorid=$7,modifytime=current_timestamp,modifierid=$8,ts=current_timestamp  
 	where id=$9 and dr=0 and status=0 and ts=$10`
-	//表头修改写入
 	editHeadRes, err := tx.Exec(editHeadSql, &eo.BillDate, &eo.Department.ID, &eo.Description, &eo.StartTime, &eo.EndTime,
 		&eo.CSA.ID, &eo.Executor.ID, &eo.Modifier.ID,
 		&eo.HID, &eo.Ts)
@@ -939,7 +942,7 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		tx.Rollback()
 		return
 	}
-	//检查表头修改的行数
+	// Check the number of rows affected by SQL statement
 	headUpdateNumber, err := editHeadRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -953,8 +956,8 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	//修改表体内容
-	updateRowSql := `update executedoc_b set epaid=$1, allowdelrow=$2,executionvalue=$3,executionvaluedisp=$4,description=$5,
+	// Prepare modify the Execution Order Row in the executionorder_b table
+	updateRowSql := `update executionorder_b set epaid=$1, allowdelrow=$2,executionvalue=$3,executionvaluedisp=$4,description=$5,
 	epadescription=$6,	ischeckerror=$7,errorvalue=$8,errorvaluedisp=$9,isrequirefile=$10,
 	isonsitephoto=$11,isissue=$12,isrectify=$13,ishandle=$14,issueownerid=$15,
 	handlestarttime=$16,handleendtime=$17, status=$18,isfromept=$19,risklevelid=$20,
@@ -968,8 +971,8 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer updateRowStmt.Close()
-	//新增行准备
-	addRowSql := `insert into executedoc_b(hid,rownumber,epaid,allowdelrow,executionvalue,
+	// Prepare Add the Execution Order row in the execution_b table
+	addRowSql := `insert into executionorder_b(hid,rownumber,epaid,allowdelrow,executionvalue,
 		executionvaluedisp,description,epadescription,ischeckerror,errorvalue,
 		errorvaluedisp,	isrequirefile,isonsitephoto,isissue,isrectify,
 		ishandle,status,issueownerid,handlestarttime,handleendtime,
@@ -984,8 +987,8 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer addRowStmt.Close()
-	//修改文件准备
-	updateFileSql := `update executedoc_file set modifytime=current_timestamp,modifierid=$1,dr=$2,ts=current_timestamp
+	// Prepare modify the Execution Order Row attachments in the executionorder_file table
+	updateFileSql := `update executionorder_file set modifytime=current_timestamp,modifierid=$1,dr=$2,ts=current_timestamp
 	where id=$3 and dr=0 and ts=$4`
 	updateFileStmt, err := tx.Prepare(updateFileSql)
 	if err != nil {
@@ -995,8 +998,8 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer updateFileStmt.Close()
-	//增加文件准备
-	addFileSql := `insert into executedoc_file(billbid,billhid,fileid,creatorid) 
+	// Prepare Add the Execution Order Row attachments in the executionorder_file table
+	addFileSql := `insert into executionorder_file(billbid,billhid,fileid,creatorid) 
 	values($1,$2,$3,$4) returning id`
 	addFileStmt, err := tx.Prepare(addFileSql)
 	if err != nil {
@@ -1006,9 +1009,9 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer addFileStmt.Close()
-	//写入行数据
+	// Write the Execution Order Row Data into executionorder_b row by row
 	for _, row := range eo.Body {
-		//检查表体行状态
+		// Check the Execution Order Row status
 		if row.Status != 0 {
 			resStatus = i18n.StatusVoucherNoFree
 			tx.Rollback()
@@ -1018,7 +1021,8 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 		if row.IsIssue == 1 && row.IsRectify == 1 {
 			isFinish = 1
 		}
-		if row.BID == 0 { //新增的行
+
+		if row.BID == 0 { // If the HID value is 0, it menas it is a newly row
 			addRowErr := addRowStmt.QueryRow(eo.HID, row.RowNumber, row.EPA.ID, row.AllowDelRow, row.ExecutionValue,
 				row.ExecutionValueDisp, row.Description, row.EpaDescription, row.IsCheckError, row.ErrorValue,
 				row.ErrorValueDisp, row.IsRequireFile, row.IsOnsitePhoto, row.IsIssue, row.IsRectify,
@@ -1031,7 +1035,7 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 				return resStatus, addRowErr
 			}
 
-			//写入附件记录
+			// Add the row attachments records
 			if len(row.Files) > 0 {
 				for _, file := range row.Files {
 					addFileErr := addFileStmt.QueryRow(row.BID, eo.HID, file.File.ID, eo.Creator.ID).Scan(&file.ID)
@@ -1044,7 +1048,7 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 				}
 			}
 
-		} else { //原有需要更新的行
+		} else { // If the HID value is not 0, it means it is a row that needs to be modified
 			updateRowRes, updateRowErr := updateRowStmt.Exec(row.EPA.ID, row.AllowDelRow, row.ExecutionValue, row.ExecutionValueDisp, row.Description,
 				row.EpaDescription, row.IsCheckError, row.ErrorValue, row.ErrorValueDisp, row.IsRequireFile,
 				row.IsOnsitePhoto, row.IsIssue, row.IsRectify, row.IsHandle, row.IssueOwner.ID,
@@ -1057,7 +1061,7 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 				tx.Rollback()
 				return
 			}
-			//检查更新行数
+			// Chcek the number of rows affected by SQL statement
 			updateRowNumber, errUpdateEffect := updateRowRes.RowsAffected()
 			if errUpdateEffect != nil {
 				resStatus = i18n.StatusInternalError
@@ -1071,10 +1075,10 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 				return
 			}
 
-			//处理附件
+			// Handle the row attachment
 			if len(row.Files) > 0 {
 				for _, file := range row.Files {
-					if file.ID == 0 { //新增附件
+					if file.ID == 0 { // If the file.ID value is 0, it means it is a newly file.
 						addFileErr := addFileStmt.QueryRow(row.BID, eo.HID, file.File.ID, eo.Modifier.ID).Scan(&file.ID)
 						if addFileErr != nil {
 							resStatus = i18n.StatusInternalError
@@ -1082,7 +1086,7 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 							tx.Rollback()
 							return resStatus, addFileErr
 						}
-					} else { //原有附件
+					} else { // If the file.ID value is not o, it means it is a file that needs to be modified
 						updateFileRes, updateFileErr := updateFileStmt.Exec(eo.Modifier.ID, file.Dr, file.ID, file.Ts)
 						if updateFileErr != nil {
 							resStatus = i18n.StatusInternalError
@@ -1108,28 +1112,29 @@ func (eo *ExecutionOrder) Edit() (resStatus i18n.ResKey, err error) {
 			}
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrder.Delete 删除执行单
+// Delete Execution Order
 func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err error) {
-	//获取单据详情
+	resStatus = i18n.StatusOK
+	// Get the Execution Order Header details
 	resStatus, err = eo.GetDetailByHID()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	//检查单据状态
-	if eo.Status != 0 { //非自由态单据不允许删除
+	// Check the Execution order status
+	if eo.Status != 0 { // Status must be 0
 		resStatus = i18n.StatusVoucherNoFree
 		return
 	}
-	//检查创建人和删除人是否为同一人
+	// Check if the creator and modifier are the same person
 	if eo.Creator.ID != modifyUserId {
 		resStatus = i18n.StatusVoucherOnlyCreateEdit
 		return
 	}
 
-	//创建事务
+	// Create a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1137,8 +1142,8 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		return
 	}
 	defer tx.Commit()
-	//删除表头
-	delHeadSql := `update executedoc_h set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
+	// Modify the Execution Order Header delete flag to 1 in the executionorder_b table
+	delHeadSql := `update executionorder_h set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and ts=$3`
 	delHeadRes, err := tx.Exec(delHeadSql, modifyUserId, eo.HID, eo.Ts)
 	if err != nil {
@@ -1147,7 +1152,7 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		tx.Rollback()
 		return
 	}
-	//检查表头删除行数
+	// Check the number of rows affected by SQL statement
 	delHeadNumber, err := delHeadRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1161,12 +1166,9 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		return
 	}
 
-	//删除表体
-	delRowSql := `update executedoc_b set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
+	// Prepare modify the Execution Order Rows delete flag to 1 in the executionorder_b table
+	delRowSql := `update executionorder_b set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and ts=$3`
-	delFileSql := `update executedoc_file set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
-	where id=$2 and dr=0 and billbid=$3 and ts=$4`
-	//删除表体预处理
 	delRowStmt, err := tx.Prepare(delRowSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1175,7 +1177,9 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		return
 	}
 	defer delRowStmt.Close()
-	//删除文件预处理
+	// Prepare modify the Execution Order Row Attachments delete flag to 1 in the executionorder_file table
+	delFileSql := `update executionorder_file set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
+	where id=$2 and dr=0 and billbid=$3 and ts=$4`
 	delFileStmt, err := tx.Prepare(delFileSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1184,9 +1188,9 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		return
 	}
 	defer delFileStmt.Close()
-	//表体删除写入
+	// Write the modified content to the database row by row
 	for _, row := range eo.Body {
-		//检查表体状态
+		// Check the Execution Order Row status
 		if row.Status != 0 {
 			resStatus = i18n.StatusVoucherNoFree
 			tx.Rollback()
@@ -1199,7 +1203,7 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 			tx.Rollback()
 			return resStatus, errDelRow
 		}
-		//检查删除影响行数
+		// Check the number of rows affected by SQL statement
 		delRowNumber, errDelRow := delRowRes.RowsAffected()
 		if errDelRow != nil {
 			resStatus = i18n.StatusInternalError
@@ -1213,7 +1217,8 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 			return
 		}
 
-		if len(row.Files) > 0 { //如果存在附件
+		// Handle the Execution Order attaments
+		if len(row.Files) > 0 {
 			for _, file := range row.Files {
 				delFileRes, delFileErr := delFileStmt.Exec(modifyUserId, file.ID, row.BID, file.Ts)
 				if delFileErr != nil {
@@ -1222,7 +1227,7 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 					tx.Rollback()
 					return resStatus, delFileErr
 				}
-				//检查删除影响行数
+
 				delFileNumber, delFileErr := delFileRes.RowsAffected()
 				if delFileErr != nil {
 					resStatus = i18n.StatusInternalError
@@ -1238,8 +1243,8 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 			}
 		}
 	}
-
-	//如果数据来自于指令单,需要回写指令单
+	// If the data comes from the Work Order,
+	// then the work Order status needs to be written back as 1 (confirmed)
 	if eo.SourceBid > 0 {
 		wor := new(WorkOrderRow)
 		wor.BID = eo.SourceBid
@@ -1255,22 +1260,23 @@ func (eo *ExecutionOrder) Delete(modifyUserId int32) (resStatus i18n.ResKey, err
 		}
 	}
 
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrder.Confirm 确认执行单
+// Confirm Execution Order
 func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, err error) {
-	//获取单据详情
+	resStatus = i18n.StatusOK
+	// Get the Execution Order details
 	resStatus, err = eo.GetDetailByHID()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	//检查单据状态
-	if eo.Status != 0 { //非自由态单据不允许确认
+	// Check the Execution Order status
+	if eo.Status != 0 { // Must be 0
 		resStatus = i18n.StatusVoucherNoFree
 		return
 	}
-	//创建事务
+	// Begin a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1278,8 +1284,8 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		return
 	}
 	defer tx.Commit()
-	//表头确认
-	confirmHeadSql := `update executedoc_h set status=1,confirmtime=current_timestamp,confirmerid=$1,ts=current_timestamp 
+	// Write the confirmation information to the executionorder_h table
+	confirmHeadSql := `update executionorder_h set status=1,confirmtime=current_timestamp,confirmerid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and status=0 and ts=$3`
 	headRes, err := tx.Exec(confirmHeadSql, confirmUserID, eo.HID, eo.Ts)
 	if err != nil {
@@ -1288,7 +1294,7 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		tx.Rollback()
 		return
 	}
-	//检查表头更新行数
+	// Check the number of rows affected by SQL statement
 	confirmHeadNumber, err := headRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1302,10 +1308,9 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		return
 	}
 
-	//确认表体行
-	confirmRowSql := `update executedoc_b set status=1,confirmtime=current_timestamp,confirmerid=$1,ts=current_timestamp 
+	// Prepare write the confirmation information to the executionorder_b table
+	confirmRowSql := `update executionorder_b set status=1,confirmtime=current_timestamp,confirmerid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and status=0 and ts=$3`
-	//预处理
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1314,9 +1319,9 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		return
 	}
 	defer rowStmt.Close()
-	//表体确认写入
+	// Write the confirmation information row by row
 	for _, row := range eo.Body {
-		//检查表体行状态
+		// Check the Execution Order rows status
 		if row.Status != 0 {
 			resStatus = i18n.StatusVoucherNoFree
 			tx.Rollback()
@@ -1344,7 +1349,8 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		}
 	}
 
-	//如果数据来自于指令单,需要回写指令单
+	// If the data comes from the Work Order,
+	// then the work Order status needs to be written back as 3 (completed)
 	if eo.SourceBid > 0 {
 		wor := new(WorkOrderRow)
 		wor.BID = eo.SourceBid
@@ -1359,26 +1365,28 @@ func (eo *ExecutionOrder) Confirm(confirmUserID int32) (resStatus i18n.ResKey, e
 		}
 	}
 
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrder.CancelConfirm 取消确认执行单
-func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.ResKey, err error) {
-	//获取单据详情
+// UnConfirm Execution Order
+func (eo *ExecutionOrder) UnConfirm(confirmUserID int32) (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Get the Execution Order details
 	resStatus, err = eo.GetDetailByHID()
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	//检查单据状态
-	if eo.Status != 1 { //非确认状态单据不允许取消确认
+	// Check the Execution Order status
+	if eo.Status != 1 { // Must be 1
 		resStatus = i18n.StatusVoucherNoConfirm
 		return
 	}
+	// Check the Execution Order Confirmer and Unconfirmer are the same person
 	if eo.Confirmer.ID != confirmUserID {
 		resStatus = i18n.StatusVoucherCancelConfirmSelf
 		return
 	}
-	//检查表体是否有非确认状态行
+	// Check the Execution Order Rows status
 	var noConfirmRowNumber int32
 	for _, row := range eo.Body {
 		if row.Status > 1 {
@@ -1390,29 +1398,29 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 		return
 	}
 
-	//创建事务
+	// Create a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("ExecutionOrder.CancelConfirm db.Begin failed", zap.Error(err))
+		zap.L().Error("ExecutionOrder.UnConfirm db.Begin failed", zap.Error(err))
 		return
 	}
 	defer tx.Commit()
-	//表头取消确认
-	confirmHeadSql := `update executedoc_h set status=0,confirmerid=0,ts=current_timestamp 
+	// Write the un-confirmation information to the executionorder_h table
+	confirmHeadSql := `update executionorder_h set status=0,confirmerid=0,ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	headRes, err := tx.Exec(confirmHeadSql, eo.HID, eo.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("ExecutionOrder.ExecutionOrder.CancelConfirm tx.Exec(confirmHeadSql) failed", zap.Error(err))
+		zap.L().Error("ExecutionOrder.ExecutionOrder.UnConfirm tx.Exec(confirmHeadSql) failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
-	//检查表头更新行数
+	// Check the number of rows affected by SQL statement
 	confirmHeadNumber, err := headRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("ExecutionOrder.CancelConfirm headRes.RowsAffected failed", zap.Error(err))
+		zap.L().Error("ExecutionOrder.UnConfirm headRes.RowsAffected failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
@@ -1421,21 +1429,20 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 		tx.Rollback()
 		return
 	}
-	//取消确认表体行
-	confirmRowSql := `update executedoc_b set status=0,confirmerid=0,ts=current_timestamp 
+	// Prepare write the un-confirmation information to the executionorder_b table
+	confirmRowSql := `update executionorder_b set status=0,confirmerid=0,ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
-	//预处理
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("ExecutionOrder.CancelConfirm tx.Prepare(confirmRowSql) failed", zap.Error(err))
+		zap.L().Error("ExecutionOrder.UnConfirm tx.Prepare(confirmRowSql) failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
 	defer rowStmt.Close()
-	//表体确认写入
+	// Write the un-confirmation information to the database row by row
 	for _, row := range eo.Body {
-		//检查表体行状态
+		// Check the Execution Rows status
 		if row.Status != 1 {
 			resStatus = i18n.StatusVoucherNoConfirm
 			tx.Rollback()
@@ -1444,7 +1451,7 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 		confirmRowRes, errConfirmRow := rowStmt.Exec(row.BID, row.Ts)
 		if errConfirmRow != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("ExecutionOrder.CancelConfirm rowStmt.Exec failed", zap.Error(errConfirmRow))
+			zap.L().Error("ExecutionOrder.UnConfirm rowStmt.Exec failed", zap.Error(errConfirmRow))
 			tx.Rollback()
 			return resStatus, errConfirmRow
 		}
@@ -1452,7 +1459,7 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 		confirmRowNumber, errConfirmRow := confirmRowRes.RowsAffected()
 		if errConfirmRow != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("ExecutionOrder.CancelConfirm confirmRowRes.RowsAffected failed", zap.Error(errConfirmRow))
+			zap.L().Error("ExecutionOrder.UnConfirm confirmRowRes.RowsAffected failed", zap.Error(errConfirmRow))
 			tx.Rollback()
 			return resStatus, errConfirmRow
 		}
@@ -1463,7 +1470,8 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 		}
 	}
 
-	//如果数据来自于指令单,需要回写指令单
+	// If the data comes from the Work Order,
+	// then the work Order status needs to be written back as 2 (executing)
 	if eo.SourceBid > 0 {
 		wor := new(WorkOrderRow)
 		wor.BID = eo.SourceBid
@@ -1477,21 +1485,22 @@ func (eo *ExecutionOrder) CancelConfirm(confirmUserID int32) (resStatus i18n.Res
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrderRow.Dispose 执行单表体行处理
+// Update the status after handle the Execution Order Row
 func (edr *ExecutionOrderRow) Dispose() (resStatus i18n.ResKey, err error) {
-	rowSql := `update executedoc_b set status=2,ts=current_timestamp,isfinish=$1,irfid=$2,irfnumber=$3  
+	resStatus = i18n.StatusOK
+	// Write the Issue Resolution Form information to the executionorder_b table
+	rowSql := `update executionorder_b set status=2,ts=current_timestamp,isfinish=$1,irfid=$2,irfnumber=$3  
 	where id=$4 and hid=$5 and ts=$6 and dr=0 and status=1 and isfinish=0`
-	//修改执行单行
 	rowUpdateRes, err := db.Exec(rowSql, edr.IsFinish, edr.IRFID, edr.IRFNumber, edr.BID, edr.HID, edr.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionOrderRow.Dispose  db.Exec(rowSql) failed", zap.Error(err))
 		return
 	}
-	//检查修改的指令单行数
+	// Check the number of rows affected by SQL statement
 	rowUpdateNumber, err := rowUpdateRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1506,18 +1515,19 @@ func (edr *ExecutionOrderRow) Dispose() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// ExecutionOrderRow.CancelDispose 执行单表体行取消处理
+// Update the status after cancel handle the Execution Order Row
 func (edr *ExecutionOrderRow) CancelDispose() (resStatus i18n.ResKey, err error) {
-	rowSql := `update executedoc_b set status=1,ts=current_timestamp,isfinish=$1,irfid=$2,irfnumber=$3  
+	resStatus = i18n.StatusOK
+	// Clear the Issue Resolution Form information in the executionorder_b table
+	rowSql := `update executionorder_b set status=1,ts=current_timestamp,isfinish=$1,irfid=$2,irfnumber=$3  
 	where id=$4 and hid=$5 and dr=0 and status=2 and isfinish=1`
-	//修改执行单行
 	rowUpdateRes, err := db.Exec(rowSql, edr.IsFinish, edr.IRFID, edr.IRFNumber, edr.BID, edr.HID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionOrderRow.CancelDispose  db.Exec(rowSql) failed", zap.Error(err))
 		return
 	}
-	//检查修改的指令单行数
+	// Check the number of rows affected by SQL statement
 	rowUpdateNumber, err := rowUpdateRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1529,21 +1539,22 @@ func (edr *ExecutionOrderRow) CancelDispose() (resStatus i18n.ResKey, err error)
 		zap.L().Info("ExecutionOrderRow.CancelDispose row OtherEdit")
 		return
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrderRow.Complete 执行单表体行完成
+// Complete the Execution Order Row (Update the status after confirm the Issue Resolutin Form)
 func (edr *ExecutionOrderRow) Complete() (resStatus i18n.ResKey, err error) {
-	rowSql := `update executedoc_b set status=3,ts=current_timestamp   
+	resStatus = i18n.StatusOK
+	// Modify the status in the executionorder_b table
+	rowSql := `update executionorder_b set status=3,ts=current_timestamp   
 	where id=$1 and hid=$2 and dr=0 and status=2 and isfinish=1`
-	//修改执行单行
 	rowUpdateRes, err := db.Exec(rowSql, edr.BID, edr.HID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionOrderRow.Complete  db.Exec(rowSql) failed", zap.Error(err))
 		return
 	}
-	//检查修改的指令单行数
+	// Check the number of rows affected by SQL statement
 	rowUpdateNumber, err := rowUpdateRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1555,21 +1566,22 @@ func (edr *ExecutionOrderRow) Complete() (resStatus i18n.ResKey, err error) {
 		zap.L().Info("ExecutionOrderRow.Complete row OtherEdit")
 		return
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExecutionOrderRow.CancelComplete 执行单表体行完成
+// Cancel complete the Execution Order Row (update the status after unconfirm the Issue Resolution Form)
 func (edr *ExecutionOrderRow) CancelComplete() (resStatus i18n.ResKey, err error) {
-	rowSql := `update executedoc_b set status=2,ts=current_timestamp   
+	resStatus = i18n.StatusOK
+	// Modify the status in the executionorder_b table
+	rowSql := `update executionorder_b set status=2,ts=current_timestamp   
 	where id=$1 and hid=$2 and dr=0 and status=3 and isfinish=1`
-	//修改执行单行
 	rowUpdateRes, err := db.Exec(rowSql, edr.BID, edr.HID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionOrderRow.CancelComplete  db.Exec(rowSql) failed", zap.Error(err))
 		return
 	}
-	//检查修改的指令单行数
+	// Check the number of rows affected by SQL statement
 	rowUpdateNumber, err := rowUpdateRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1581,29 +1593,32 @@ func (edr *ExecutionOrderRow) CancelComplete() (resStatus i18n.ResKey, err error
 		zap.L().Info("ExecutionOrderRow.CancelComplete row OtherEdit")
 		return
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// ExectueDocCommit.Add 增加批注
-func (edc *ExecutionOrderComment) Add() (resStatus i18n.ResKey, err error) {
-	sqlStr := `insert into executedoc_comment(bid,hid,billnumber,rownumber,sendto_id,
-	content,creatorid,sendtime,createtime)
-	values($1,$2,$3,$4,$5,$6,$7,
-	to_char(current_timestamp,'YYYYMMDDHH24MI'),current_timestamp) returning id`
-	err = db.QueryRow(sqlStr, edc.BID, edc.HID, edc.BillNumber, edc.RowNUmber, edc.SendTo.ID,
-		edc.Content, edc.Creator.ID).Scan(&edc.ID)
+// Add Execution Order Comment
+func (eoc *ExecutionOrderComment) Add() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Insert comment content into the executionorder_comment table
+	sqlStr := `insert into executionorder_comment(bid,hid,billnumber,rownumber,sendtoid,
+	content,creatorid)
+	values($1,$2,$3,$4,$5,$6,$7) 
+	returning id`
+	err = db.QueryRow(sqlStr, eoc.BID, eoc.HID, eoc.BillNumber, eoc.RowNUmber, eoc.SendTo.ID,
+		eoc.Content, eoc.Creator.ID).Scan(&eoc.ID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionOrderComment.Add db.QueryRow(sqlStr) failed", zap.Error(err))
 		return
 	}
-	resStatus = i18n.StatusOK
 	return
 }
 
-// ExecutionOrderReview.Add 增加审阅记录
+// Add Execution Order Review Record
 func (edrr *ExecutionOrderReview) Add() (resStatus i18n.ResKey, err error) {
-	sqlStr := `insert into executedoc_review(hid,billnumber,starttime,endtime,consumeseconds,creatorid) 
+	resStatus = i18n.StatusOK
+	// Insert review content into the executionorder_comment table
+	sqlStr := `insert into executionorder_review(hid,billnumber,starttime,endtime,consumeseconds,creatorid) 
 	values($1,$2,$3,$4,$5,$6) returning id`
 	err = db.QueryRow(sqlStr, edrr.HID, edrr.BillNumber, edrr.StartTime, edrr.EndTime, edrr.ConsumeSeconds, edrr.Creator.ID).Scan(&edrr.ID)
 	if err != nil {
@@ -1611,16 +1626,19 @@ func (edrr *ExecutionOrderReview) Add() (resStatus i18n.ResKey, err error) {
 		zap.L().Error("ExecutionOrderReview.Add db.QueryRow(sqlStr) failed", zap.Error(err))
 		return
 	}
-	resStatus = i18n.StatusOK
 	return
 }
 
-// EOCommentsParams.Get 获取单据批注列表
+// Get Execution Order Components
 func (cs *EOCommentsParams) Get() (resStatus i18n.ResKey, err error) {
-	cs.Comments = make([]ExecutionOrderComment, 0) //解决返回列表为null
+	resStatus = i18n.StatusOK
+	cs.Comments = make([]ExecutionOrderComment, 0)
+	// Get the comments list from executionorder_comment table
 	sqlStr := `select id,bid,hid,billnumber,rownumber,
-	sendto_id,isread,readtime,content,sendtime,
-	createtime,creatorid,dr,ts from executedoc_comment where dr=0 and hid=$1`
+	sendtoid,isread,readtime,content,sendtime,
+	createtime,creatorid,dr,ts 
+	from executionorder_comment 
+	where dr=0 and hid=$1`
 	rows, err := db.Query(sqlStr, cs.HID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1629,43 +1647,46 @@ func (cs *EOCommentsParams) Get() (resStatus i18n.ResKey, err error) {
 	}
 	defer rows.Close()
 
-	//提取数据
+	// Extract comments data row by row
 	for rows.Next() {
-		var edc ExecutionOrderComment
-		err = rows.Scan(&edc.ID, &edc.BID, &edc.HID, &edc.BillNumber, &edc.RowNUmber,
-			&edc.SendTo.ID, &edc.IsRead, &edc.ReadTime, &edc.Content, &edc.SendTime,
-			&edc.CreateDate, &edc.Creator.ID, &edc.Dr, &edc.Ts)
+		var eoc ExecutionOrderComment
+		err = rows.Scan(&eoc.ID, &eoc.BID, &eoc.HID, &eoc.BillNumber, &eoc.RowNUmber,
+			&eoc.SendTo.ID, &eoc.IsRead, &eoc.ReadTime, &eoc.Content, &eoc.SendTime,
+			&eoc.CreateDate, &eoc.Creator.ID, &eoc.Dr, &eoc.Ts)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("EOCommentsParams.Get rows.Next failed", zap.Error(err))
 			return
 		}
-		//填充发送人信息
-		if edc.SendTo.ID > 0 {
-			resStatus, err = edc.SendTo.GetPersonInfoByID()
+		// Get SendTo Person details
+		if eoc.SendTo.ID > 0 {
+			resStatus, err = eoc.SendTo.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充发送人信息
-		if edc.Creator.ID > 0 {
-			resStatus, err = edc.Creator.GetPersonInfoByID()
+		// Get Creator details
+		if eoc.Creator.ID > 0 {
+			resStatus, err = eoc.Creator.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		cs.Comments = append(cs.Comments, edc)
+		cs.Comments = append(cs.Comments, eoc)
 	}
 
-	return i18n.StatusOK, nil
+	return
 }
 
-// EOReviewsParams.Get 获取审阅记录模型
+// Get Execution Order Review Records list
 func (rs *EOReviewsParams) Get() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	rs.Reviews = make([]ExecutionOrderReview, 0)
+	// Get the review records from the executionorder_review table
 	sqlStr := `select id,hid,billnumber,starttime,endtime,
 	consumeseconds,createtime,creatorid,dr,ts 
-	from executedoc_review where dr=0 and hid=$1`
+	from executionorder_review 
+	where dr=0 and hid=$1`
 	rows, err := db.Query(sqlStr, rs.HID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -1673,7 +1694,7 @@ func (rs *EOReviewsParams) Get() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer rows.Close()
-
+	// Extract records row by row
 	for rows.Next() {
 		var er ExecutionOrderReview
 		err = rows.Scan(&er.ID, &er.HID, &er.BillNumber, &er.StartTime, &er.EndTime,
@@ -1691,5 +1712,5 @@ func (rs *EOReviewsParams) Get() (resStatus i18n.ResKey, err error) {
 		}
 		rs.Reviews = append(rs.Reviews, er)
 	}
-	return i18n.StatusOK, nil
+	return
 }
