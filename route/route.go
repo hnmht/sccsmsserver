@@ -26,10 +26,10 @@ func Setup(mode string) *gin.Engine {
 		// DocRoute(superGroup)       //文档
 		// DDRoute(superGroup)        //dd问题处理单
 		DeptRoute(superGroup) // Department
-		// EDRoute(superGroup)        //ed执行单
-		EPARoute(superGroup) // Execution Project
-		EPCRoute(superGroup) // Execution Project Category
-		EPTRoute(superGroup) // Execution Project Template
+		EPARoute(superGroup)  // Execution Project
+		EPCRoute(superGroup)  // Execution Project Category
+		EPTRoute(superGroup)  // Execution Project Template
+		EORoute(superGroup)   // Execution Order
 		// EventRoute(superGroup)     //Event
 		FileRoute(superGroup) // File
 		// LandPageRoute(superGroup)  //landingPage首页定义
