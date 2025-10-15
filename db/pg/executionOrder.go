@@ -18,7 +18,7 @@ type ExecutionOrder struct {
 	Department       SimpDept            `db:"deptid" json:"department"`
 	Description      string              `db:"description" json:"description"`
 	Status           int16               `db:"status" json:"status"`         //0 free 1 confirmed 2 executing 3 completed
-	SourceType       string              `db:"sourcetype" json:"sourceType"` //Source Type: UA:User Add WO: Work Order
+	SourceType       string              `db:"sourcetype" json:"sourceType"` //Source Type: di:Direct Input wo: Work Order
 	SourceBillNumber string              `db:"sourcebillnumber" json:"sourceBillNumber"`
 	SourceHid        int32               `db:"sourcehid" json:"sourceHID"`
 	SourceRowNumber  int32               `db:"sourcerownumber" json:"sourceRowNumber"`
@@ -66,8 +66,8 @@ type ExecutionOrderRow struct {
 	IsRectify          int16            `db:"isrectify" json:"isRectify"` // On-Site correction performed
 	IsHandle           int16            `db:"ishandle" json:"isHandle"`   // 0 No 1 Yes
 	IssueOwner         Person           `db:"issueownerid" json:"issueOwner"`
-	HandleStartTime    string           `db:"handlestarttime" json:"handleStartTime"`
-	HandleEndTime      string           `db:"handleendtime" json:"handleEndTime"`
+	HandleStartTime    time.Time        `db:"handlestarttime" json:"handleStartTime"`
+	HandleEndTime      time.Time        `db:"handleendtime" json:"handleEndTime"`
 	Status             int16            `db:"status" json:"status"`
 	IsFromEPT          int16            `db:"isfromept" json:"isFromEpt"`
 	IsFinish           int16            `db:"isfinish" json:"isFinish"`
@@ -1407,7 +1407,7 @@ func (eo *ExecutionOrder) UnConfirm(confirmUserID int32) (resStatus i18n.ResKey,
 	}
 	defer tx.Commit()
 	// Write the un-confirmation information to the executionorder_h table
-	confirmHeadSql := `update executionorder_h set status=0,confirmerid=0,ts=current_timestamp 
+	confirmHeadSql := `update executionorder_h set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	headRes, err := tx.Exec(confirmHeadSql, eo.HID, eo.Ts)
 	if err != nil {
@@ -1430,7 +1430,7 @@ func (eo *ExecutionOrder) UnConfirm(confirmUserID int32) (resStatus i18n.ResKey,
 		return
 	}
 	// Prepare write the un-confirmation information to the executionorder_b table
-	confirmRowSql := `update executionorder_b set status=0,confirmerid=0,ts=current_timestamp 
+	confirmRowSql := `update executionorder_b set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {
