@@ -160,12 +160,3 @@ func GetLatestSerialNo(tx *sql.Tx, voucherType string, voucherDate string) (seri
 
 	return
 }
-
-/* // Cancel the voucher serial number
-func CancelSerialNo(voucherType string, voucherDate string) {
-	sqlStr := `update serialno set serialno = serialno-1 where dateString= $1 and vouchertype= $2`
-	_, err := db.Exec(sqlStr, voucherType, voucherDate)
-	if err != nil {
-		zap.L().Error("UpdateSerialNo db.Exec failed", zap.Error(err))
-	}
-} */

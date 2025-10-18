@@ -416,7 +416,7 @@ func (wo *WorkOrder) Add() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 	// Get the latest Serial Number
-	billNo, resStatus, err := GetLatestSerialNo(tx, "WO", wo.BillDate.Format("20060102"))
+	billNo, resStatus, err := GetLatestSerialNo(tx, "WO", wo.BillDate.Format("060102"))
 	if resStatus != i18n.StatusOK || err != nil {
 		tx.Rollback()
 		return
