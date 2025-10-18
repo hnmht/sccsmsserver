@@ -24,7 +24,6 @@ func Setup(mode string) *gin.Engine {
 		// DashboardRoute(superGroup) //看板数据
 		DCRoute(superGroup) // Document Category
 		// DocRoute(superGroup)       //文档
-		// DDRoute(superGroup)        //dd问题处理单
 		DeptRoute(superGroup) // Department
 		EPARoute(superGroup)  // Execution Project
 		EPCRoute(superGroup)  // Execution Project Category
@@ -32,6 +31,7 @@ func Setup(mode string) *gin.Engine {
 		EORoute(superGroup)   // Execution Order
 		// EventRoute(superGroup)     //Event
 		FileRoute(superGroup) // File
+		IRFRoute(superGroup)  // Issue Resolution Form
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
 		// LQRoute(superGroup)        //劳保用品岗位定额

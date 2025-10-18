@@ -15,7 +15,7 @@ type IssueResolutionForm struct {
 	BillNumber         string           `db:"billnumber" json:"billnumber"`                 //单据编号
 	BillDate           time.Time        `db:"billdate" json:"billdate"`                     //单据日期
 	CSA                ConstructionSite `db:"csaid" json:"csa"`                             //现场
-	EPA                ExecutionProject `db:"epaid" json:"eid"`                             //执行项目
+	EPA                ExecutionProject `db:"epaid" json:"ep"`                              //执行项目
 	ExecutionValue     string           `db:"executionvalue" json:"executionvalue"`         //执行值
 	ExecutionValueDisp string           `db:"executionvaluedisp" json:"executionvaluedisp"` //执行值显示
 	Executor           Person           `db:"executorid" json:"executor"`                   //执行人
@@ -126,14 +126,15 @@ func (irf *IssueResolutionForm) Add() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// IssueResolutionForm.Edit 编辑问题处理单
+// Edit Issue Resolution Form
 func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
-	//检查创建人和编辑人是否为同一人
+	resStatus = i18n.StatusOK
+	// Check if the cereator and modifier are the same person
 	if irf.Creator.ID != irf.Modifier.ID {
 		resStatus = i18n.StatusVoucherOnlyCreateEdit
 		return
 	}
-	//创建事务
+	// Begin a transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -142,7 +143,7 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 
-	//修改单据
+	// Modify Issue Resolution From in issueresoltionform table
 	editSql := `update issueresolutionform set billdate=$1,deptid=$2,fixerid=$3,isfinish=$4,starttime=$5,
 	endtime=$6,	description=$7,modifytime=current_timestamp,modifierid=$8,ts=current_timestamp 
 	where id=$9 and dr=0 and status=0 and ts=$10`
@@ -156,7 +157,7 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	//检查表头修改的行数
+	// Check the number of rows affected by SQL statement
 	updateNumber, err := editRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -170,7 +171,7 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 
-	//修改文件准备
+	// Prepare Modify attachments
 	updateFileSql := `update issueresolutionform_file set modifytime=current_timestamp,modifierid=$1,dr=$2,ts=current_timestamp
 	where id=$3 and dr=0 and ts=$4`
 	updateFileStmt, err := tx.Prepare(updateFileSql)
@@ -181,7 +182,7 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	defer updateFileStmt.Close()
-	//增加文件准备
+	// Prepare Add attachments
 	addFileSql := `insert into issueresolutionform_file(billbid,fileid,creatorid) 
 	values($1,$2,$3) returning id`
 	addFileStmt, err := tx.Prepare(addFileSql)
@@ -193,10 +194,10 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	defer addFileStmt.Close()
 
-	//文件写入
+	// Write attachments information to issueresolutionform_file table
 	if len(irf.FixFiles) > 0 {
 		for _, file := range irf.FixFiles {
-			if file.ID == 0 { //新增附件
+			if file.ID == 0 { // If the File.ID value is 0, it means it is a newly file
 				addFileErr := addFileStmt.QueryRow(irf.ID, file.File.ID, irf.Modifier.ID).Scan(&file.ID)
 				if addFileErr != nil {
 					resStatus = i18n.StatusInternalError
@@ -204,7 +205,7 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 					tx.Rollback()
 					return resStatus, addFileErr
 				}
-			} else { //原有附件
+			} else { // If the file.ID is not 0, it means it is a file that needs to be modified
 				updateFileRes, updateFileErr := updateFileStmt.Exec(irf.Modifier.ID, file.Dr, file.ID, file.Ts)
 				if updateFileErr != nil {
 					resStatus = i18n.StatusInternalError
@@ -228,24 +229,24 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 		}
 	}
 
-	return i18n.StatusOK, nil
+	return
 }
 
-// IssueResolutionForm.Delete 删除问题处理单
+// Delete Issue Resolution Form
 func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKey, err error) {
-	//检查单据状态
+	resStatus = i18n.StatusOK
+	// Check if the Issue Resolution Form status
 	if irf.Status != 0 {
 		resStatus = i18n.StatusVoucherNoFree
 		return
 	}
-
-	//检查创建人和删除人是否为同一人
+	// Check if the Creator and Modifier are the same person
 	if irf.Creator.ID != modifyUserId {
 		resStatus = i18n.StatusVoucherOnlyCreateEdit
 		return
 	}
 
-	//创建事务
+	// Begin a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -254,7 +255,7 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 	}
 	defer tx.Commit()
 
-	//删除
+	// Modify the Issue Resolution Form delete flag to 1 in the issueresolutionform table
 	delSql := `update issueresolutionform set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and ts=$3`
 	delRes, err := tx.Exec(delSql, modifyUserId, irf.ID, irf.Ts)
@@ -264,7 +265,7 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 		tx.Rollback()
 		return
 	}
-	//检查删除行数
+	// Check the number of rows affected by SQL statements
 	delNumber, err := delRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -278,11 +279,11 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 		return
 	}
 
-	//删除附件
+	// Modify Issue Resolution Form attachments delete flag to 1 in the issueresolutionform_file table
 	if len(irf.FixFiles) > 0 {
+		// Prepare modify
 		delFileSql := `update issueresolutionform_file set dr=1,modifytime=current_timestamp,modifierid=$1,ts=current_timestamp 
 		where id=$2 and dr=0 and billbid=$3 and ts=$4`
-		//删除文件预处理
 		delFileStmt, delFileErr := tx.Prepare(delFileSql)
 		if delFileErr != nil {
 			resStatus = i18n.StatusInternalError
@@ -291,7 +292,7 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 			return resStatus, delFileErr
 		}
 		defer delFileStmt.Close()
-
+		// Write data to the issueresolutionform_file table
 		for _, row := range irf.FixFiles {
 			delFileRes, delFileErr := delFileStmt.Exec(modifyUserId, row.ID, row.BillBID, row.Ts)
 			if delFileErr != nil {
@@ -300,7 +301,7 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 				tx.Rollback()
 				return resStatus, delFileErr
 			}
-			//检查删除影响行数
+			// Check the number of rows affected by SQL statement
 			delFileNumber, delFileErr := delFileRes.RowsAffected()
 			if delFileErr != nil {
 				resStatus = i18n.StatusInternalError
@@ -315,7 +316,8 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 			}
 		}
 	}
-	//回写执行单
+
+	// Write back the Execution Order
 	if irf.SourceBID > 0 {
 		edr := new(ExecutionOrderRow)
 		edr.BID = irf.SourceBID
@@ -330,17 +332,18 @@ func (irf *IssueResolutionForm) Delete(modifyUserId int32) (resStatus i18n.ResKe
 		}
 	}
 
-	return i18n.StatusOK, nil
+	return
 }
 
-// IssueResolutionForm.Confirm 确认问题处理单
-func (irf *IssueResolutionForm) Confirm(confirmUserID int32) (resStatus i18n.ResKey, err error) {
-	//检查单据状态
-	if irf.Status != 0 { //非自由态单据不允许确认
+// Confirm Issue Resolution Form
+func (irf *IssueResolutionForm) Confirm(confirmerID int32) (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Check the Issue Resolution Form status
+	if irf.Status != 0 { // Must be 0
 		resStatus = i18n.StatusVoucherNoFree
 		return
 	}
-	//创建事务
+	// Begin a database transaction
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -348,17 +351,17 @@ func (irf *IssueResolutionForm) Confirm(confirmUserID int32) (resStatus i18n.Res
 		return
 	}
 	defer tx.Commit()
-	//单据确认
+	// Write the confirmation infomation to the issueresolutionform table
 	sqlStr := `update issueresolutionform set status=1,confirmtime=current_timestamp,confirmerid=$1,ts=current_timestamp 
 	where id=$2 and dr=0 and status=0 and ts=$3`
-	confirmRes, err := tx.Exec(sqlStr, confirmUserID, irf.ID, irf.Ts)
+	confirmRes, err := tx.Exec(sqlStr, confirmerID, irf.ID, irf.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("IssueResolutionForm.Confirm tx.Exec(sqlStr) failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
-	//检查更新行数
+	// Check the number of rows affected by SQL statement
 	updateNumber, err := confirmRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -372,7 +375,7 @@ func (irf *IssueResolutionForm) Confirm(confirmUserID int32) (resStatus i18n.Res
 		return
 	}
 
-	//回写执行单
+	// Write back to Execution Order
 	if irf.SourceBID > 0 {
 		edr := new(ExecutionOrderRow)
 		edr.BID = irf.SourceBID
@@ -386,40 +389,41 @@ func (irf *IssueResolutionForm) Confirm(confirmUserID int32) (resStatus i18n.Res
 			return
 		}
 	}
-
 	return
 }
 
-// IssueResolutionForm.CancelConfirm 取消确认问题处理单
-func (irf *IssueResolutionForm) CancelConfirm(confirmUserID int32) (resStatus i18n.ResKey, err error) {
-	//检查单据状态
-	if irf.Status != 1 { //非确认态单据不允许确认
+// UnConfirm Issue Resolution Form
+func (irf *IssueResolutionForm) UnConfirm(confirmerID int32) (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	// Check the Issue Resolution Form status
+	if irf.Status != 1 { // Must be 1
 		resStatus = i18n.StatusVoucherNoConfirm
 		return
 	}
-	if irf.Confirmer.ID != confirmUserID {
+	// Check if the UnConfirmer and confirmer are the same person
+	if irf.Confirmer.ID != confirmerID {
 		resStatus = i18n.StatusVoucherCancelConfirmSelf
 		return
 	}
-	//创建事务
+	// Begin a database transacetion
 	tx, err := db.Begin()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("IssueResolutionForm.CancelConfirm db.Begin failed", zap.Error(err))
+		zap.L().Error("IssueResolutionForm.UnConfirm db.Begin failed", zap.Error(err))
 		return
 	}
 	defer tx.Commit()
-	//单据取消确认
-	sqlStr := `update issueresolutionform set status=0,confirmerid=0,ts=current_timestamp 
+	// Update the Confirm information in the issueresolutionform table
+	sqlStr := `update issueresolutionform set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	confirmRes, err := tx.Exec(sqlStr, irf.ID, irf.Ts)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("IssueResolutionForm.CancelConfirm tx.Exec(sqlStr) failed", zap.Error(err))
+		zap.L().Error("IssueResolutionForm.UnConfirm tx.Exec(sqlStr) failed", zap.Error(err))
 		tx.Rollback()
 		return
 	}
-	//检查更新行数
+	// Check the number of rows affected by SQL statement
 	updateNumber, err := confirmRes.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -433,7 +437,7 @@ func (irf *IssueResolutionForm) CancelConfirm(confirmUserID int32) (resStatus i1
 		return
 	}
 
-	//回写执行单
+	// Write back the Exectution Order
 	if irf.SourceBID > 0 {
 		edr := new(ExecutionOrderRow)
 		edr.BID = irf.SourceBID
@@ -447,17 +451,18 @@ func (irf *IssueResolutionForm) CancelConfirm(confirmUserID int32) (resStatus i1
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
-// GetDDList 获取处理单列表
-func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.ResKey, err error) {
+// Get the Issue Resolution Form List
+func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	var build strings.Builder
-	//拼接检查sql
+	// Assemble the SQL for checking
 	build.WriteString(`select count(b.id) as rownumber 
 	from issueresolutionform as b
-	left join csa as si on b.csaid = si.id
-	left join epa as eid on b.epaid = eid.id
+	left join csa as cs on b.csaid = cs.id
+	left join epa as ep on b.epaid = ep.id
 	left join sysuser as executor on b.executorid = executor.id
 	left join sysuser as fixer on b.fixerid = fixer.id
 	left join department as dept on b.deptid = dept.id
@@ -468,24 +473,24 @@ func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.Re
 		build.WriteString(")")
 	}
 	checkSql := build.String()
-	//检查
+	// Check
 	var rowNumber int32
 	err = db.QueryRow(checkSql).Scan(&rowNumber)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetDDList db.QueryRow(checkSql) failed", zap.Error(err))
+		zap.L().Error("GetIRFList db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 { //如果查询数据量为0
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
 	}
-	if rowNumber > setting.Conf.PqConfig.MaxRecord { //查询数据量大于最大记录数
+	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
 	}
-	build.Reset() //清空build
-	//拼接正式sql
+	build.Reset()
+	// Assemble the SQL for data retrieval
 	build.WriteString(`select b.id,b.billnumber,b.billdate,b.csaid,b.epaid,
 	b.executionvalue,b.executionvaluedisp,b.executorid,b.deptid,b.fixerid,
 	b.isfinish,b.starttime,b.endtime,b.eodescription,b.description,
@@ -493,8 +498,8 @@ func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.Re
 	b.sourcebid,b.risklevelid,b.createtime,b.creatorid,confirmtime,
 	confirmerid,b.modifytime,b.modifierid,b.dr,b.ts 
 	from issueresolutionform as b
-	left join csa as si on b.csaid = si.id
-	left join epa as eid on b.epaid = eid.id
+	left join csa as cs on b.csaid = cs.id
+	left join epa as ep on b.epaid = ep.id
 	left join sysuser as executor on b.executorid = executor.id
 	left join sysuser as fixer on b.fixerid = fixer.id
 	left join department as dept on b.deptid = dept.id
@@ -504,16 +509,16 @@ func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.Re
 		build.WriteString(queryString)
 		build.WriteString(")")
 	}
-	ddsSql := build.String()
-	//获取指令单列表
-	ddsRows, err := db.Query(ddsSql)
+	irfsSql := build.String()
+	// Retrieve the list of IRF from database
+	ddsRows, err := db.Query(irfsSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetDDList db.Query failed", zap.Error(err))
+		zap.L().Error("GetIRFList db.Query failed", zap.Error(err))
 		return
 	}
 	defer ddsRows.Close()
-	//提取数据
+	// Extract data row by row
 	for ddsRows.Next() {
 		var irf IssueResolutionForm
 		err = ddsRows.Scan(&irf.ID, &irf.BillNumber, &irf.BillDate, &irf.CSA.ID, &irf.EPA.ID,
@@ -524,66 +529,66 @@ func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.Re
 			&irf.Confirmer.ID, &irf.ModifyDate, &irf.Modifier.ID, &irf.Dr, &irf.Ts)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetDDList ddsRows.Scan() failed", zap.Error(err))
+			zap.L().Error("GetIRFList ddsRows.Scan() failed", zap.Error(err))
 			return
 		}
-		//填充现场信息
+		// Get Construction Site details
 		if irf.CSA.ID > 0 {
 			resStatus, err = irf.CSA.GetInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充执行项目信息
+		// Get Execution Project details
 		if irf.EPA.ID > 0 {
 			resStatus, err = irf.EPA.GetInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充执行人信息
+		// Get Executor details
 		if irf.Executor.ID > 0 {
 			resStatus, err = irf.Executor.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充部门信息
+		// Get Deapartment details
 		if irf.Department.ID > 0 {
 			resStatus, err = irf.Department.GetSimpDeptInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充处理人信息
+		// Get Fixer details
 		if irf.Fixer.ID > 0 {
 			resStatus, err = irf.Fixer.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充创建人信息
+		// Get Creator deatils
 		if irf.Creator.ID > 0 {
 			resStatus, err = irf.Creator.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充风险等级信息
+		// Get Risk Level details
 		if irf.RiskLevel.ID > 0 {
 			resStatus, err = irf.RiskLevel.GetRLInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充确认人信息
+		// Get Confirmer details
 		if irf.Confirmer.ID > 0 {
 			resStatus, err = irf.Confirmer.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充更新人信息
+		// Get Modifier details
 		if irf.Modifier.ID > 0 {
 			resStatus, err = irf.Modifier.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
@@ -591,62 +596,61 @@ func GetDDList(queryString string) (dds []IssueResolutionForm, resStatus i18n.Re
 			}
 		}
 
-		//获取执行单附件
+		// Get Execution Order Row Attachments
 		irf.IssueFiles, resStatus, err = GetEORowFiles(irf.SourceBID)
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
-		//获取处理单附件
-		irf.FixFiles, resStatus, err = GetDDFiles(irf.ID)
+		// Get Issue Resolution Form Attachments
+		irf.FixFiles, resStatus, err = GetIRFFiles(irf.ID)
 		if resStatus != i18n.StatusOK || err != nil {
 			return
 		}
-		dds = append(dds, irf)
+		irfs = append(irfs, irf)
 	}
-	resStatus = i18n.StatusOK
-
 	return
 }
 
-// GetDDFiles 获取处理单附件
-func GetDDFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, err error) {
-	voucherFiles = make([]VoucherFile, 0) //解决返回文件为空问题
+// Get Issue Resolution Form attachments
+func GetIRFFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	voucherFiles = make([]VoucherFile, 0)
+	// Retrieve data from database
 	attachSql := `select id,billbid,billhid,fileid,createtime,
 	creatorid,modifytime,modifierid,dr,ts 
 	from issueresolutionform_file where billbid=$1 and dr=0`
-	//填充附件
 	fileRows, err := db.Query(attachSql, bid)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("GetDDFiles db.query(attachsql) failed", zap.Error(err))
+		zap.L().Error("GetIRFFiles db.query(attachsql) failed", zap.Error(err))
 		return
 	}
 	defer fileRows.Close()
-
+	// Extract data row by row
 	for fileRows.Next() {
 		var f VoucherFile
 		fileErr := fileRows.Scan(&f.ID, &f.BillBID, &f.BillHID, &f.File.ID, &f.CreateDate,
 			&f.Creator.ID, &f.ModifyDate, &f.Modifier.ID, &f.Dr, &f.Ts)
 		if fileErr != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetDDFiles fileRows.Scan failed", zap.Error(fileErr))
+			zap.L().Error("GetIRFFiles fileRows.Scan failed", zap.Error(fileErr))
 			return
 		}
-		//填充文件信息
+		// Get file details
 		if f.File.ID > 0 {
 			resStatus, err = f.File.GetFileInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充创建人
+		// Get creator details
 		if f.Creator.ID > 0 {
 			resStatus, err = f.Creator.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
 		}
-		//填充更新人
+		// Get modifier details
 		if f.Modifier.ID > 0 {
 			resStatus, err = f.Modifier.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
@@ -655,8 +659,5 @@ func GetDDFiles(bid int32) (voucherFiles []VoucherFile, resStatus i18n.ResKey, e
 		}
 		voucherFiles = append(voucherFiles, f)
 	}
-
-	resStatus = i18n.StatusOK
-
 	return
 }
