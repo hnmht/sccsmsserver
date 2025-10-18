@@ -821,7 +821,7 @@ var tables []table = []table{
 		CreateSQL: `create table issueresolutionform(
 			id serial NOT NUll,
 			billnumber varchar(20),
-			billdate varchar(10),
+			billdate timestamp with time zone default current_timestamp,
 			csaid int default 0,
 			epaid int default 0,
 			executionvalue varchar(1024),
