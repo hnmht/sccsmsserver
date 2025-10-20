@@ -11,39 +11,39 @@ import (
 
 // Issue Resolution Form struct
 type IssueResolutionForm struct {
-	ID                 int32            `db:"id" json:"id"`                                 //ID
-	BillNumber         string           `db:"billnumber" json:"billnumber"`                 //单据编号
-	BillDate           time.Time        `db:"billdate" json:"billdate"`                     //单据日期
-	CSA                ConstructionSite `db:"csaid" json:"csa"`                             //现场
-	EPA                ExecutionProject `db:"epaid" json:"ep"`                              //执行项目
-	ExecutionValue     string           `db:"executionvalue" json:"executionvalue"`         //执行值
-	ExecutionValueDisp string           `db:"executionvaluedisp" json:"executionvaluedisp"` //执行值显示
-	Executor           Person           `db:"executorid" json:"executor"`                   //执行人
-	Department         SimpDept         `db:"deptid" json:"department"`                     //部门
-	Fixer              Person           `db:"fixerid" json:"fixer"`                         //处理人
-	IsFinish           int16            `db:"isfinish" json:"isfinish"`                     //是否处理完成
-	StartTime          time.Time        `db:"starttime" json:"starttime"`                   //开始时间
-	EndTime            time.Time        `db:"endtime" json:"endtime"`                       //结束时间
-	EODescription      string           `db:"eodescription" json:"eodescription"`           //问题说明
-	Description        string           `db:"description" json:"description"`               //说明
-	Status             int16            `db:"status" json:"status"`                         //状态
-	SourceType         string           `db:"sourcetype" json:"sourcetype"`                 //来源单据类型 ED:执行单
-	SourceBillNumber   string           `db:"sourcebillnumber" json:"sourcebillnumber"`     //来源单据号
-	SourceHID          int32            `db:"sourcehid" json:"sourcehid"`                   //来源单据表头ID
-	SourceRowNumber    int32            `db:"sourcerownumber" json:"sourcerownumber"`       //来源单据行号
-	SourceBID          int32            `db:"sourcebid" json:"sourcebid"`                   //来源单据表体ID
-	RiskLevel          RiskLevel        `db:"risklevelid" json:"risklevel"`                 //风险等级
-	SourceRowTs        time.Time        `json:"sourcerowts"`                                //来源单据表体ts
-	IssueFiles         []VoucherFile    `json:"issueFiles"`                                 //问题附件
-	FixFiles           []VoucherFile    `json:"fixFiles"`                                   //处理结果附件
-	CreateDate         time.Time        `db:"createtime" json:"createdate"`                 //创建日期
-	Creator            Person           `db:"creatorid" json:"createuser"`                  //创建人
-	ConfirmDate        time.Time        `db:"confirmtime" json:"confirmdate"`               //确认时间
-	Confirmer          Person           `db:"confirmerid" json:"confirmuser"`               //确认人
-	ModifyDate         time.Time        `db:"modifytime" json:"modifydate"`                 //修改日期
-	Modifier           Person           `db:"modifierid" json:"modifyuser"`                 //修改人
-	Ts                 time.Time        `db:"ts" json:"ts"`                                 //时间戳
-	Dr                 int16            `db:"dr" json:"dr"`                                 //删除标志
+	ID                 int32            `db:"id" json:"id"`
+	BillNumber         string           `db:"billnumber" json:"billNumber"`
+	BillDate           time.Time        `db:"billdate" json:"billDate"`
+	CSA                ConstructionSite `db:"csaid" json:"csa"`
+	EPA                ExecutionProject `db:"epaid" json:"epa"`
+	ExecutionValue     string           `db:"executionvalue" json:"executionValue"`
+	ExecutionValueDisp string           `db:"executionvaluedisp" json:"executionValueDisp"`
+	Executor           Person           `db:"executorid" json:"executor"` // Execution Order Creator
+	Department         SimpDept         `db:"deptid" json:"department"`
+	IssueOwner         Person           `db:"issueownerid" json:"issueOwner"`
+	IsFinish           int16            `db:"isfinish" json:"isFinish"`
+	StartTime          time.Time        `db:"starttime" json:"startTime"`
+	EndTime            time.Time        `db:"endtime" json:"endTime"`
+	EODescription      string           `db:"eodescription" json:"eoDescription"`
+	Description        string           `db:"description" json:"description"`
+	Status             int16            `db:"status" json:"status"`
+	SourceType         string           `db:"sourcetype" json:"sourceType"`
+	SourceBillNumber   string           `db:"sourcebillnumber" json:"sourceBillNumber"`
+	SourceHID          int32            `db:"sourcehid" json:"sourceHID"`
+	SourceRowNumber    int32            `db:"sourcerownumber" json:"sourceRowNumber"`
+	SourceBID          int32            `db:"sourcebid" json:"sourceBID"`
+	RiskLevel          RiskLevel        `db:"risklevelid" json:"riskLevel"`
+	SourceRowTs        time.Time        `json:"sourceRowTs"`
+	IssueFiles         []VoucherFile    `json:"issueFiles"`
+	FixFiles           []VoucherFile    `json:"fixFiles"`
+	CreateDate         time.Time        `db:"createtime" json:"createDate"`
+	Creator            Person           `db:"creatorid" json:"creator"`
+	ConfirmDate        time.Time        `db:"confirmtime" json:"confirmDate"`
+	Confirmer          Person           `db:"confirmerid" json:"confirmer"`
+	ModifyDate         time.Time        `db:"modifytime" json:"modifyDate"`
+	Modifier           Person           `db:"modifierid" json:"modifier"`
+	Ts                 time.Time        `db:"ts" json:"ts"`
+	Dr                 int16            `db:"dr" json:"dr"`
 }
 
 // Add Issue Resolution Form
@@ -66,14 +66,14 @@ func (irf *IssueResolutionForm) Add() (resStatus i18n.ResKey, err error) {
 	}
 	// Insert into IRF data to
 	addSql := `insert into issueresolutionform(billnumber,billdate,csaid,epaid,executionvalue,
-	executionvaluedisp,executorid,deptid,fixerid,isfinish,
+	executionvaluedisp,executorid,deptid,issueownerid,isfinish,
 	starttime,endtime,eodescription,description,status,
 	sourcetype,sourcebillnumber,sourcehid,sourcerownumber,sourcebid,
 	risklevelid,creatorid)
 	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)  
 	returning id`
 	err = tx.QueryRow(addSql, irf.BillNumber, irf.BillDate, irf.CSA.ID, irf.EPA.ID, irf.ExecutionValue,
-		irf.ExecutionValueDisp, irf.Executor.ID, irf.Department.ID, irf.Fixer.ID, irf.IsFinish,
+		irf.ExecutionValueDisp, irf.Executor.ID, irf.Department.ID, irf.IssueOwner.ID, irf.IsFinish,
 		irf.StartTime, irf.EndTime, irf.EODescription, irf.Description, irf.Status,
 		irf.SourceType, irf.SourceBillNumber, irf.SourceHID, irf.SourceRowNumber, irf.SourceBID,
 		irf.RiskLevel.ID, irf.Creator.ID).Scan(&irf.ID)
@@ -144,10 +144,10 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 	defer tx.Commit()
 
 	// Modify Issue Resolution From in issueresoltionform table
-	editSql := `update issueresolutionform set billdate=$1,deptid=$2,fixerid=$3,isfinish=$4,starttime=$5,
+	editSql := `update issueresolutionform set billdate=$1,deptid=$2,issueownerid=$3,isfinish=$4,starttime=$5,
 	endtime=$6,	description=$7,modifytime=current_timestamp,modifierid=$8,ts=current_timestamp 
 	where id=$9 and dr=0 and status=0 and ts=$10`
-	editRes, err := tx.Exec(editSql, irf.BillDate, irf.Department.ID, irf.Fixer.ID, irf.IsFinish, irf.StartTime,
+	editRes, err := tx.Exec(editSql, irf.BillDate, irf.Department.ID, irf.IssueOwner.ID, irf.IsFinish, irf.StartTime,
 		irf.EndTime, irf.Description, irf.Modifier.ID,
 		irf.ID, irf.Ts)
 	if err != nil {
@@ -464,7 +464,7 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 	left join csa as cs on b.csaid = cs.id
 	left join epa as ep on b.epaid = ep.id
 	left join sysuser as executor on b.executorid = executor.id
-	left join sysuser as fixer on b.fixerid = fixer.id
+	left join sysuser as issueowner on b.issueownerid = issueowner.id
 	left join department as dept on b.deptid = dept.id
 	where (b.dr=0)`)
 	if queryString != "" {
@@ -492,7 +492,7 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 	build.Reset()
 	// Assemble the SQL for data retrieval
 	build.WriteString(`select b.id,b.billnumber,b.billdate,b.csaid,b.epaid,
-	b.executionvalue,b.executionvaluedisp,b.executorid,b.deptid,b.fixerid,
+	b.executionvalue,b.executionvaluedisp,b.executorid,b.deptid,b.issueownerid,
 	b.isfinish,b.starttime,b.endtime,b.eodescription,b.description,
 	b.status,b.sourcetype,b.sourcebillnumber,b.sourcehid,b.sourcerownumber,
 	b.sourcebid,b.risklevelid,b.createtime,b.creatorid,confirmtime,
@@ -501,7 +501,7 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 	left join csa as cs on b.csaid = cs.id
 	left join epa as ep on b.epaid = ep.id
 	left join sysuser as executor on b.executorid = executor.id
-	left join sysuser as fixer on b.fixerid = fixer.id
+	left join sysuser as issueowner on b.issueownerid = issueowner.id
 	left join department as dept on b.deptid = dept.id
 	where (b.dr=0)`)
 	if queryString != "" {
@@ -522,7 +522,7 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 	for ddsRows.Next() {
 		var irf IssueResolutionForm
 		err = ddsRows.Scan(&irf.ID, &irf.BillNumber, &irf.BillDate, &irf.CSA.ID, &irf.EPA.ID,
-			&irf.ExecutionValue, &irf.ExecutionValueDisp, &irf.Executor.ID, &irf.Department.ID, &irf.Fixer.ID,
+			&irf.ExecutionValue, &irf.ExecutionValueDisp, &irf.Executor.ID, &irf.Department.ID, &irf.IssueOwner.ID,
 			&irf.IsFinish, &irf.StartTime, &irf.EndTime, &irf.EODescription, &irf.Description,
 			&irf.Status, &irf.SourceType, &irf.SourceBillNumber, &irf.SourceHID, &irf.SourceRowNumber,
 			&irf.SourceBID, &irf.RiskLevel.ID, &irf.CreateDate, &irf.Creator.ID, &irf.ConfirmDate,
@@ -560,9 +560,9 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 				return
 			}
 		}
-		// Get Fixer details
-		if irf.Fixer.ID > 0 {
-			resStatus, err = irf.Fixer.GetPersonInfoByID()
+		// Get IssueOwner details
+		if irf.IssueOwner.ID > 0 {
+			resStatus, err = irf.IssueOwner.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}

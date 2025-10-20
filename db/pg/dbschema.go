@@ -828,7 +828,7 @@ var tables []table = []table{
 			exectivevaluedisp varchar(1024),
 			executorid int default 0,
 			deptid int default 0,
-			fixerid int default 0,
+			issueownerid int default 0,
 			isfinish smallint default 0,
 			starttime timestamp with time zone default current_timestamp,
 			endtime timestamp with time zone default current_timestamp,
