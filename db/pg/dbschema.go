@@ -825,7 +825,7 @@ var tables []table = []table{
 			csaid int default 0,
 			epaid int default 0,
 			executionvalue varchar(1024),
-			exectivevaluedisp varchar(1024),
+			executionvaluedisp varchar(1024),
 			executorid int default 0,
 			deptid int default 0,
 			issueownerid int default 0,
