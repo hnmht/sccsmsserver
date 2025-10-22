@@ -17,18 +17,18 @@ func Setup(mode string) *gin.Engine {
 	// Globle path
 	superGroup := r.Group(pub.APIPath)
 	{
-		AuthRoute(superGroup) // Auth
-		CSARoute(superGroup)  // Construction Site Archive
-		CSCRoute(superGroup)  // Construction Site Category
-		CSORoute(superGroup)  // Construction Site Options
-		// DashboardRoute(superGroup) //看板数据
-		DCRoute(superGroup) // Document Category
+		AuthRoute(superGroup)      // Auth
+		CSARoute(superGroup)       // Construction Site Archive
+		CSCRoute(superGroup)       // Construction Site Category
+		CSORoute(superGroup)       // Construction Site Options
+		DashboardRoute(superGroup) // Dashboard
+		DCRoute(superGroup)        // Document Category
+		DeptRoute(superGroup)      // Department
 		// DocRoute(superGroup)       //文档
-		DeptRoute(superGroup) // Department
-		EPARoute(superGroup)  // Execution Project
-		EPCRoute(superGroup)  // Execution Project Category
-		EPTRoute(superGroup)  // Execution Project Template
-		EORoute(superGroup)   // Execution Order
+		EPARoute(superGroup) // Execution Project
+		EPCRoute(superGroup) // Execution Project Category
+		EPTRoute(superGroup) // Execution Project Template
+		EORoute(superGroup)  // Execution Order
 		// EventRoute(superGroup)     //Event
 		FileRoute(superGroup) // File
 		IRFRoute(superGroup)  // Issue Resolution Form

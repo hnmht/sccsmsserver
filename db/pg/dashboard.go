@@ -2,8 +2,8 @@ package pg
 
 import (
 	"sccsmsserver/i18n"
-	"strconv"
 	"strings"
+	"time"
 
 	"go.uber.org/zap"
 )
@@ -13,7 +13,7 @@ import (
 type GiveWO struct {
 	FreeCount      int32 `json:"freeCount"`
 	ConfirmedCount int32 `json:"confirmedCount"`
-	ExecutingCount int32 `json:"exectutingCount"`
+	ExecutingCount int32 `json:"executingCount"`
 	CompletedCount int32 `json:"completedCount"`
 }
 
@@ -79,24 +79,24 @@ type ReviewedEORecord struct {
 
 // User's Execution Order Reviewed by other User Record
 type BeReviewedItem struct {
-	ID             int32  `json:"id"`
-	HID            int32  `json:"hid"`
-	BillNumber     string `json:"billNumber"`
-	StartTime      string `json:"startTime"`
-	EndTime        string `json:"endTime"`
-	ConsumeSeconds int32  `json:"consumeSeconds"`
-	CSAID          int32  `json:"csaID"`
-	CSACode        string `json:"csaCode"`
-	CSAName        string `json:"csaName"`
-	ReviewerID     int32  `json:"reviewerID"`
-	ReviewerCode   string `json:"reviewerCode"`
-	ReviewerName   string `json:"reviewerName"`
+	ID             int32     `json:"id"`
+	HID            int32     `json:"hid"`
+	BillNumber     string    `json:"billNumber"`
+	StartTime      time.Time `json:"startTime"`
+	EndTime        time.Time `json:"endTime"`
+	ConsumeSeconds int32     `json:"consumeSeconds"`
+	CSAID          int32     `json:"csaID"`
+	CSACode        string    `json:"csaCode"`
+	CSAName        string    `json:"csaName"`
+	ReviewerID     int32     `json:"reviewerID"`
+	ReviewerCode   string    `json:"reviewerCode"`
+	ReviewerName   string    `json:"reviewerName"`
 }
 
 // DashBoard Data struct
 type DashBoardData struct {
-	StartDate       string             `json:"startDate"`
-	EndDate         string             `json:"endDate"`
+	StartDate       time.Time          `json:"startDate"`
+	EndDate         time.Time          `json:"endDate"`
 	GiveWO          GiveWO             `json:"giveWo"`
 	ReciveWO        ReciveWO           `json:"reciveWo"`
 	DiscoveredIssue DiscoveredIssue    `json:"discoveredIssue"`
@@ -111,15 +111,15 @@ type RiskCount struct {
 	OccYear     string    `json:"occYear"`
 	OccMonth    string    `json:"occMonth"`
 	OccWeek     string    `json:"occWeek"`
-	OccDay      string    `json:"occDay"`
+	OccDay      time.Time `json:"occDay"`
 	RiskLevel   RiskLevel `json:"riskLevel"`
 	TotalNumber int32     `json:"totalNumber"`
 }
 
 // Risk Trend Data struct
 type RiskTrendData struct {
-	StartDate  string      `json:"startDate"`
-	EndDate    string      `json:"endDate"`
+	StartDate  time.Time   `json:"startDate"`
+	EndDate    time.Time   `json:"endDate"`
 	RiskTrends []RiskCount `json:"riskTrends"`
 }
 
@@ -159,20 +159,13 @@ func (dd *DashBoardData) Get(userID int32) (resStatus i18n.ResKey, err error) {
 }
 
 // Statistics on Work Orders Issued by Users
-func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus i18n.ResKey, err error) {
+func (gw *GiveWO) Get(userID int32, startDate time.Time, endDate time.Time) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var build strings.Builder
 	// Concatenate SQL strings
-	build.WriteString(` and (b.creatorid=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and b.starttime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and b.starttime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (b.creatorid=$1`)
+	build.WriteString(" and b.starttime>=$2")
+	build.WriteString(" and b.starttime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	// Get the count of Work Order Rows in "free" status
@@ -183,7 +176,7 @@ func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus
 	where (b.dr=0 and h.dr=0 and b.status=0)`)
 	build.WriteString(sqlString)
 	freeSql := build.String()
-	err = db.QueryRow(freeSql).Scan(&gw.FreeCount)
+	err = db.QueryRow(freeSql, userID, startDate, endDate).Scan(&gw.FreeCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GiveWO.Get db.QueryRow(freesql) failed", zap.Error(err))
@@ -198,7 +191,7 @@ func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus
 	where (b.dr=0 and h.dr=0 and b.status=1)`)
 	build.WriteString(sqlString)
 	confirmSql := build.String()
-	err = db.QueryRow(confirmSql).Scan(&gw.ConfirmedCount)
+	err = db.QueryRow(confirmSql, userID, startDate, endDate).Scan(&gw.ConfirmedCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GiveWO.Get db.QueryRow(confirmSql) failed", zap.Error(err))
@@ -213,7 +206,7 @@ func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus
 	where (b.dr=0 and h.dr=0 and b.status=2)`)
 	build.WriteString(sqlString)
 	executeSql := build.String()
-	err = db.QueryRow(executeSql).Scan(&gw.ExecutingCount)
+	err = db.QueryRow(executeSql, userID, startDate, endDate).Scan(&gw.ExecutingCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GiveWO.Get db.QueryRow(executeSql) failed", zap.Error(err))
@@ -227,7 +220,7 @@ func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus
 	where (b.dr=0 and h.dr=0 and b.status=3)`)
 	build.WriteString(sqlString)
 	finishedSql := build.String()
-	err = db.QueryRow(finishedSql).Scan(&gw.CompletedCount)
+	err = db.QueryRow(finishedSql, userID, startDate, endDate).Scan(&gw.CompletedCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GiveWO.Get db.QueryRow(finishedSql) failed", zap.Error(err))
@@ -239,20 +232,13 @@ func (gw *GiveWO) Get(userID int32, startDate string, endDate string) (resStatus
 }
 
 // Statistics on Work Order Received by User
-func (rw *ReciveWO) Get(userID int32, startDate string, endDate string) (resStatus i18n.ResKey, err error) {
+func (rw *ReciveWO) Get(userID int32, startDate time.Time, endDate time.Time) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var build strings.Builder
 	// Concatenate SQL strings
-	build.WriteString(` and (b.executorid=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and b.startTime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and b.startTime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (b.executorid=$1`)
+	build.WriteString(" and b.startTime>=$2")
+	build.WriteString(" and b.startTime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	build.Reset()
@@ -263,7 +249,7 @@ func (rw *ReciveWO) Get(userID int32, startDate string, endDate string) (resStat
 	where (b.dr=0 and h.dr=0 and b.status>0)`)
 	build.WriteString(sqlString)
 	allSql := build.String()
-	err = db.QueryRow(allSql).Scan(&rw.Count)
+	err = db.QueryRow(allSql, userID, startDate, endDate).Scan(&rw.Count)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ReviveWOItem.Get db.QueryRow(allSql) failed", zap.Error(err))
@@ -278,7 +264,7 @@ func (rw *ReciveWO) Get(userID int32, startDate string, endDate string) (resStat
 	where (b.dr=0 and h.dr=0 and b.status=1)`)
 	build.WriteString(sqlString)
 	unFinishedSql := build.String()
-	err = db.QueryRow(unFinishedSql).Scan(&rw.UnFinishedCount)
+	err = db.QueryRow(unFinishedSql, userID, startDate, endDate).Scan(&rw.UnFinishedCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ReviveWOItem.Get db.QueryRow(unFinishedSql) failed", zap.Error(err))
@@ -290,20 +276,13 @@ func (rw *ReciveWO) Get(userID int32, startDate string, endDate string) (resStat
 }
 
 // Statistics on Issues Discovered by User
-func (dp *DiscoveredIssue) Get(userID int32, startDate string, endDate string) (resStatus i18n.ResKey, err error) {
+func (dp *DiscoveredIssue) Get(userID int32, startDate time.Time, endDate time.Time) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var build strings.Builder
 	// Concatenate SQL strings
-	build.WriteString(` and (b.creatorid=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and h.startTime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and h.startTime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (b.creatorid=$1`)
+	build.WriteString(" and h.startTime>=$2")
+	build.WriteString(" and h.startTime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	build.Reset()
@@ -314,7 +293,7 @@ func (dp *DiscoveredIssue) Get(userID int32, startDate string, endDate string) (
 	where (b.dr=0 and h.dr=0 and b.isissue=1)`)
 	build.WriteString(sqlString)
 	allSql := build.String()
-	err = db.QueryRow(allSql).Scan(&dp.Count)
+	err = db.QueryRow(allSql, userID, startDate, endDate).Scan(&dp.Count)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("DiscoveredIssue.Get db.QueryRow(allSql) failed", zap.Error(err))
@@ -328,7 +307,7 @@ func (dp *DiscoveredIssue) Get(userID int32, startDate string, endDate string) (
 	where (b.dr=0 and h.dr=0 and b.isissue=1) and (b.isRectify = 1 or b.isfinish=1)`)
 	build.WriteString(sqlString)
 	finishedSql := build.String()
-	err = db.QueryRow(finishedSql).Scan(&dp.Finished)
+	err = db.QueryRow(finishedSql, userID, startDate, endDate).Scan(&dp.Finished)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("DiscoveredIssue.Get db.QueryRow(finishedSql) failed", zap.Error(err))
@@ -340,20 +319,13 @@ func (dp *DiscoveredIssue) Get(userID int32, startDate string, endDate string) (
 }
 
 // Statistics on Issues where the User is the Issue Owner
-func (dp *ProcessIssue) Get(userID int32, startDate string, endDate string) (resStatus i18n.ResKey, err error) {
+func (dp *ProcessIssue) Get(userID int32, startDate time.Time, endDate time.Time) (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	var build strings.Builder
 	// Concatenate SQL string
-	build.WriteString(` and (b.issueownerid=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and b.handlestarttime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and b.handlestarttime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (b.issueownerid=$1`)
+	build.WriteString(" and b.handlestarttime>=$2")
+	build.WriteString(" and b.handlestarttime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	build.Reset()
@@ -364,7 +336,7 @@ func (dp *ProcessIssue) Get(userID int32, startDate string, endDate string) (res
 	where (b.dr=0 and h.dr=0 and b.ishandle=1 and b.isfinish=1)`)
 	build.WriteString(sqlString)
 	finishedSql := build.String()
-	err = db.QueryRow(finishedSql).Scan(&dp.CompletedCount)
+	err = db.QueryRow(finishedSql, userID, startDate, endDate).Scan(&dp.CompletedCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ProcessIssue.Get db.QueryRow(finishedSql) failed", zap.Error(err))
@@ -378,7 +350,7 @@ func (dp *ProcessIssue) Get(userID int32, startDate string, endDate string) (res
 	where (b.dr=0 and h.dr=0 and b.ishandle=1 and b.isfinish=0)`)
 	build.WriteString(sqlString)
 	unFinishedSql := build.String()
-	err = db.QueryRow(unFinishedSql).Scan(&dp.UnFinishedCount)
+	err = db.QueryRow(unFinishedSql, userID, startDate, endDate).Scan(&dp.UnFinishedCount)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ProcessIssue.Get db.QueryRow(unFinishedSql) failed", zap.Error(err))
@@ -390,19 +362,13 @@ func (dp *ProcessIssue) Get(userID int32, startDate string, endDate string) (res
 }
 
 // Get Issue Items List
-func GetIssueItems(startDate string, endDate string) (iis []IssueItem, resStatus i18n.ResKey, err error) {
+func GetIssueItems(startDate time.Time, endDate time.Time) (iis []IssueItem, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	iis = make([]IssueItem, 0)
 	var build strings.Builder
 	// Concatenate SQL strings
-	if startDate != "" {
-		build.WriteString(" and h.startTime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and h.startTime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(" and h.startTime>=$1")
+	build.WriteString(" and h.startTime<=$2")
 	sqlString := build.String()
 	build.Reset()
 
@@ -442,7 +408,7 @@ func GetIssueItems(startDate string, endDate string) (iis []IssueItem, resStatus
 	build.WriteString(sqlString)
 
 	sqlStr := build.String()
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, startDate, endDate)
 	if err != nil {
 		zap.L().Error("GetIssueItems db.Query(sqlStr) failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
@@ -468,21 +434,14 @@ func GetIssueItems(startDate string, endDate string) (iis []IssueItem, resStatus
 }
 
 // Get User Reviewed Execution Order records
-func GetReviewedRecords(userID int32, startDate string, endDate string) (rrs []ReviewedEORecord, resStatus i18n.ResKey, err error) {
+func GetReviewedRecords(userID int32, startDate time.Time, endDate time.Time) (rrs []ReviewedEORecord, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	rrs = make([]ReviewedEORecord, 0)
 	var build strings.Builder
 	// Concatenate SQL strings
-	build.WriteString(` and (r.creatorID=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and r.startTime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and r.startTime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (r.creatorID=$1`)
+	build.WriteString(" and r.startTime>=$2")
+	build.WriteString(" and r.startTime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	build.Reset()
@@ -507,7 +466,7 @@ func GetReviewedRecords(userID int32, startDate string, endDate string) (rrs []R
 	build.WriteString(sqlString)
 	sqlStr := build.String()
 
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, userID, startDate, endDate)
 	if err != nil {
 		zap.L().Error("GetReviewedRecords db.Query(sqlStr) failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
@@ -532,21 +491,14 @@ func GetReviewedRecords(userID int32, startDate string, endDate string) (rrs []R
 }
 
 // Statistics of Records where the Execution Order Filled by the user Reviewed by others
-func GetBeReviewedItems(userID int32, startDate string, endDate string) (brs []BeReviewedItem, resStatus i18n.ResKey, err error) {
+func GetBeReviewedItems(userID int32, startDate time.Time, endDate time.Time) (brs []BeReviewedItem, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	brs = make([]BeReviewedItem, 0)
 	var build strings.Builder
 	// Concatenate SQL strings
-	build.WriteString(` and (h.creatorID=`)
-	build.WriteString(strconv.Itoa(int(userID)))
-	if startDate != "" {
-		build.WriteString(" and r.startTime>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and r.startTime<=")
-		build.WriteString(endDate)
-	}
+	build.WriteString(` and (h.creatorid=$1`)
+	build.WriteString(" and r.startTime>=$2")
+	build.WriteString(" and r.startTime<=$3")
 	build.WriteString(`)`)
 	sqlString := build.String()
 	build.Reset()
@@ -571,7 +523,7 @@ func GetBeReviewedItems(userID int32, startDate string, endDate string) (brs []B
 	build.WriteString(sqlString)
 	sqlStr := build.String()
 
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, userID, startDate, endDate)
 	if err != nil {
 		zap.L().Error("GetBeReviewedItems db.Query(sqlStr) failed", zap.Error(err))
 		resStatus = i18n.StatusOK
@@ -595,23 +547,15 @@ func GetBeReviewedItems(userID int32, startDate string, endDate string) (brs []B
 }
 
 // Summarize Risk Records
-func GetRiskRecords(startDate string, endDate string) (rcs []RiskCount, resStatus i18n.ResKey, err error) {
+func GetRiskRecords(startDate time.Time, endDate time.Time) (rcs []RiskCount, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	rcs = make([]RiskCount, 0)
 	var build strings.Builder
 	// Concatenate SQL strings
-	if startDate != "" {
-		build.WriteString(" and h.billdate>=")
-		build.WriteString(startDate)
-	}
-	if endDate != "" {
-		build.WriteString(" and h.billdate<='")
-		build.WriteString(endDate)
-		build.WriteString("'")
-	}
-
-	build.WriteString("	group by occYear,occMonth,occDay,rlid")
-	build.WriteString(" order by occDay")
+	build.WriteString(" and h.billdate>=$1")
+	build.WriteString(" and h.billdate<=$2")
+	build.WriteString("	group by occyear,occmonth,occday,rlid")
+	build.WriteString(" order by occday")
 	conString := build.String()
 	build.Reset()
 
@@ -631,7 +575,7 @@ func GetRiskRecords(startDate string, endDate string) (rcs []RiskCount, resStatu
 	build.WriteString(conString)
 	sqlStr := build.String()
 	// Retrieve Records from database
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, startDate, endDate)
 	if err != nil {
 		zap.L().Error("GetRiskRecords db.Query(sqlStr) failed", zap.Error(err))
 		resStatus = i18n.StatusInternalError
@@ -656,7 +600,7 @@ func GetRiskRecords(startDate string, endDate string) (rcs []RiskCount, resStatu
 		}
 		rcs = append(rcs, rc)
 	}
-	return rcs, i18n.StatusOK, nil
+	return
 }
 
 // Get Risk Trend data

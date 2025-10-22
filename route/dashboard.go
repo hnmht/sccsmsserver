@@ -1,11 +1,18 @@
 package route
 
-/* func DashboardRoute(g *gin.RouterGroup) {
-	DashboardGroup := g.Group("/da", handlers.JWTAuthMiddleware())
+import (
+	"sccsmsserver/handlers"
+	"sccsmsserver/middleware"
+
+	"github.com/gin-gonic/gin"
+)
+
+func DashboardRoute(g *gin.RouterGroup) {
+	DashboardGroup := g.Group("/da", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
-		//获取看板数据
+		// Get Dashboard data
 		DashboardGroup.POST("/data", handlers.GetDashboardDataHandler)
-		//获取风险趋势数据
+		// Get Risk Trends data
 		DashboardGroup.POST("/risktrend", handlers.GetRiskTrendDataHandler)
 	}
-} */
+}
