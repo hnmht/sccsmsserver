@@ -562,8 +562,8 @@ func GetRiskRecords(startDate time.Time, endDate time.Time) (rcs []RiskCount, re
 	// Summarize Risk Records by Occurrence date
 	build.WriteString(`
 	select EXTRACT(YEAR from h.billdate) as occyear,
-	EXTRACT(MONTH from h.billdate) as occmonth,
-	EXTRACT(WEEK from h.billdate) as occweek,
+	TO_CHAR(h.billdate,'YYYY-MM') as occmonth,
+	TO_CHAR(h.billdate,'IYYYIW') as occweek,
 	h.billdate as occday,
 	b.risklevelid as rlid,
 	count(b.id) as itemnumber
