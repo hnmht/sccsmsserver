@@ -25,13 +25,13 @@ func Setup(mode string) *gin.Engine {
 		DCRoute(superGroup)        // Document Category
 		DeptRoute(superGroup)      // Department
 		// DocRoute(superGroup)       //文档
-		EPARoute(superGroup) // Execution Project
-		EPCRoute(superGroup) // Execution Project Category
-		EPTRoute(superGroup) // Execution Project Template
-		EORoute(superGroup)  // Execution Order
-		// EventRoute(superGroup)     //Event
-		FileRoute(superGroup) // File
-		IRFRoute(superGroup)  // Issue Resolution Form
+		EPARoute(superGroup)   // Execution Project
+		EPCRoute(superGroup)   // Execution Project Category
+		EPTRoute(superGroup)   // Execution Project Template
+		EORoute(superGroup)    // Execution Order
+		EventRoute(superGroup) // User Events
+		FileRoute(superGroup)  // File
+		IRFRoute(superGroup)   // Issue Resolution Form
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
 		// LQRoute(superGroup)        //劳保用品岗位定额

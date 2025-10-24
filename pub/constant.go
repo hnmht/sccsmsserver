@@ -109,3 +109,6 @@ const TokenExpireDuration = 2 * time.Hour
 
 // Token Issuer
 const TokenIssuer = "SeaCloud"
+
+// Event Background Colors
+var EventBackgroundColors = [4]string{"orange", "blue", "green", "grey"}
