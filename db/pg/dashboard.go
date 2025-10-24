@@ -55,7 +55,7 @@ type IssueItem struct {
 	RLName      string `json:"rlName"`      // Risk Level Name
 	RLColor     string `json:"rlColor"`     // Risk Level Color
 	IsRectify   string `json:"isRectify"`   // Is On-Site correction performed
-	IsFinish    string `json:"isfinish"`    // Is handle
+	IsFinish    string `json:"isFinish"`    // Is handle
 	CreatorID   int32  `json:"creatorID"`   // Fixer ID
 	CreatorCode string `json:"creatorCode"` // Fixer Code
 	CreatorName string `json:"creatorName"` // Fixer Name

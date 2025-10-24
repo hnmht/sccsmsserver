@@ -47,7 +47,7 @@ type SystemLanguage struct {
 // List of languages the system wil support
 var SupportLanguages []SystemLanguage = []SystemLanguage{
 	{Language: "en-US", Tag: language.AmericanEnglish, FileName: "en-US.json", Default: true},
-	{Language: "zh-Hans", Tag: language.SimplifiedChinese, FileName: "zh-Hans.json", Default: false},
+	{Language: "zh-CN", Tag: language.SimplifiedChinese, FileName: "zh-CN.json", Default: false},
 }
 
 // Default language message printer
