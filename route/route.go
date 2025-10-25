@@ -35,7 +35,7 @@ func Setup(mode string) *gin.Engine {
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
 		// LQRoute(superGroup)        //劳保用品岗位定额
-		// MsgRoute(superGroup)       //消息
+		MsgRoute(superGroup)      // Message
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
 		PositionRoute(superGroup) // Position
