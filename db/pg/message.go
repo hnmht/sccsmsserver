@@ -29,7 +29,7 @@ type CommentMessage struct {
 	EOFiles            []VoucherFile `json:"eoFiles"`
 	SendTo             Person        `db:"sendtoid" json:"sendTo"`
 	IsRead             int16         `db:"isread" json:"isRead"`
-	ReadTime           time.Time     `db:"readtime" json:"readtime"`
+	ReadTime           time.Time     `db:"readtime" json:"readTime"`
 	Content            string        `db:"content" json:"content"`
 	SendTime           time.Time     `db:"sendtime" json:"sendTime"`
 	CreateDate         time.Time     `db:"createtime" json:"createDate"`
@@ -311,7 +311,7 @@ func (cm *CommentMessage) Read() (resStatus i18n.ResKey, err error) {
 	}
 	// Update the record in the executionorder_comment
 	sqlStr := `update executionorder_comment 
-	set isread=1,current_timestamp,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp 
+	set isread=1,readtime=current_timestamp,modifierid=$1,modifytime=current_timestamp,ts=current_timestamp 
 	where dr=0 and isread=0 and id=$2 and ts=$3`
 	res, err := db.Exec(sqlStr, cm.Modifier.ID, cm.ID, cm.Ts)
 	if err != nil {
