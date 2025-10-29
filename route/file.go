@@ -12,7 +12,7 @@ func FileRoute(g *gin.RouterGroup) {
 	{
 		// Receive client files upload
 		FileGroup.POST("/receive", handlers.RecieveFilesHandler)
-		// Get file information by file ha
+		// Get file information by file hash
 		FileGroup.POST("/getfilebyhash", handlers.GetFileInfoByHashHandler)
 		// Get files information by file hash array
 		FileGroup.POST("/getfilesbyhash", handlers.GetFilesByHashHandler)

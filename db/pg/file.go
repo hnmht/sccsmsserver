@@ -9,6 +9,7 @@ import (
 	"sccsmsserver/i18n"
 	"sccsmsserver/pkg/minio"
 	"sccsmsserver/pub"
+	"strconv"
 	"time"
 
 	"go.uber.org/zap"
@@ -78,13 +79,14 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 		&file.UpLoadDate, &file.CreatorName, &file.Hash, &file.Source, &file.Ts)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			zap.L().Error("file.getFileInfoByID db.QueryRow failed, file not find, the file ID is:" + strconv.Itoa(int(file.ID)))
 			resStatus = i18n.StatusFileNotExist
 			file.CreatorID = 0
 			file.FileUrl = ""
 			return
 		}
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("file getFileInfoByID db.queryrow failed")
+		zap.L().Error("file.getFileInfoByID db.queryrow failed")
 		return
 	}
 	// Get File URL
