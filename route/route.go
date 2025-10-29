@@ -39,12 +39,12 @@ func Setup(mode string) *gin.Engine {
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
 		PositionRoute(superGroup) // Position
-		PPERoute(superGroup)      //劳保用品档案
+		PPERoute(superGroup)      // Personal Protective Equipment
 		PubRoute(superGroup)      // System public information
-		// RepRoute(superGroup)       //报表
-		RLRoute(superGroup)   // Risk Level
-		RoleRoute(superGroup) // Role
-		TCRoute(superGroup)   // Training Course
+		RepRoute(superGroup)      // Report
+		RLRoute(superGroup)       // Risk Level
+		RoleRoute(superGroup)     // Role
+		TCRoute(superGroup)       // Training Course
 		// TRRoute(superGroup)        //tr培训记录
 		UDARoute(superGroup)  // User-defined Archive
 		UDCRoute(superGroup)  // User-defined Category

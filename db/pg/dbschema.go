@@ -830,6 +830,7 @@ var tables []table = []table{
 			deptid int default 0,
 			issueownerid int default 0,
 			isfinish smallint default 0,
+			handlerid int default 0,
 			starttime timestamp with time zone default current_timestamp,
 			endtime timestamp with time zone default current_timestamp,
 			eodescription varchar(256),

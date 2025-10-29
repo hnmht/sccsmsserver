@@ -22,6 +22,7 @@ type IssueResolutionForm struct {
 	Department         SimpDept         `db:"deptid" json:"department"`
 	IssueOwner         Person           `db:"issueownerid" json:"issueOwner"`
 	IsFinish           int16            `db:"isfinish" json:"isFinish"`
+	Handler            Person           `db:"handlerid" json:"handler"`
 	StartTime          time.Time        `db:"starttime" json:"startTime"`
 	EndTime            time.Time        `db:"endtime" json:"endTime"`
 	EODescription      string           `db:"eodescription" json:"eoDescription"`
@@ -67,16 +68,16 @@ func (irf *IssueResolutionForm) Add() (resStatus i18n.ResKey, err error) {
 	// Insert into IRF data to
 	addSql := `insert into issueresolutionform(billnumber,billdate,csaid,epaid,executionvalue,
 	executionvaluedisp,executorid,deptid,issueownerid,isfinish,
-	starttime,endtime,eodescription,description,status,
-	sourcetype,sourcebillnumber,sourcehid,sourcerownumber,sourcebid,
-	risklevelid,creatorid)
-	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)  
+	handlerid,starttime,endtime,eodescription,description,
+	status,sourcetype,sourcebillnumber,sourcehid,sourcerownumber,
+	sourcebid,risklevelid,creatorid)
+	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)  
 	returning id`
 	err = tx.QueryRow(addSql, irf.BillNumber, irf.BillDate, irf.CSA.ID, irf.EPA.ID, irf.ExecutionValue,
 		irf.ExecutionValueDisp, irf.Executor.ID, irf.Department.ID, irf.IssueOwner.ID, irf.IsFinish,
-		irf.StartTime, irf.EndTime, irf.EODescription, irf.Description, irf.Status,
-		irf.SourceType, irf.SourceBillNumber, irf.SourceHID, irf.SourceRowNumber, irf.SourceBID,
-		irf.RiskLevel.ID, irf.Creator.ID).Scan(&irf.ID)
+		irf.Handler.ID, irf.StartTime, irf.EndTime, irf.EODescription, irf.Description,
+		irf.Status, irf.SourceType, irf.SourceBillNumber, irf.SourceHID, irf.SourceRowNumber,
+		irf.SourceBID, irf.RiskLevel.ID, irf.Creator.ID).Scan(&irf.ID)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("IssueResolutionForm.Add tx.QueryRow(addsql) failed", zap.Error(err))
@@ -144,10 +145,10 @@ func (irf *IssueResolutionForm) Edit() (resStatus i18n.ResKey, err error) {
 	defer tx.Commit()
 
 	// Modify Issue Resolution From in issueresoltionform table
-	editSql := `update issueresolutionform set billdate=$1,deptid=$2,issueownerid=$3,isfinish=$4,starttime=$5,
+	editSql := `update issueresolutionform set billdate=$1,deptid=$2,handlerid=$3,isfinish=$4,starttime=$5,
 	endtime=$6,	description=$7,modifytime=current_timestamp,modifierid=$8,ts=current_timestamp 
 	where id=$9 and dr=0 and status=0 and ts=$10`
-	editRes, err := tx.Exec(editSql, irf.BillDate, irf.Department.ID, irf.IssueOwner.ID, irf.IsFinish, irf.StartTime,
+	editRes, err := tx.Exec(editSql, irf.BillDate, irf.Department.ID, irf.Handler.ID, irf.IsFinish, irf.StartTime,
 		irf.EndTime, irf.Description, irf.Modifier.ID,
 		irf.ID, irf.Ts)
 	if err != nil {
@@ -493,10 +494,11 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 	// Assemble the SQL for data retrieval
 	build.WriteString(`select b.id,b.billnumber,b.billdate,b.csaid,b.epaid,
 	b.executionvalue,b.executionvaluedisp,b.executorid,b.deptid,b.issueownerid,
-	b.isfinish,b.starttime,b.endtime,b.eodescription,b.description,
-	b.status,b.sourcetype,b.sourcebillnumber,b.sourcehid,b.sourcerownumber,
-	b.sourcebid,b.risklevelid,b.createtime,b.creatorid,confirmtime,
-	confirmerid,b.modifytime,b.modifierid,b.dr,b.ts 
+	b.isfinish,b.handlerid,b.starttime,b.endtime,b.eodescription,
+	b.description,b.status,b.sourcetype,b.sourcebillnumber,b.sourcehid,
+	b.sourcerownumber,b.sourcebid,b.risklevelid,b.createtime,b.creatorid,
+	confirmtime,confirmerid,b.modifytime,b.modifierid,b.dr,
+	b.ts 
 	from issueresolutionform as b
 	left join csa as cs on b.csaid = cs.id
 	left join epa as ep on b.epaid = ep.id
@@ -523,10 +525,11 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 		var irf IssueResolutionForm
 		err = ddsRows.Scan(&irf.ID, &irf.BillNumber, &irf.BillDate, &irf.CSA.ID, &irf.EPA.ID,
 			&irf.ExecutionValue, &irf.ExecutionValueDisp, &irf.Executor.ID, &irf.Department.ID, &irf.IssueOwner.ID,
-			&irf.IsFinish, &irf.StartTime, &irf.EndTime, &irf.EODescription, &irf.Description,
-			&irf.Status, &irf.SourceType, &irf.SourceBillNumber, &irf.SourceHID, &irf.SourceRowNumber,
-			&irf.SourceBID, &irf.RiskLevel.ID, &irf.CreateDate, &irf.Creator.ID, &irf.ConfirmDate,
-			&irf.Confirmer.ID, &irf.ModifyDate, &irf.Modifier.ID, &irf.Dr, &irf.Ts)
+			&irf.IsFinish, &irf.Handler.ID, &irf.StartTime, &irf.EndTime, &irf.EODescription,
+			&irf.Description, &irf.Status, &irf.SourceType, &irf.SourceBillNumber, &irf.SourceHID,
+			&irf.SourceRowNumber, &irf.SourceBID, &irf.RiskLevel.ID, &irf.CreateDate, &irf.Creator.ID,
+			&irf.ConfirmDate, &irf.Confirmer.ID, &irf.ModifyDate, &irf.Modifier.ID, &irf.Dr,
+			&irf.Ts)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("GetIRFList ddsRows.Scan() failed", zap.Error(err))
@@ -563,6 +566,13 @@ func GetIRFList(queryString string) (irfs []IssueResolutionForm, resStatus i18n.
 		// Get IssueOwner details
 		if irf.IssueOwner.ID > 0 {
 			resStatus, err = irf.IssueOwner.GetPersonInfoByID()
+			if resStatus != i18n.StatusOK || err != nil {
+				return
+			}
+		}
+		// Get Handler details
+		if irf.Handler.ID > 0 {
+			resStatus, err = irf.Handler.GetPersonInfoByID()
 			if resStatus != i18n.StatusOK || err != nil {
 				return
 			}
