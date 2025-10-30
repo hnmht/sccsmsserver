@@ -299,6 +299,7 @@ func GetReferEOs(queryString string) (reos []ReferExecutionOrder, resStatus i18n
 // Get Execution Order list
 func GetEOList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
+	eos = make([]ExecutionOrder, 0)
 	var build strings.Builder
 	// Assemble the SQL for checking
 	build.WriteString(`select count(h.id) as rownumber

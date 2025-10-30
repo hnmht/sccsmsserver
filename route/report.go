@@ -13,8 +13,8 @@ func RepRoute(g *gin.RouterGroup) {
 		// Work Order Status Report
 		REPGroup.POST("/wor", handlers.GetWoReportHandler)
 		// Execution Order status Report
-		REPGroup.POST("/edr", handlers.GetEoReportHandler)
+		REPGroup.POST("/eor", handlers.GetEoReportHandler)
 		// Issue Resolution Form Report
-		REPGroup.POST("/ddr", handlers.GetIRFReportHandler)
+		REPGroup.POST("/irfr", handlers.GetIRFReportHandler)
 	}
 }
