@@ -13,7 +13,7 @@ func Setup(mode string) *gin.Engine {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true)) // Global middleware
 	// r.Use(Cors())                                       // Allow the browser to make cross-origin requests
-	// r.Use(IpBlackListMiddleWare()) //Ip黑名单
+	// r.Use(IpBlackListMiddleWare()) // IP Black list
 	// Globle path
 	superGroup := r.Group(pub.APIPath)
 	{
@@ -24,14 +24,14 @@ func Setup(mode string) *gin.Engine {
 		DashboardRoute(superGroup) // Dashboard
 		DCRoute(superGroup)        // Document Category
 		DeptRoute(superGroup)      // Department
-		// DocRoute(superGroup)       //文档
-		EPARoute(superGroup)   // Execution Project
-		EPCRoute(superGroup)   // Execution Project Category
-		EPTRoute(superGroup)   // Execution Project Template
-		EORoute(superGroup)    // Execution Order
-		EventRoute(superGroup) // User Events
-		FileRoute(superGroup)  // File
-		IRFRoute(superGroup)   // Issue Resolution Form
+		DocRoute(superGroup)       // Document
+		EPARoute(superGroup)       // Execution Project
+		EPCRoute(superGroup)       // Execution Project Category
+		EPTRoute(superGroup)       // Execution Project Template
+		EORoute(superGroup)        // Execution Order
+		EventRoute(superGroup)     // User Events
+		FileRoute(superGroup)      // File
+		IRFRoute(superGroup)       // Issue Resolution Form
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
 		// LQRoute(superGroup)        //劳保用品岗位定额
