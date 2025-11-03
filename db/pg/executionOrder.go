@@ -193,10 +193,10 @@ func GetReferEOs(queryString string) (reos []ReferExecutionOrder, resStatus i18n
 		zap.L().Error("GetReferEOs db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	/* if rowNumber == 0 {
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	} */
+	}
 	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
@@ -322,10 +322,10 @@ func GetEOList(queryString string) (eos []ExecutionOrder, resStatus i18n.ResKey,
 		zap.L().Error("GetEOList db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	/* if rowNumber == 0 {
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	} */
+	}
 	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
@@ -408,10 +408,10 @@ func GetEOReviewList(queryString string, useID int32) (eos []ExecutionOrder, res
 		zap.L().Error("GetEOReviewList db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	/* if rowNumber == 0 {
+	if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	} */
+	}
 	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return
@@ -497,10 +497,10 @@ func GetEOReviewListPagination(con PagingQueryParams, userID int32) (edsp EOList
 		zap.L().Error("GetEOReviewListPagination db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	/* if edsp.Count == 0 {
+	if edsp.Count == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	} */
+	}
 	if edsp.Count > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return

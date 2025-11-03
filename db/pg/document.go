@@ -54,7 +54,7 @@ type QueryDocument struct {
 	ReleaseDate time.Time     `db:"releasedate" json:"releaseDate"`
 	Description string        `db:"description" json:"description"`
 	Files       []VoucherFile `json:"files"`
-	CreatorID   int32         `json:"creatorid"`
+	CreatorID   int32         `json:"creatorID"`
 	CreatorCode string        `json:"creatorCode"`
 	CreatorName string        `json:"creatorName"`
 }
@@ -207,13 +207,11 @@ func (d *Document) GetDetailByID() (resStatus i18n.ResKey, err error) {
 			return
 		}
 	}
-
 	// Get Document attachments
 	d.Files, resStatus, err = GetDocumentFiles(d.ID)
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-
 	// Write into cache
 	dB, _ := json.Marshal(d)
 	cache.Set(pub.Document, d.ID, dB)
@@ -223,6 +221,7 @@ func (d *Document) GetDetailByID() (resStatus i18n.ResKey, err error) {
 
 // Add Document
 func (d *Document) Add() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
 	// Check the number of files, zero is not allowed
 	if len(d.Files) == 0 {
 		resStatus = i18n.StatusDocumentNoFile
