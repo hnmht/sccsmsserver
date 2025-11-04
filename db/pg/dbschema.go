@@ -934,18 +934,18 @@ var tables []table = []table{
 	},
 	{
 		TableName:   "trainingrecord_h",
-		Description: "Traning Record Header Table",
+		Description: "Training Record Header Table",
 		CreateSQL: `create table trainingrecord_h (
 			id serial NOT NUll,
 			billnumber varchar(20),
-			billdate varchar(10),
+			billdate timestamp with time zone default current_timestamp,
 			deptid int default 0,
 			description varchar(256),
 			lecturerid int default 0,
-			traindate varchar(20),
+			trainingdate timestamp with time zone default current_timestamp,
 			tcid int default 0,
-			starttime varchar(20),
-			endtime varchar(20),
+			starttime timestamp with time zone default current_timestamp,
+			endtime timestamp with time zone default current_timestamp,
 			classhour numeric default 0,
 			isexamine smallint default 0,
 			status smallint default 0,					
@@ -964,7 +964,7 @@ var tables []table = []table{
 	},
 	{
 		TableName:   "trainingrecord_b",
-		Description: "Traning Record Body Table",
+		Description: "Training Record Body Table",
 		CreateSQL: `
 			create table trainingrecord_b (
 			id serial NOT NUll,
@@ -973,8 +973,8 @@ var tables []table = []table{
 			studentid int default 0,
 			positionname varchar(128) default '',
 			deptname varchar(128) default '',
-			starttime varchar(20),
-			endtime varchar(20),
+			starttime timestamp with time zone default current_timestamp,
+			endtime timestamp with time zone default current_timestamp,
 			classhour numeric default 0,
 			description varchar(256),
 			examres smallint default 0,
@@ -1018,7 +1018,7 @@ var tables []table = []table{
 		CreateSQL: `
 			create table ppequotas_h (
 			id serial NOT NUll,
-			billdate varchar(10),
+			billdate  timestamp with time zone default current_timestamp,
 			positionid int default 0,
 			period varchar(20) default '',
 			description varchar(2048) default '',
@@ -1067,12 +1067,12 @@ var tables []table = []table{
 		CreateSQL: `create table ppeissuanceform_h (
 			id serial NOT NUll,
 			billnumber varchar(20),
-			billdate varchar(10),
+			billdate timestamp with time zone default current_timestamp,
 			deptid int default 0,
 			description varchar(256) default '',
 			period varchar(10) default '',			
-			startdate varchar(20),
-			enddate varchar(20),
+			startdate timestamp with time zone default current_timestamp,
+			enddate timestamp with time zone default current_timestamp,
 			sourcetype varchar(8) default 'UA',
 			status smallint default 0,					
 			createtime timestamp with time zone default current_timestamp,

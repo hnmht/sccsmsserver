@@ -45,11 +45,11 @@ func Setup(mode string) *gin.Engine {
 		RLRoute(superGroup)       // Risk Level
 		RoleRoute(superGroup)     // Role
 		TCRoute(superGroup)       // Training Course
-		// TRRoute(superGroup)        //tr培训记录
-		UDARoute(superGroup)  // User-defined Archive
-		UDCRoute(superGroup)  // User-defined Category
-		UserRoute(superGroup) // User
-		WORoute(superGroup)   // Work Order
+		TRRoute(superGroup)       // Training Record
+		UDARoute(superGroup)      // User-defined Archive
+		UDCRoute(superGroup)      // User-defined Category
+		UserRoute(superGroup)     // User
+		WORoute(superGroup)       // Work Order
 	}
 	//ping
 	// r.POST("/ping", control.PubServerPing)

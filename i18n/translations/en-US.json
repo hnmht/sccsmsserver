@@ -567,6 +567,11 @@
             "message": "A labor protection supplies post quota for the same period already exists."
         },
         {
+            "key": "StatusTRBodyNoConfirm",
+            "type": "string",
+            "message": "There are unconfirmed rows in the training record body."
+        },
+        {
             "key": "StatusUDUsed",
             "type": "string",
             "message": "Referenced by User Defined master data."
