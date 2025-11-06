@@ -947,7 +947,7 @@ var tables []table = []table{
 			starttime timestamp with time zone default current_timestamp,
 			endtime timestamp with time zone default current_timestamp,
 			classhour numeric default 0,
-			isexamine smallint default 0,
+			isexam smallint default 0,
 			status smallint default 0,					
 			createtime timestamp with time zone default current_timestamp,
 			creatorid int DEFAULT 0,

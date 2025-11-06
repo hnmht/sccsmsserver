@@ -22,7 +22,7 @@ type TrainingRecord struct {
 	StartTime    time.Time           `db:"starttime" json:"startTime"`
 	EndTime      string              `db:"endtime" json:"endTime"`
 	ClassHour    float64             `db:"classhour" json:"classHour"`
-	IsExam       int16               `db:"isExam" json:"isExamine"`
+	IsExam       int16               `db:"isExam" json:"isExam"`
 	HFiles       []VoucherFile       `json:"hFiles"`
 	Body         []TrainingRecordRow `json:"body"`
 	Status       int16               `db:"status" json:"status"` // 0 free 1 confirmed 2 executing 3 completed
@@ -40,10 +40,10 @@ type TrainingRecord struct {
 type TrainingRecordRow struct {
 	BID          int32         `db:"id" json:"id"`
 	HID          int32         `db:"hid" json:"hid"`
-	RowNumber    int32         `db:"rownumber" json:"rownNmber"`
+	RowNumber    int32         `db:"rownumber" json:"rowNumber"`
 	Student      Person        `db:"studentid" json:"student"`
 	PositionName string        `db:"positionname" json:"positionName"`
-	DeptName     string        `db:"name" json:"deptName"`
+	DeptName     string        `db:"deptname" json:"deptName"`
 	StartTime    time.Time     `db:"starttime" json:"startTime"`
 	EndTime      time.Time     `db:"endtime" json:"endTime"`
 	ClassHour    float64       `db:"classhour" json:"classHour"`
@@ -190,7 +190,7 @@ func (tr *TrainingRecord) Add() (resStatus i18n.ResKey, err error) {
 	}
 
 	// Perpare insert data into the trainingrecord_b table
-	bodySql := `insert into trainingrecord_b(hid,rownumber,studentid,positionname,name,
+	bodySql := `insert into trainingrecord_b(hid,rownumber,studentid,positionname,deptname,
 		starttime,endtime,classhour,description,examres,
 		examscore,status,creatorid)
 		values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) 
@@ -271,7 +271,7 @@ func (tr *TrainingRecord) FillBody() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Retrieve Training Record body rows from the trainingrecord_b table
 	bodySql := `select id,hid,rownumber,studentid,positionname,
-		name,starttime,endtime,classhour,description,
+		deptname,starttime,endtime,classhour,description,
 		examres,examscore,status,createtime,creatorid,
 		confirmtime,confirmerid,modifytime,modifierid,dr,
 		ts from trainingrecord_b
@@ -692,7 +692,7 @@ func (tr *TrainingRecord) Edit() (resStatus i18n.ResKey, err error) {
 	}
 
 	// Prepare update Training Record body Row
-	updateRowSql := `update trainingrecord_b set rownumber=$1,studentid=$2,positionname=$3,name=$4,starttime=$5,
+	updateRowSql := `update trainingrecord_b set rownumber=$1,studentid=$2,positionname=$3,deptname=$4,starttime=$5,
 	endtime=$6,classhour=$7,description=$8,examres=$9,examscore=$10,	
 	modifytime=current_timestamp,modifierid=$11,ts=current_timestamp,dr=$12 
 	where id=$13 and ts=$14 and status=0 and dr=0`
@@ -705,7 +705,7 @@ func (tr *TrainingRecord) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	defer updateRowStmt.Close()
 	// Prepare Add Training Record body row
-	addRowSql := `insert into trainingrecord_b(hid,rownumber,studentid,positionname,name,
+	addRowSql := `insert into trainingrecord_b(hid,rownumber,studentid,positionname,deptname,
 		starttime,endtime,classhour,description,examres,
 		examscore,creatorid)
 		values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) 
