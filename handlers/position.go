@@ -18,10 +18,9 @@ func AddPositionHandler(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddOPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, p)
+		ResponseWithMsg(c, resStatus, p)
 		return
 	}
 	p.Creator.ID = operatorID
@@ -47,10 +46,9 @@ func EditPositionHandler(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditOPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, p)
+		ResponseWithMsg(c, resStatus, p)
 		return
 	}
 	p.Modifier.ID = operatorID
@@ -70,10 +68,9 @@ func DeletePositionHandler(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteOPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, p)
+		ResponseWithMsg(c, resStatus, p)
 		return
 	}
 	p.Modifier.ID = operatorID
@@ -123,9 +120,8 @@ func DeletePositionsHandler(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, ps)
 		return
 	}

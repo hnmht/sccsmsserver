@@ -18,9 +18,8 @@ func AddDocumentHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddDocumentHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -41,9 +40,8 @@ func EditDocumentHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operaorID, resStatus := GetCurrentUser(c)
+	operaorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditDocumentHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -79,9 +77,8 @@ func DeleteDocumentHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operaorID, resStatus := GetCurrentUser(c)
+	operaorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteDocumentHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -100,9 +97,8 @@ func DeleteDocumentsHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get Operator ID
-	operaorID, resStatus := GetCurrentUser(c)
+	operaorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteDocumentsHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, docs)
 		return
 	}

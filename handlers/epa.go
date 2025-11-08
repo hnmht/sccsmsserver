@@ -57,10 +57,9 @@ func AddEPHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	opeartorID, resStatus := GetCurrentUser(c)
+	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddEPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eid)
+		ResponseWithMsg(c, resStatus, eid)
 		return
 	}
 	eid.Creator.ID = opeartorID
@@ -81,10 +80,9 @@ func EditEPHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	opeartorID, resStatus := GetCurrentUser(c)
+	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditEPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eid)
+		ResponseWithMsg(c, resStatus, eid)
 		return
 	}
 	eid.Modifier.ID = opeartorID
@@ -106,10 +104,9 @@ func DeleteEPHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	opeartorID, resStatus := GetCurrentUser(c)
+	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eid)
+		ResponseWithMsg(c, resStatus, eid)
 		return
 	}
 	eid.Modifier.ID = opeartorID
@@ -129,10 +126,9 @@ func DeleteEPsHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get operator ID
-	opeartorID, resStatus := GetCurrentUser(c)
+	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eids)
+		ResponseWithMsg(c, resStatus, eids)
 		return
 	}
 	// Batch delete

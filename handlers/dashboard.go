@@ -18,10 +18,9 @@ func GetDashboardDataHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("GetDashboardDataHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, d)
+		ResponseWithMsg(c, resStatus, d)
 		return
 	}
 	// Get Dashboard Data

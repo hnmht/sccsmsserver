@@ -19,9 +19,8 @@ func AddTRHandler(c *gin.Context) {
 		return
 	}
 	//Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddTRHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tr)
 		return
 	}
@@ -72,9 +71,8 @@ func EditTRHandler(c *gin.Context) {
 		return
 	}
 	//Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditTRHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tr)
 		return
 	}
@@ -95,9 +93,8 @@ func DeleteTRHandler(c *gin.Context) {
 		return
 	}
 	//Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteTRHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tr)
 		return
 	}
@@ -117,9 +114,8 @@ func ConfirmTRHandler(c *gin.Context) {
 		return
 	}
 	//Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ConfirmTRHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tr)
 		return
 	}
@@ -139,9 +135,8 @@ func UnConfirmTRHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("UnConfirmTRHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tr)
 		return
 	}

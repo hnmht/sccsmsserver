@@ -33,10 +33,9 @@ func AddEOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddEOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eo)
+		ResponseWithMsg(c, resStatus, eo)
 		return
 	}
 	eo.Creator.ID = operatorID
@@ -56,10 +55,9 @@ func EditEOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditEOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eo)
+		ResponseWithMsg(c, resStatus, eo)
 		return
 	}
 	eo.Modifier.ID = operatorID
@@ -79,10 +77,9 @@ func DeleteEOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eo)
+		ResponseWithMsg(c, resStatus, eo)
 		return
 	}
 	// Delete
@@ -101,10 +98,9 @@ func ConfirmEOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ConfirmEOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eo)
+		ResponseWithMsg(c, resStatus, eo)
 		return
 	}
 	// Confirm
@@ -123,10 +119,9 @@ func CancelConfirmEOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("CancelConfirmEOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eo)
+		ResponseWithMsg(c, resStatus, eo)
 		return
 	}
 	// Un-Confirm
@@ -160,10 +155,9 @@ func GetEOReviewListHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("GetEOReviewListHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, qp)
+		ResponseWithMsg(c, resStatus, qp)
 		return
 	}
 	// Get List
@@ -182,10 +176,9 @@ func GetEOReviewListPaginationHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("GetEOReviewListPaginationHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, pqp)
+		ResponseWithMsg(c, resStatus, pqp)
 		return
 	}
 	// Get list
@@ -219,10 +212,9 @@ func AddCommentHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddCommentHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eoc)
+		ResponseWithMsg(c, resStatus, eoc)
 		return
 	}
 	eoc.Creator.ID = operatorID
@@ -243,10 +235,9 @@ func AddReviewHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddReviewHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, eor)
+		ResponseWithMsg(c, resStatus, eor)
 		return
 	}
 	eor.Creator.ID = operatorID

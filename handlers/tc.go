@@ -18,9 +18,8 @@ func AddTCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddTCHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tc)
 		return
 	}
@@ -41,9 +40,8 @@ func EditTCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditTCHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tc)
 		return
 	}
@@ -64,9 +62,8 @@ func DeleteTCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteTCHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tc)
 		return
 	}
@@ -86,9 +83,8 @@ func DeleteTCsHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteTCsHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, tcs)
 		return
 	}

@@ -34,9 +34,9 @@ func LoginHandler(c *gin.Context) {
 
 // Get User Information handler
 func UserInfoHandler(c *gin.Context) {
-	userID, resStatus := GetCurrentUser(c)
+	userID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, nil)
+		ResponseWithMsg(c, resStatus, nil)
 		return
 	}
 	var u = pg.User{ID: userID}
@@ -54,10 +54,9 @@ func AddUserHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddUserHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, u)
+		ResponseWithMsg(c, resStatus, u)
 		return
 	}
 	u.Creator.ID = operatorID
@@ -100,9 +99,8 @@ func EditUserHandler(c *gin.Context) {
 		u.Password = string(oriPassword)
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditUserHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, u)
 		return
 	}
@@ -123,9 +121,8 @@ func ModifyProfileHandler(c *gin.Context) {
 		return
 	}
 	// Get opertor id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ModifyProfileHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, u)
 		return
 	}
@@ -141,9 +138,8 @@ func LogoutHandler(c *gin.Context) {
 	// Get Client type
 	clientType := c.Request.Header.Get("XClientType")
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("LogoutHandler getCurrentUser failed:")
 		ResponseWithMsg(c, resStatus, nil)
 		return
 	}
@@ -176,9 +172,8 @@ func DeleteUserHandler(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteUserHandler getCurrentUser failed")
 		ResponseWithMsg(c, resStatus, u)
 		return
 	}
@@ -198,9 +193,8 @@ func DeleteUsersHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteUsersHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, users)
 		return
 	}

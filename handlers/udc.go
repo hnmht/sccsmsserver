@@ -18,9 +18,8 @@ func AddUDCHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	creatorID, resStatus := GetCurrentUser(c)
+	creatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddUDCHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
@@ -46,9 +45,8 @@ func EditUDCHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditUDCHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
@@ -69,9 +67,8 @@ func DeleteUDCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteUDCHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, udc)
 		return
 	}
@@ -118,9 +115,8 @@ func DeleteUDCsHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
 	}
 	// Get operator ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, udcs)
 		return
 	}

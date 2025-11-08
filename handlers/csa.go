@@ -24,10 +24,9 @@ func AddCSHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddCSHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, cs)
+		ResponseWithMsg(c, resStatus, cs)
 		return
 	}
 	cs.Creator.ID = operatorID
@@ -46,10 +45,9 @@ func EditCSHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	operationID, resStatus := GetCurrentUser(c)
+	operationID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditCSHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, cs)
+		ResponseWithMsg(c, resStatus, cs)
 		return
 	}
 	cs.Modifier.ID = operationID
@@ -99,10 +97,9 @@ func DeleteCSHandler(c *gin.Context) {
 		return
 	}
 	// Get operation ID
-	operationID, resStatus := GetCurrentUser(c)
+	operationID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteCSHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, cs)
+		ResponseWithMsg(c, resStatus, cs)
 		return
 	}
 	cs.Modifier.ID = operationID
@@ -122,10 +119,9 @@ func DeleteCSsHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	operationID, resStatus := GetCurrentUser(c)
+	operationID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteCSsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, css)
+		ResponseWithMsg(c, resStatus, css)
 		return
 	}
 	// Batch Delete

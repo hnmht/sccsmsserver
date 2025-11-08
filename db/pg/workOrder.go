@@ -510,15 +510,11 @@ func (wo *WorkOrder) Edit() (resStatus i18n.ResKey, err error) {
 		tx.Rollback()
 		return
 	}
-	// Prepare to update or insert body rows
+	// Prepare to update row
 	updateRowSql := `update workorder_b set hid=$1,rownumber=$2,csaid=$3,executorid=$4,description=$5,
 	eptid=$6,starttime=$7,endtime=$8,status=$9,modifytime=current_timestamp,modifierid=$10,
 	ts=current_timestamp,dr=$11  
 	where id=$12 and ts=$13 and status=0 and dr=0 and eoid=0`
-	addRowSql := `insert into workorder_b(hid,rownumber,csaid,executorid,description,
-	eptid,starttime,endtime,status,creatorid,modifierid)
-	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning id`
-	// Prepare to update row
 	updateRowStmt, err := tx.Prepare(updateRowSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -528,6 +524,9 @@ func (wo *WorkOrder) Edit() (resStatus i18n.ResKey, err error) {
 	}
 	defer updateRowStmt.Close()
 	// Prepare to add row
+	addRowSql := `insert into workorder_b(hid,rownumber,csaid,executorid,description,
+	eptid,starttime,endtime,status,creatorid,modifierid)
+	values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning id`
 	addRowStmt, err := tx.Prepare(addRowSql)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
@@ -538,7 +537,7 @@ func (wo *WorkOrder) Edit() (resStatus i18n.ResKey, err error) {
 	defer addRowStmt.Close()
 	// Write body rows into the database
 	for _, row := range wo.Body {
-		if row.BID == 0 { // If the row.BID is o, it means the row is new
+		if row.BID == 0 { // If the row.BID is 0, it means the row is new
 			err = addRowStmt.QueryRow(wo.HID, row.RowNumber, row.CSA.ID, row.Executor.ID, row.Description,
 				row.EPT.HID, row.StartTime, row.EndTime, row.Status, wo.Modifier.ID, wo.Modifier.ID).Scan(&row.BID)
 			if err != nil {

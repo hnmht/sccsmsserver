@@ -19,10 +19,9 @@ func AddEPTHandler(c *gin.Context) {
 		return
 	}
 	// Get the operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddEPTHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ept)
+		ResponseWithMsg(c, resStatus, ept)
 		return
 	}
 	ept.Creator.ID = operatorID
@@ -43,10 +42,9 @@ func EditEPTHandler(c *gin.Context) {
 		return
 	}
 	// Get the operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditEPTHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ept)
+		ResponseWithMsg(c, resStatus, ept)
 		return
 	}
 	ept.Modifier.ID = operatorID
@@ -67,10 +65,9 @@ func DeleteEPTHandler(c *gin.Context) {
 		return
 	}
 	// Get the operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPTHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ept)
+		ResponseWithMsg(c, resStatus, ept)
 		return
 	}
 	ept.Modifier.ID = operatorID
@@ -131,10 +128,9 @@ func DeleteEPTsHandler(c *gin.Context) {
 		return
 	}
 	// Get the operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPTsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, epts)
+		ResponseWithMsg(c, resStatus, epts)
 		return
 	}
 	// Delete

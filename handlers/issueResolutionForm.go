@@ -18,10 +18,9 @@ func AddIRFHandler(c *gin.Context) {
 		return
 	}
 	// Get Operation ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddIRFHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, irf)
+		ResponseWithMsg(c, resStatus, irf)
 		return
 	}
 	irf.Creator.ID = operatorID
@@ -41,10 +40,9 @@ func EditIRFHandler(c *gin.Context) {
 		return
 	}
 	// Get Operation ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditIRFHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, irf)
+		ResponseWithMsg(c, resStatus, irf)
 		return
 	}
 	irf.Modifier.ID = operatorID
@@ -64,10 +62,9 @@ func DeleteIRFhandler(c *gin.Context) {
 		return
 	}
 	//Get Operation ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteIRFhandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, irf)
+		ResponseWithMsg(c, resStatus, irf)
 		return
 	}
 	// Delete
@@ -86,10 +83,9 @@ func ConfirmIRFhandler(c *gin.Context) {
 		return
 	}
 	//Get Operation ID
-	operationID, resStatus := GetCurrentUser(c)
+	operationID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ConfirmIRFhandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, irf)
+		ResponseWithMsg(c, resStatus, irf)
 		return
 	}
 	// Confirm
@@ -108,10 +104,9 @@ func UnConfirmIRFhandler(c *gin.Context) {
 		return
 	}
 	//Get Operation ID
-	operationID, resStatus := GetCurrentUser(c)
+	operationID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("UnConfirmIRFhandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, irf)
+		ResponseWithMsg(c, resStatus, irf)
 		return
 	}
 	// UnConfirm

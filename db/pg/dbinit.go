@@ -24,7 +24,7 @@ var SysFunctionList SystemMenus = SystemMenus{
 	SystemMenu{ID: 610, FatherID: 600, Title: "MenuTC", Path: "/private/training/course", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 620, FatherID: 600, Title: "MenuTR", Path: "/private/training/record", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 630, FatherID: 600, Title: "MenuTS", Path: "/private/training/teachingStatistics", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
-	SystemMenu{ID: 640, FatherID: 600, Title: "MenuTPS", Path: "/private/train/participationStatistics", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
+	SystemMenu{ID: 640, FatherID: 600, Title: "MenuTPS", Path: "/private/training/participationStatistics", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 700, FatherID: 0, Title: "MenuPPEM", Path: "/private/personalProtectiveEquipmentManagement", Icon: "Masks", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 710, FatherID: 700, Title: "MenuPQ", Path: "/private/ppe/quota", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},
 	SystemMenu{ID: 720, FatherID: 700, Title: "MenuPPEWizard", Path: "/private/ppe/wizard", Icon: "", Component: "", Selected: false, Indeterminate: false, AddFromVersion: "1.0.0"},

@@ -34,12 +34,12 @@ func Setup(mode string) *gin.Engine {
 		IRFRoute(superGroup)       // Issue Resolution Form
 		// LandPageRoute(superGroup)  //landingPage首页定义
 		// LDRoute(superGroup)        //劳保用品发放单
-		// LQRoute(superGroup)        //劳保用品岗位定额
 		MsgRoute(superGroup)      // Message
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
 		PositionRoute(superGroup) // Position
 		PPERoute(superGroup)      // Personal Protective Equipment
+		PPEQuotaRoute(superGroup) // Personal Protective Equipment Quota
 		PubRoute(superGroup)      // System public information
 		RepRoute(superGroup)      // Report
 		RLRoute(superGroup)       // Risk Level

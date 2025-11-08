@@ -59,10 +59,9 @@ func AddEPCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddEPCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, epc)
+		ResponseWithMsg(c, resStatus, epc)
 		return
 	}
 	epc.Creator.ID = operatorID
@@ -82,10 +81,9 @@ func EditEPCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditEPCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, epc)
+		ResponseWithMsg(c, resStatus, epc)
 		return
 	}
 	epc.Modifier.ID = operatorID
@@ -106,10 +104,9 @@ func DeleteEPCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, epc)
+		ResponseWithMsg(c, resStatus, epc)
 		return
 	}
 	epc.Modifier.ID = operatorID
@@ -130,10 +127,9 @@ func DeleteEPCsHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEPCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, epcs)
+		ResponseWithMsg(c, resStatus, epcs)
 		return
 	}
 	// Batch delete

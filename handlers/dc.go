@@ -58,10 +58,9 @@ func AddDCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddDCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, dc)
+		ResponseWithMsg(c, resStatus, dc)
 		return
 	}
 	dc.Creator.ID = operatorID
@@ -81,10 +80,9 @@ func EditDCHandler(c *gin.Context) {
 	}
 
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditDCHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, dc)
+		ResponseWithMsg(c, resStatus, dc)
 		return
 	}
 	dc.Modifier.ID = operatorID
@@ -105,10 +103,9 @@ func DeleteDCHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteEICHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, dc)
+		ResponseWithMsg(c, resStatus, dc)
 		return
 	}
 	dc.Modifier.ID = operatorID
@@ -129,10 +126,9 @@ func DeleteDCsHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteDCsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, dcs)
+		ResponseWithMsg(c, resStatus, dcs)
 		return
 	}
 	// Delete Document Categories

@@ -23,9 +23,8 @@ func GenerateFrontendDBID(c *gin.Context) {
 		return
 	}
 	// Get operator id
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, f)
 		return
 	}

@@ -10,8 +10,10 @@ import (
 
 // Get Constraction Site Options
 func GetCSOsHandler(c *gin.Context) {
-	sios, resStatus, _ := pg.GetCSOs()
-	ResponseWithMsg(c, resStatus, sios)
+	// Get csos
+	csos, resStatus, _ := pg.GetCSOs()
+	// Response
+	ResponseWithMsg(c, resStatus, csos)
 }
 
 // Modify Construction Site Option Handler
@@ -24,10 +26,9 @@ func EditCSOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditCSOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, cso)
+		ResponseWithMsg(c, resStatus, cso)
 		return
 	}
 	cso.Modifier.ID = operatorID

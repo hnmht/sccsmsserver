@@ -22,9 +22,8 @@ func RecieveFilesHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ReceiveFileHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, nil)
 		return
 	}
@@ -195,9 +194,8 @@ func RecieveFilesHandler(c *gin.Context) {
 			return
 		}
 		// Write file information to database
-		resStatus, err = fileInfo.Add()
-		if err != nil || resStatus != i18n.StatusOK {
-			zap.L().Error("file.Add failed:", zap.Error(err))
+		resStatus, _ = fileInfo.Add()
+		if resStatus != i18n.StatusOK {
 			ResponseWithMsg(c, resStatus, err)
 			return
 		}
@@ -219,7 +217,6 @@ func GetFileInfoByHashHandler(c *gin.Context) {
 	// Get file information
 	resStatus, _ := f.GetFileInfoByHash()
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("GetFileInfoByHash error:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, f)
 		return
 	}

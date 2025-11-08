@@ -61,9 +61,8 @@ func AddDeptHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddDeptHandler getCurrentUser failed: " + resStatus.String())
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -84,9 +83,8 @@ func EditDeptHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditDeptHandler getCurrentUser failed: " + resStatus.String())
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -108,9 +106,8 @@ func DelDeptHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelDeptHandler getCurrentUser failed: " + resStatus.String())
 		ResponseWithMsg(c, resStatus, d)
 		return
 	}
@@ -131,9 +128,8 @@ func DelDeptsHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelDeptsHandler getCurrentUser failed: " + resStatus.String())
 		ResponseWithMsg(c, resStatus, depts)
 		return
 	}

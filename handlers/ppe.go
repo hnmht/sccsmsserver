@@ -18,10 +18,9 @@ func AddPPEHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddPPEHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ppe)
+		ResponseWithMsg(c, resStatus, ppe)
 		return
 	}
 	ppe.Creator.ID = operatorID
@@ -47,10 +46,9 @@ func EditPPEHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditPPEHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ppe)
+		ResponseWithMsg(c, resStatus, ppe)
 		return
 	}
 	ppe.Modifier.ID = operatorID
@@ -70,10 +68,9 @@ func DeletePPEHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeletePPEHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ppe)
+		ResponseWithMsg(c, resStatus, ppe)
 		return
 	}
 	ppe.Modifier.ID = operatorID
@@ -124,10 +121,9 @@ func DeletePPEsHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelUDCsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, ppes)
+		ResponseWithMsg(c, resStatus, ppes)
 		return
 	}
 	// Batch Delete

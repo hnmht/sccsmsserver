@@ -18,10 +18,9 @@ func AddRLHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddRLHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, rl)
+		ResponseWithMsg(c, resStatus, rl)
 		return
 	}
 	rl.Creator.ID = operatorID
@@ -49,10 +48,9 @@ func EditRLHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditRLHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, rl)
+		ResponseWithMsg(c, resStatus, rl)
 		return
 	}
 	rl.Modifier.ID = operatorID
@@ -72,10 +70,9 @@ func DeleteRLHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteRLHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, rl)
+		ResponseWithMsg(c, resStatus, rl)
 		return
 	}
 	rl.Modifier.ID = operatorID
@@ -126,14 +123,13 @@ func DeleteRLsHandler(c *gin.Context) {
 		return
 	}
 	// Get Opeartor ID
-	modifyUserId, resStatus := GetCurrentUser(c)
+	modifyUserId, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteRLsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, rls)
+		ResponseWithMsg(c, resStatus, rls)
 		return
 	}
-	//批量删除
+	// Batch delete
 	resStatus, _ = pg.DeleteRLs(rls, modifyUserId)
-
+	// Response
 	ResponseWithMsg(c, resStatus, rls)
 }

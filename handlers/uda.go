@@ -19,9 +19,8 @@ func AddUDAHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	creatorID, resStatus := GetCurrentUser(c)
+	creatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddUDAHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, uda)
 		return
 	}
@@ -40,9 +39,8 @@ func EditUDAHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	//Get operator ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditUDAHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, uda)
 		return
 	}
@@ -62,9 +60,8 @@ func DeleteUDAHandler(c *gin.Context) {
 		return
 	}
 	// Get operator ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteUDAHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, uda)
 		return
 	}
@@ -84,9 +81,8 @@ func DeleteUDAsHandler(c *gin.Context) {
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 	}
 	// Get operator ID
-	modifyUserId, resStatus := GetCurrentUser(c)
+	modifyUserId, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DelUDAsHandler getCurrentUser failed:", zap.Error(err))
 		ResponseWithMsg(c, resStatus, udas)
 		return
 	}

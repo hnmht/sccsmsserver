@@ -63,10 +63,9 @@ func AddWOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddWOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wo)
+		ResponseWithMsg(c, resStatus, wo)
 		return
 	}
 	wo.Creator.ID = operatorID
@@ -86,10 +85,9 @@ func EditWOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditWOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wo)
+		ResponseWithMsg(c, resStatus, wo)
 		return
 	}
 	wo.Modifier.ID = operatorID
@@ -109,10 +107,9 @@ func DeleteWOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteWOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wo)
+		ResponseWithMsg(c, resStatus, wo)
 		return
 	}
 	// Delete
@@ -131,10 +128,9 @@ func DeleteWOsHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteWOsHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wos)
+		ResponseWithMsg(c, resStatus, wos)
 		return
 	}
 	// Batch Delete
@@ -152,10 +148,9 @@ func ConfirmWOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("ConfirmWOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wo)
+		ResponseWithMsg(c, resStatus, wo)
 		return
 	}
 	// Confirm
@@ -174,10 +169,9 @@ func UnConfirmWOHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("UnConfirmWOHandler getCurrentUser failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, wo)
+		ResponseWithMsg(c, resStatus, wo)
 		return
 	}
 	// UnConfirm

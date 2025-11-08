@@ -40,9 +40,8 @@ func AddRoleHandler(c *gin.Context) {
 	}
 
 	// Get Current user ID
-	creatorID, resStatus := GetCurrentUser(c)
+	creatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("AddRoleHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, r)
 		return
 	}
@@ -63,9 +62,8 @@ func DeleteRoleHandler(c *gin.Context) {
 		return
 	}
 	// Get Current User ID
-	modifierID, resStatus := GetCurrentUser(c)
+	modifierID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteRoleHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, r)
 		return
 	}
@@ -86,9 +84,8 @@ func EditRoleHandler(c *gin.Context) {
 		return
 	}
 	// Get current user ID
-	modifierId, resStatus := GetCurrentUser(c)
+	modifierId, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("EditRoleHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, r)
 		return
 	}
@@ -109,9 +106,8 @@ func DeleteRolesHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("DeleteRoleHandler getCurrentUser failed", zap.Error(err))
 		ResponseWithMsg(c, resStatus, r)
 		return
 	}
@@ -145,9 +141,8 @@ func UpdateRoleMenusHandler(c *gin.Context) {
 		return
 	}
 	// Get Operator ID
-	operatorID, resStatus := GetCurrentUser(c)
+	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		zap.L().Error("UpdateRoleMenus getCurrentUser failed: ", zap.Error(err))
 		ResponseWithMsg(c, resStatus, r)
 		return
 	}

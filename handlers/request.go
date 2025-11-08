@@ -9,17 +9,17 @@ import (
 )
 
 // Get the current user ID from the request
-func GetCurrentUser(c *gin.Context) (userID int32, resStatus i18n.ResKey) {
+func GetOperatorID(c *gin.Context) (userID int32, resStatus i18n.ResKey) {
 	resStatus = i18n.StatusOK
 	uid, ok := c.Get(pub.CTXUserID)
 	if !ok {
-		zap.L().Error("GetCurrentUser c.Get(pub.CTXUserID) failed.")
+		zap.L().Error("GetOperatorID c.Get(pub.CTXUserID) failed.")
 		resStatus = i18n.CodeNeedLogin
 		return
 	}
 	userID, ok = uid.(int32)
 	if !ok {
-		zap.L().Error("GetCurrentUser uid.(int32) failed.")
+		zap.L().Error("GetOperatorID uid.(int32) failed.")
 		resStatus = i18n.CodeNeedLogin
 		return
 	}
