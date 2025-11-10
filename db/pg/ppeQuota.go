@@ -655,7 +655,7 @@ func (pq *PPEQuota) Unconfirm(operatorID int32) (resStatus i18n.ResKey, err erro
 	}
 	defer tx.Commit()
 	// Update the confirmation flag in the ppequotas_h table
-	confirmHeadSql := `update ppequotas_h set status=0,confirmerid=0,ts=current_timestamp 
+	confirmHeadSql := `update ppequotas_h set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	headRes, err := tx.Exec(confirmHeadSql, pq.HID, pq.Ts)
 	if err != nil {
@@ -678,7 +678,7 @@ func (pq *PPEQuota) Unconfirm(operatorID int32) (resStatus i18n.ResKey, err erro
 		return
 	}
 	// Prepare to update the confirmation flag in the ppequatos_b table
-	confirmRowSql := `update ppequotas_b set status=0,confirmerid=0,ts=current_timestamp 
+	confirmRowSql := `update ppequotas_b set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {

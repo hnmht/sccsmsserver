@@ -1135,7 +1135,7 @@ func (tr *TrainingRecord) UnConfirm(operatorID int32) (resStatus i18n.ResKey, er
 	}
 	defer tx.Commit()
 	// Update the header record in the trainingrecord_h table
-	confirmHeadSql := `update trainingrecord_h set status=0,confirmerid=0,ts=current_timestamp 
+	confirmHeadSql := `update trainingrecord_h set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	headRes, err := tx.Exec(confirmHeadSql, tr.HID, tr.Ts)
 	if err != nil {
@@ -1158,7 +1158,7 @@ func (tr *TrainingRecord) UnConfirm(operatorID int32) (resStatus i18n.ResKey, er
 		return
 	}
 	// Prepare update the body data
-	confirmRowSql := `update trainingrecord_b set status=0,confirmerid=0,ts=current_timestamp 
+	confirmRowSql := `update trainingrecord_b set status=0,confirmerid=0,confirmtime=to_timestamp(0),ts=current_timestamp 
 	where id=$1 and dr=0 and status=1 and ts=$2`
 	rowStmt, err := tx.Prepare(confirmRowSql)
 	if err != nil {
