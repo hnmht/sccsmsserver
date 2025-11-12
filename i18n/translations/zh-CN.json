@@ -572,6 +572,11 @@
             "message": "培训记录表体存在非确认状态行."
         },
         {
+            "key": "StatusPPEIFBodyNoConfirm",
+            "type": "string",
+            "message": "劳保用品发放单标题存在非确认状态行."
+        },
+        {
             "key": "StatusUDUsed",
             "type": "string",
             "message": "被自定义档案引用."

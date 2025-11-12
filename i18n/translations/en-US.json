@@ -572,6 +572,11 @@
             "message": "There are unconfirmed rows in the training record body."
         },
         {
+            "key": "StatusPPEIFBodyNoConfirm",
+            "type": "string",
+            "message": "There are unconfirmed rows in the PPE Issuance Form body."
+        },
+        {
             "key": "StatusUDUsed",
             "type": "string",
             "message": "Referenced by User Defined master data."

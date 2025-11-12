@@ -143,6 +143,8 @@ const (
 	StatusPQExist ResKey = "StatusPQExist"
 	// Training Record (12300-12399)
 	StatusTRBodyNoConfirm ResKey = "StatusTRBodyNoConfirm"
+	// PPE Issuance Form (12400-12499)
+	StatusPPEIFBodyNoConfirm ResKey = "StatusPPEIFBodyNoConfirm"
 	// Referenced （80000-89999）
 	StatusUDUsed             ResKey = "StatusUDUsed"
 	StatusEPAUsed            ResKey = "StatusEPAUsed"

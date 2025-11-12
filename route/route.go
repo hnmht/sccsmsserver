@@ -33,13 +33,13 @@ func Setup(mode string) *gin.Engine {
 		FileRoute(superGroup)      // File
 		IRFRoute(superGroup)       // Issue Resolution Form
 		// LandPageRoute(superGroup)  //landingPage首页定义
-		// LDRoute(superGroup)        //劳保用品发放单
 		MsgRoute(superGroup)      // Message
 		OuRoute(superGroup)       // Online user
 		PersonRoute(superGroup)   // Person
 		PositionRoute(superGroup) // Position
-		PPERoute(superGroup)      // Personal Protective Equipment
+		PPEIFRoute(superGroup)    // Personal Protective Equipment Issuance Form
 		PPEQuotaRoute(superGroup) // Personal Protective Equipment Quota
+		PPERoute(superGroup)      // Personal Protective Equipment
 		PubRoute(superGroup)      // System public information
 		RepRoute(superGroup)      // Report
 		RLRoute(superGroup)       // Risk Level
