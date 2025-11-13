@@ -8,7 +8,7 @@ import (
 )
 
 func PPEIFRoute(g *gin.RouterGroup) {
-	PPEIFGroup := g.Group("/ppeif", middleware.JWTAuthMiddleware())
+	PPEIFGroup := g.Group("/ppeif", middleware.CheckClientTypeMiddleware(), middleware.JWTAuthMiddleware())
 	{
 		// Add PPE Issuance Form
 		PPEIFGroup.POST("/add", handlers.AddPPEIFHandler)
@@ -25,7 +25,7 @@ func PPEIFRoute(g *gin.RouterGroup) {
 		// Confirm PPE Issuance Form
 		PPEIFGroup.POST("/confirm", handlers.ConfirmPPEIFHandler)
 		// Unconfirm PPE Issuance Form
-		PPEIFGroup.POST("/unconfirm", handlers.UnConfirmIRFhandler)
+		PPEIFGroup.POST("/unconfirm", handlers.UnconfirmPPEIFHandler)
 		// Get PPE Issuance Form Report
 		PPEIFGroup.POST("/rep", handlers.GetPPEIFReportHandler)
 	}

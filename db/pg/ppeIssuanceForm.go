@@ -1294,7 +1294,7 @@ func (pif *PPEIssuanceForm) Unconfirm(operatorID int32) (resStatus i18n.ResKey, 
 			return
 		}
 	}
-	return i18n.StatusOK, nil
+	return
 }
 
 // Get PPE Issuance Form Report
