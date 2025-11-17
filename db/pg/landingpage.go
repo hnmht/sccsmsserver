@@ -1,38 +1,101 @@
 package pg
 
 import (
+	"database/sql"
+	"sccsmsserver/i18n"
 	"time"
 
 	"go.uber.org/zap"
 )
 
 type LandingPageInfo struct {
-	SysNameDisp string    `db:"sysnamedisp" json:"sysnamedisp"`
-	IntroText   string    `db:"introtext" json:"introtext"`
+	SysNameDisp string    `db:"sysnamedisp" json:"sysNameDisp"`
+	IntroText   string    `db:"introtext" json:"introText"`
 	File        File      `db:"fileid" json:"file"`
 	ModifyDate  time.Time `db:"modifytime" json:"modifyDate"`
-	ModifyUser  Person    `db:"modifierid" json:"modifier"`
+	Modifier    Person    `db:"modifierid" json:"modifier"`
 	Ts          time.Time `db:"ts" json:"ts"`
 }
 
-// 初始化首页内容定义表
+// Initialize the landing page table
 func initLandingPage() (isFinish bool, err error) {
-	//检查首页内容定义表是否存在记录
+	// Step 1: Check if a record exists for default value in the landingpage table
 	sqlStr := "select count(fileid) as rownum from landingpage"
 	hasRecord, isFinish, err := genericCheckRecord("landingpage", sqlStr)
-	if hasRecord || !isFinish || err != nil { //有数据 或 没有完成 或有错误
+	if hasRecord || !isFinish || err != nil {
 		return
 	}
-	//表中没有数据则插入预置数据
+	// Step 2: Insert a default record into the landingpage table
 	sqlStr = `insert into landingpage(sysnamedisp,introtext,fileid,modifierid) 
-		values('SeaCloud现场管理系统',
-		'一套实用有效的企业安全生产信息化系统,包含现场管理、文档管理、培训管理、劳保用品管理四大模块，帮助企业有效落实安全生产措施.'
+		values('SeaCloud Construction Site Managemnet System',
+		'An open-source construction site management system that helps managers effectively implement on-site management measures.'
 		,0,10000);`
 	_, err = db.Exec(sqlStr)
 	if err != nil {
 		isFinish = false
 		zap.L().Error("landingpage insert initvalue failed", zap.Error(err))
 		return isFinish, err
+	}
+	return
+}
+
+// Get Landing Page Info
+func GetLandingPageInfo() (info LandingPageInfo, resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	sqlStr := "select sysnamedisp,introtext,fileid,modifytime,modifierid,ts from landingpage limit 1"
+	err = db.QueryRow(sqlStr).Scan(&info.SysNameDisp, &info.IntroText, &info.File.ID, &info.ModifyDate, &info.Modifier.ID, &info.Ts)
+	if err != nil {
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("GetLandingPageInfo db.QueryRow failed ", zap.Error(err))
+		return
+	}
+	// Get File details
+	if info.File.ID > 0 {
+		resStatus, err = info.File.GetFileInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
+	}
+	// Get Modifier details
+	if info.Modifier.ID > 0 {
+		resStatus, err = info.Modifier.GetPersonInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
+	}
+
+	return
+}
+
+// Modify Landing Page Info
+func (info *LandingPageInfo) Modify() (resStatus i18n.ResKey, err error) {
+	resStatus = i18n.StatusOK
+	sqlStr := `update landingpage set sysnamedisp=$1,introtext=$2,fileid=$3,modifytime=current_timestamp,modifierid=$4,ts=current_timestamp where ts=$5
+	 returning modifytime,ts,modifierid`
+	err = db.QueryRow(sqlStr, info.SysNameDisp, info.IntroText, info.File.ID, info.Modifier.ID, info.Ts).Scan(&info.ModifyDate, &info.Ts, &info.Modifier.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			resStatus = i18n.StatusOtherEdit
+			return
+		}
+		resStatus = i18n.StatusInternalError
+		zap.L().Error("LandingPageInfo.Modify db.QueryRow failed", zap.Error(err))
+		return
+	}
+	// Get File info
+	if info.File.ID > 0 {
+		resStatus, err = info.File.GetFileInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
+	}
+
+	// Get Modifier info
+	if info.Modifier.ID > 0 {
+		resStatus, err = info.Modifier.GetPersonInfoByID()
+		if err != nil || resStatus != i18n.StatusOK {
+			return
+		}
 	}
 	return
 }

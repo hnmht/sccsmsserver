@@ -107,9 +107,9 @@ type PPEIssuanceFormReport struct {
 	EndDate               time.Time `json:"endDate"`
 	SourceType            string    `json:"sourceType"`
 	Hstatus               int16     `json:"hStatus"`
-	CreateUserID          int32     `json:"creatorID"`
-	CreateUserCode        string    `json:"creatorCode"`
-	CreateUserName        string    `json:"creatorName"`
+	CreatorID             int32     `json:"creatorID"`
+	CreatorCode           string    `json:"creatorCode"`
+	CreatorName           string    `json:"creatorName"`
 }
 
 // Generate a PPE Issuance Form via Wizard
@@ -1396,7 +1396,7 @@ func GetPPEIFReport(queryString string) (pifrs []PPEIssuanceFormReport, resStatu
 			&pifr.PPEName, &pifr.PPEModel, &pifr.PPEUnit, &pifr.Quantity, &pifr.BDescription,
 			&pifr.BStatus, &pifr.Billnumber, &pifr.BillDate, &pifr.IssuingDeptID, &pifr.IssuingDeptCode,
 			&pifr.IssuingDeptName, &pifr.HDescription, &pifr.Period, &pifr.StartDate, &pifr.EndDate,
-			&pifr.SourceType, &pifr.Hstatus, &pifr.CreateUserID, &pifr.CreateUserCode, &pifr.CreateUserName)
+			&pifr.SourceType, &pifr.Hstatus, &pifr.CreatorID, &pifr.CreatorCode, &pifr.CreatorName)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("GetQueryDocumentReport ldRep.Next() ldRep.Scan failed", zap.Error(err))

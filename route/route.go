@@ -32,24 +32,24 @@ func Setup(mode string) *gin.Engine {
 		EventRoute(superGroup)     // User Events
 		FileRoute(superGroup)      // File
 		IRFRoute(superGroup)       // Issue Resolution Form
-		// LandPageRoute(superGroup)  //landingPage首页定义
-		MsgRoute(superGroup)      // Message
-		OuRoute(superGroup)       // Online user
-		PersonRoute(superGroup)   // Person
-		PositionRoute(superGroup) // Position
-		PPEIFRoute(superGroup)    // Personal Protective Equipment Issuance Form
-		PPEQuotaRoute(superGroup) // Personal Protective Equipment Quota
-		PPERoute(superGroup)      // Personal Protective Equipment
-		PubRoute(superGroup)      // System public information
-		RepRoute(superGroup)      // Report
-		RLRoute(superGroup)       // Risk Level
-		RoleRoute(superGroup)     // Role
-		TCRoute(superGroup)       // Training Course
-		TRRoute(superGroup)       // Training Record
-		UDARoute(superGroup)      // User-defined Archive
-		UDCRoute(superGroup)      // User-defined Category
-		UserRoute(superGroup)     // User
-		WORoute(superGroup)       // Work Order
+		LandPageRoute(superGroup)  // Landing Page define
+		MsgRoute(superGroup)       // Message
+		OuRoute(superGroup)        // Online user
+		PersonRoute(superGroup)    // Person
+		PositionRoute(superGroup)  // Position
+		PPEIFRoute(superGroup)     // Personal Protective Equipment Issuance Form
+		PPEQuotaRoute(superGroup)  // Personal Protective Equipment Quota
+		PPERoute(superGroup)       // Personal Protective Equipment
+		PubRoute(superGroup)       // System public information
+		RepRoute(superGroup)       // Report
+		RLRoute(superGroup)        // Risk Level
+		RoleRoute(superGroup)      // Role
+		TCRoute(superGroup)        // Training Course
+		TRRoute(superGroup)        // Training Record
+		UDARoute(superGroup)       // User-defined Archive
+		UDCRoute(superGroup)       // User-defined Category
+		UserRoute(superGroup)      // User
+		WORoute(superGroup)        // Work Order
 	}
 	//ping
 	// r.POST("/ping", control.PubServerPing)
