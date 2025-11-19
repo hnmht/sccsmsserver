@@ -2,5 +2,4 @@ config.yaml
 *.log
 *.exe
 ui/out
-ui/build
-ui/build_b
+ui/dist

@@ -46,8 +46,8 @@ type ParamChangePwd struct {
 	UserCode      string `json:"code"`
 	UserName      string `json:"name"`
 	Password      string `json:"password" binding:"required"`
-	NewPassword   string `json:"newpwd" binding:"required"`
-	ConfirmNewPwd string `json:"confirmnewpwd" binding:"required"`
+	NewPassword   string `json:"newPassword" binding:"required"`
+	ConfirmNewPwd string `json:"confirmNewPassword" binding:"required"`
 }
 
 // Initialize user table
@@ -1020,10 +1020,10 @@ func (pcp *ParamChangePwd) ChangePassword() (resStatus i18n.ResKey, err error) {
 	// change password
 	sqlStr = "update sysuser set password=$1 where id=$2"
 	newPwd := encryptPassword(pcp.NewPassword)
-	_, err = db.Exec(newPwd, pcp.UserID)
+	_, err = db.Exec(sqlStr, newPwd, pcp.UserID)
 	if err != nil {
 		zap.L().Error("ChangePassword update exec failed:", zap.Error(err))
-		resStatus = i18n.StatusErrorUnknow
+		resStatus = i18n.StatusInternalError
 		return
 	}
 	return

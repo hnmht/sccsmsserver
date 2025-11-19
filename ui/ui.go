@@ -11,12 +11,12 @@ import (
 	"go.uber.org/zap"
 )
 
-//go:embed build/*
+//go:embed dist/*
 var embeddedFiles embed.FS
 
 func AddRoutes(router *gin.Engine) {
-	// 获取 build 子目录
-	buildFS, err := fs.Sub(embeddedFiles, "build")
+	// Get "dist" file archive
+	buildFS, err := fs.Sub(embeddedFiles, "dist")
 	if err != nil {
 		zap.L().Error("AddRoutes fs.Sub failed:", zap.Error(err))
 		return
