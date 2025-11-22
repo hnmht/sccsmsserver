@@ -4,7 +4,6 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"go.uber.org/zap"
 	"golang.org/x/text/feature/plural"
@@ -89,7 +88,6 @@ func InitTranslators() (err error) {
 			case "plural":
 				cm := plural.Selectf(msg.SelectorF.Arg, msg.SelectorF.Format, msg.SelectorF.Cases...)
 				err = message.Set(lang.Tag, msg.Key, cm)
-				fmt.Println("lang.Tag:", lang.Tag, ". msg.Key:", msg.Key, "cm:", cm)
 				if err != nil {
 					zap.L().Error("InitTranslators message.Set failed:", zap.Error(err))
 					return err

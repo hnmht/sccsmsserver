@@ -30,7 +30,7 @@ type ParamLogin struct {
 
 // User login failure record struct
 type UserLoginFault struct {
-	UserID    int32     `db:"user_id" json:"userID"`
+	UserID    int32     `db:"userid" json:"userID"`
 	UserCode  string    `db:"usercode" json:"userCode"`
 	ClientIp  string    `db:"clientip" json:"clientIp"`
 	UserAgent string    `db:"useragent" json:"useragent"`
@@ -197,8 +197,8 @@ func (ulf *UserLoginFault) handlingInvalidPassword() (err error) {
 	var pwdFaultNum int32
 	sqlStr := `select count(id) as faultnum from sysloginfault 
 	where ts > (current_timestamp - interval '30 minutes') 
-	and type = 1 
-	and user_id = $1  `
+	and type=1 
+	and userid=$1`
 	err = db.QueryRow(sqlStr, &ulf.UserID).Scan(&pwdFaultNum)
 	if err != nil {
 		zap.L().Error("UserLoginFault TreatmentInvalidPassword QueryRow failed", zap.Error(err))
