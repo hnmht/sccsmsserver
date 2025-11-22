@@ -1028,8 +1028,17 @@
         },
         {
             "key": "StatusResReject",
-            "type": "string",
-            "message": "Access denied by server."
+            "type": "plural",
+            "selectorf": {
+                "arg": 1,
+                "format": "%d",
+                "cases": [
+                    "=1",
+                    "The IP address has been locked. Please try again in 1 minute.",
+                    "other",
+                    "The IP address has been locked. Please try again in %d minutes."
+                ]
+            }
         },
         {
             "key": "StatusResNoData",

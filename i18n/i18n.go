@@ -4,6 +4,7 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"go.uber.org/zap"
 	"golang.org/x/text/feature/plural"
@@ -18,17 +19,17 @@ var transFile embed.FS
 type ResKey string
 
 // plural.Selectf function parameters
-type SelectfParms struct {
+type SelectorF struct {
 	Arg    int           `json:"arg"`
 	Format string        `json:"format"`
 	Cases  []interface{} `json:"cases"`
 }
 
 type TransItem struct {
-	Key          string       `json:"key"`
-	Type         string       `json:"type"` // string || plural
-	Message      string       `json:"message"`
-	SelectfParms SelectfParms `json:"selectParms"`
+	Key       string    `json:"key"`
+	Type      string    `json:"type"` // string || plural
+	Message   string    `json:"message"`
+	SelectorF SelectorF `json:"selectorf"`
 }
 
 // Language translation file structor
@@ -86,8 +87,9 @@ func InitTranslators() (err error) {
 					return err
 				}
 			case "plural":
-				cm := plural.Selectf(msg.SelectfParms.Arg, msg.SelectfParms.Format, msg.SelectfParms.Cases...)
+				cm := plural.Selectf(msg.SelectorF.Arg, msg.SelectorF.Format, msg.SelectorF.Cases...)
 				err = message.Set(lang.Tag, msg.Key, cm)
+				fmt.Println("lang.Tag:", lang.Tag, ". msg.Key:", msg.Key, "cm:", cm)
 				if err != nil {
 					zap.L().Error("InitTranslators message.Set failed:", zap.Error(err))
 					return err
@@ -97,7 +99,6 @@ func InitTranslators() (err error) {
 				return errors.New("InitTranslators TransItem type undefined")
 			}
 		}
-
 		p := message.NewPrinter(lang.Tag)
 		if lang.Default {
 			defaultPrinter = p
@@ -128,5 +129,6 @@ func (r ResKey) Msg(lang string, params ...interface{}) (result string) {
 	if result == rs {
 		result = defaultPrinter.Sprintf(rs, params...)
 	}
+
 	return
 }

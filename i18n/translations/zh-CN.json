@@ -1028,8 +1028,17 @@
         },
         {
             "key": "StatusResReject",
-            "type": "string",
-            "message": "服务器拒绝."
+            "type": "plural",
+            "selectorf": {
+                "arg": 1,
+                "format": "%d",
+                "cases": [
+                    "=1",
+                    "当前IP地址已被锁定. 请在1分钟后再试.",
+                    "other",
+                    "当前IP地址已被锁定. 请在 %d 分钟后再试."
+                ]
+            }
         },
         {
             "key": "StatusResNoData",

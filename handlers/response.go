@@ -13,9 +13,9 @@ type ResponseData struct {
 	Data   interface{} `json:"data"`
 }
 
-func ResponseWithMsg(c *gin.Context, key i18n.ResKey, data interface{}) {
+func ResponseWithMsg(c *gin.Context, key i18n.ResKey, data interface{}, params ...interface{}) {
 	lang := c.GetHeader("Accept-Language")
-	msg := key.Msg(lang)
+	msg := key.Msg(lang, params...)
 	c.JSON(http.StatusOK, &ResponseData{
 		ResKey: key,
 		Msg:    msg,

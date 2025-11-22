@@ -12,7 +12,7 @@ func Setup(mode string) *gin.Engine {
 	gin.SetMode(mode)
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true)) // Global middleware
-	// r.Use(IpBlackListMiddleWare()) // IP Black list
+	r.Use(IpBlackListMiddleWare())                      // IP Black list
 	// Globle path
 	superGroup := r.Group(pub.APIPath)
 	{
