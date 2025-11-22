@@ -12,17 +12,17 @@ func Cors() gin.HandlerFunc {
 		method := c.Request.Method
 		origin := c.Request.Header.Get("Origin")
 		if origin != "" {
-			//接收客户端发送的origin （重要！）
+			// Whether the response can be shared with requesting code from the given origin
 			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
-			//服务器支持的所有跨域请求的方法
+			// One or more HTTP request methods allowed when accessing a resource in response to preflight request
 			c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE,UPDATE")
-			//允许跨域设置可以返回其他子段，可以自定义字段
+			// Used in response to a preflight request to indicate the HTTP headers that can be used during the actual request
 			c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization, Accept, X-Requested-With")
-			// 允许浏览器（客户端）可以解析的头部 （重要）
+			// Allows a server to indicate which response headers should be made avaliable to scripts running in the browser in response to a cross-origin request
 			c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers")
-			//设置缓存时间
+			//Indicates how long the results of a preflight request can be cached
 			c.Header("Access-Control-Max-Age", "172800")
-			//允许客户端传递校验信息比如 cookie (重要)
+			// Tells browser whether the server allows credentials to be included in cross-origin HTTP requests
 			c.Header("Access-Control-Allow-Credentials", "true")
 		}
 		if method == "OPTIONS" {

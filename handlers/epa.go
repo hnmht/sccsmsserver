@@ -11,9 +11,9 @@ import (
 // Get Execution Project List handler
 func GetEPListHandler(c *gin.Context) {
 	// Get EP list
-	eids, resStatus, _ := pg.GetEPList()
+	epas, resStatus, _ := pg.GetEPList()
 	// Response
-	ResponseWithMsg(c, resStatus, eids)
+	ResponseWithMsg(c, resStatus, epas)
 }
 
 // Get Latest Execution Project Front-end Cache handler
@@ -31,26 +31,26 @@ func GetEPCacheHandler(c *gin.Context) {
 	ResponseWithMsg(c, resStatus, epac)
 }
 
-// CheckEPCodeExistHandler 检查执行项目类别档案名称是否存在
+// Check Execution Project name exists handler
 func CheckEPCodeExistHandler(c *gin.Context) {
-	eid := new(pg.ExecutionProject)
-	err := c.ShouldBind(eid)
+	epa := new(pg.ExecutionProject)
+	err := c.ShouldBind(epa)
 	if err != nil {
 		zap.L().Error("CheckEPCodeExistHandler invalid param", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Check Code
-	resStatus, _ := eid.CheckCodeExist()
+	resStatus, _ := epa.CheckCodeExist()
 	// Response
-	ResponseWithMsg(c, resStatus, eid)
+	ResponseWithMsg(c, resStatus, epa)
 }
 
 // Add Execution Project master data handler
 func AddEPHandler(c *gin.Context) {
 	// Parse the parameters
-	eid := new(pg.ExecutionProject)
-	err := c.ShouldBind(eid)
+	epa := new(pg.ExecutionProject)
+	err := c.ShouldBind(epa)
 	if err != nil {
 		zap.L().Error("AddEPHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
@@ -59,21 +59,21 @@ func AddEPHandler(c *gin.Context) {
 	// Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, resStatus, eid)
+		ResponseWithMsg(c, resStatus, epa)
 		return
 	}
-	eid.Creator.ID = opeartorID
+	epa.Creator.ID = opeartorID
 	// Add EP
-	resStatus, _ = eid.Add()
+	resStatus, _ = epa.Add()
 	// Response
-	ResponseWithMsg(c, resStatus, eid)
+	ResponseWithMsg(c, resStatus, epa)
 }
 
 // Edit Execution Project master data handler
 func EditEPHandler(c *gin.Context) {
 	// Parse the parameters
-	eid := new(pg.ExecutionProject)
-	err := c.ShouldBind(eid)
+	epa := new(pg.ExecutionProject)
+	err := c.ShouldBind(epa)
 	if err != nil {
 		zap.L().Error("EditEPHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
@@ -82,22 +82,22 @@ func EditEPHandler(c *gin.Context) {
 	// Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, resStatus, eid)
+		ResponseWithMsg(c, resStatus, epa)
 		return
 	}
-	eid.Modifier.ID = opeartorID
+	epa.Modifier.ID = opeartorID
 
 	// Modify
-	resStats, _ := eid.Edit()
+	resStats, _ := epa.Edit()
 	// Response
-	ResponseWithMsg(c, resStats, eid)
+	ResponseWithMsg(c, resStats, epa)
 }
 
 // Delete Execution Project master data handler
 func DeleteEPHandler(c *gin.Context) {
 	// Get the parameters
-	eid := new(pg.ExecutionProject)
-	err := c.ShouldBind(eid)
+	epa := new(pg.ExecutionProject)
+	err := c.ShouldBind(epa)
 	if err != nil {
 		zap.L().Error("DeleteEPHandler invalid param", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
@@ -106,21 +106,21 @@ func DeleteEPHandler(c *gin.Context) {
 	// Get operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, resStatus, eid)
+		ResponseWithMsg(c, resStatus, epa)
 		return
 	}
-	eid.Modifier.ID = opeartorID
+	epa.Modifier.ID = opeartorID
 	// Delete
-	resStatus, _ = eid.Delete()
+	resStatus, _ = epa.Delete()
 	// Response
-	ResponseWithMsg(c, resStatus, eid)
+	ResponseWithMsg(c, resStatus, epa)
 }
 
 // Batch delete Execution Project master datas handler
 func DeleteEPsHandler(c *gin.Context) {
 	// Get the parameters
-	eids := new([]pg.ExecutionProject)
-	err := c.ShouldBind(eids)
+	epas := new([]pg.ExecutionProject)
+	err := c.ShouldBind(epas)
 	if err != nil {
 		zap.L().Error("DeleteEPsHandler invaid parms", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
@@ -128,11 +128,11 @@ func DeleteEPsHandler(c *gin.Context) {
 	// Get operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, resStatus, eids)
+		ResponseWithMsg(c, resStatus, epas)
 		return
 	}
 	// Batch delete
-	resStatus, _ = pg.DeleteEPs(eids, opeartorID)
+	resStatus, _ = pg.DeleteEPs(epas, opeartorID)
 	// Response
-	ResponseWithMsg(c, resStatus, eids)
+	ResponseWithMsg(c, resStatus, epas)
 }

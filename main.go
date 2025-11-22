@@ -60,26 +60,25 @@ func main() {
 		return
 	}
 
-	//9.注册路由
+	// Step 7: Route Setup
 	r := route.Setup(setting.Conf.Mode)
 
-	//10.配置服务
+	// Step 8: Start HTTP server
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", setting.Conf.Port),
 		Handler: r,
 	}
-
 	var isTLS = setting.Conf.TLS
 	if setting.Conf.TLS {
 		var certExist bool = true
 		var keyExist bool = true
-		//检查证书文件是否存在
+		// Check if the certificate file exists
 		_, errCert := os.Lstat(setting.Conf.CertificateFile)
 		if errCert != nil {
 			certExist = false
 			zap.L().Error("get CertificateFile failed", zap.Error(errCert))
 		}
-		//检查私玥文件是否存在
+		// Check if the private key file exists
 		_, errKey := os.Lstat(setting.Conf.PrivateKeyFile)
 		if errKey != nil {
 			keyExist = false
@@ -88,7 +87,7 @@ func main() {
 
 		if !certExist || !keyExist {
 			isTLS = false
-			zap.L().Info("没有找到证书文件或私钥文件,系统将以http方式提供服务!")
+			zap.L().Info("The certificate or private key file was not found. the system will serve using HTTP.")
 		}
 	}
 
@@ -102,8 +101,8 @@ func main() {
 	if setting.Conf.Mode == "release" {
 		fmt.Println("...............................................................")
 		fmt.Println(" ")
-		fmt.Println("SeaCloud现场管理系统")
-		fmt.Println("在浏览器中输入以下地址访问系统:")
+		fmt.Println("Sea&Cloud Consruction Site Management System")
+		fmt.Println("Enter the following address in your browser to access the system:")
 		for _, ip := range ipList {
 			if ip.To4() != nil {
 				fmt.Println(protocol + "://" + ip.String() + ":" + portStr)
@@ -112,13 +111,12 @@ func main() {
 		fmt.Println(" ")
 		fmt.Println("...............................................................")
 		fmt.Println(" ")
-		fmt.Println("周口市海云信息技术有限公司")
-		fmt.Println("https://www.zkseacloud.cn")
+		fmt.Println("Author: Haitao Meng")
+		fmt.Println("https://github.com/hnmht")
 		fmt.Println(" ")
 		fmt.Println("...............................................................")
 		fmt.Println(" ")
-		fmt.Println("SeaCloud 现场管理系统正在运行,请勿关闭此窗口...")
-		fmt.Println("SeaCloud Scene Management System Backend Services running, Don't close this window...")
+		fmt.Println("Sea&Cloud Construction Site Management System Backend Services running, Don't close this window...")
 		fmt.Println(" ")
 		fmt.Println("...............................................................")
 	}
@@ -134,16 +132,17 @@ func main() {
 			zap.L().Error("srv.ListenAndServe failed", zap.Error(err))
 		}
 	}()
-	//11.关机
+	// Shut down the service
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	zap.L().Info("Shutdown Server...")
-	//创建一个5秒超时的context
+	// Create a context with a 5-second timeout.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	//等待5秒，将未处理完的请求处理完成再关闭服务，超过5秒就超时退出
+	// Wait for 5 seconds to complete pending requests before shutting down the service.
+	// Exit withe a timeout if it exceeds 5 seconds.
 	if err := srv.Shutdown(ctx); err != nil {
 		zap.L().Error("Server Shutdown failed:", zap.Error(err))
 	}

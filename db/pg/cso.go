@@ -41,7 +41,7 @@ func initCSO() (isFinish bool, err error) {
 	// Check if a record exists in the cso table
 	sqlStr := "select count(id) from cso"
 	hasRecord, isFinish, err := genericCheckRecord("cso", sqlStr)
-	if hasRecord || !isFinish || err != nil { //有数据 或 没有完成 或有错误
+	if hasRecord || !isFinish || err != nil {
 		return
 	}
 	// If there's no data, continue with the initialzation

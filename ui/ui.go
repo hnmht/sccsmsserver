@@ -21,9 +21,9 @@ func AddRoutes(router *gin.Engine) {
 		zap.L().Error("AddRoutes fs.Sub failed:", zap.Error(err))
 		return
 	}
-	// 静态资源路径，例如 /static/js/main.js
+	// Static resource path
 	router.StaticFS("/", http.FS(buildFS))
-	// fallback 所有非 /api/* 路由到 index.html
+	// Fallback
 	router.NoRoute(func(c *gin.Context) {
 		if strings.HasPrefix(c.Request.URL.Path, pub.APIPath) {
 			c.JSON(http.StatusNotFound, gin.H{

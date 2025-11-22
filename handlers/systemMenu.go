@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetMenuHandler 获取树状菜单列表
+// Get Menulist handler
 func GetMenuHandler(c *gin.Context) {
 	ResponseWithMsg(c, i18n.StatusOK, pg.SysFunctionList)
 }

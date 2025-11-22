@@ -49,11 +49,9 @@ func CheckClientTypeMiddleware() func(c *gin.Context) {
 	}
 }
 
-// JWTAuthMiddleware 基于JWT的认证中间件
+// JWT authentication middleware
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		// startTime := time.Now()
-		//约定请求JWTToken放在请求Header的Authorization中，并使用Bearer开头 : Authorization: Bearer ****
 		authHeader := c.Request.Header.Get("Authorization")
 		clientType := c.Request.Header.Get("XClientType")
 
@@ -63,7 +61,6 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		// 判断格式：解析请求头按照空格分割
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			handlers.ResponseWithMsg(c, i18n.CodeInvalidToken, nil)
@@ -71,7 +68,6 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		//parts[1]是获取到的tokenString, 使用JWT解析函数进行解析
 		mc, resStaus := jwt.ParseToken(parts[1])
 		if resStaus != i18n.StatusOK {
 			handlers.ResponseWithMsg(c, resStaus, nil)
@@ -79,7 +75,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		//从缓存中获取当前用户
+		// Get Current User from cache
 		var ou pg.OnlineUser
 		ou.User.ID = mc.UserID
 		ou.ClientType = clientType
@@ -90,24 +86,26 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 
-		//如果token没有存在于在线用户缓存中，说明用户被管理员踢出系统
+		// If the user token is not found in the cache,
+		// it indicate that the token has been invalidated bye the administrator.
 		if exist == 0 {
 			handlers.ResponseWithMsg(c, i18n.CodeTokenDestroy, nil)
 			c.Abort()
 			return
 		}
 
-		//如果token存在但是和tokenID不一致，说明用户已经在其他终端登录
+		// If the token exists but the ID is mismatched,
+		// it means the user has already logged in another device
 		if ou.TokenID != mc.Id {
 			handlers.ResponseWithMsg(c, i18n.CodeLoginOther, nil)
 			c.Abort()
 			return
 		}
 
-		//将当前请求的usrename信息保存到请求上下文
+		// Save the current request's user information to the context
 		c.Set(pub.CTXUserCode, mc.UserCode)
 		c.Set(pub.CTXUserID, mc.UserID)
 		c.Set(pub.CTXTokenID, mc.Id)
-		c.Next() //后续的处理请求函数中,可以通过c.GET(CTXUsername和CTXUserID)获取当前用户信息
+		c.Next()
 	}
 }

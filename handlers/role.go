@@ -25,7 +25,7 @@ func CheckRoleNameExistHandler(c *gin.Context) {
 		return
 	}
 	resStatus, _ := r.CheckNameExist()
-	//返回
+	// Response
 	ResponseWithMsg(c, resStatus, r)
 }
 

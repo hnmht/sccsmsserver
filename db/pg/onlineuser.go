@@ -77,7 +77,7 @@ func (ou *OnlineUser) Del() (resStatus i18n.ResKey, err error) {
 func GetAllOnlineUser() (ous []OnlineUser, resStatus i18n.ResKey, err error) {
 	ous = make([]OnlineUser, 0)
 	resStatus = i18n.StatusOK
-	//获取用户表中的所有用户
+	// Retrive all users from the sysuser table
 	sqlStr := `select id from sysuser where dr=0`
 	rows, err := db.Query(sqlStr)
 	if err != nil {
@@ -87,7 +87,7 @@ func GetAllOnlineUser() (ous []OnlineUser, resStatus i18n.ResKey, err error) {
 	}
 	defer rows.Close()
 
-	//提取数据
+	// Extract data row by row
 	for rows.Next() {
 		var ou OnlineUser
 		err = rows.Scan(&ou.User.ID)
@@ -97,7 +97,7 @@ func GetAllOnlineUser() (ous []OnlineUser, resStatus i18n.ResKey, err error) {
 			return
 		}
 
-		//从缓存中获取当前登录用户信息
+		// Get User detail from cache
 		for _, clientType := range pub.ValidClientTypes {
 			ou.ClientType = clientType
 			exist, resStatus, errGet := ou.Get()

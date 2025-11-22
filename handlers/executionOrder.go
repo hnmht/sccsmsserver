@@ -145,7 +145,7 @@ func GetEOListHandler(c *gin.Context) {
 	ResponseWithMsg(c, resStatus, eos)
 }
 
-// GetEOReviewListHandler 获取执行单列表
+// Get Execution Order List for Review handler
 func GetEOReviewListHandler(c *gin.Context) {
 	qp := new(pg.QueryParams)
 	err := c.ShouldBind(qp)

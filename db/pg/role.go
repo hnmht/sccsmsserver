@@ -76,7 +76,7 @@ func initSysUserRole() (isFinish bool, err error) {
 	sqlStr := "select count(id) as rownum from sysuserrole where userid=10000"
 	// Step 2: Exit if the record exists or an error occurs,
 	hasRecord, isFinish, err := genericCheckRecord("sysuserrole", sqlStr)
-	if hasRecord || !isFinish || err != nil { //有数据 或 没有完成 或有错误
+	if hasRecord || !isFinish || err != nil {
 		return
 	}
 	// Step 3: Insert the 'admin' user and 'systemadmin' role mapping into the sysuserrole table

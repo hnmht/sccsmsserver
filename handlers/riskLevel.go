@@ -82,7 +82,7 @@ func DeleteRLHandler(c *gin.Context) {
 	ResponseWithMsg(c, resStatus, rl)
 }
 
-// CheckRLNameExistHandler 检查风险等级名称是否存在
+// Check the Risk Level Name exists handler
 func CheckRLNameExistHandler(c *gin.Context) {
 	rl := new(pg.RiskLevel)
 	err := c.ShouldBind(rl)

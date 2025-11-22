@@ -443,7 +443,7 @@ func (epc *EPC) CheckIsUsed() (resStatus i18n.ResKey, err error) {
 	return
 }
 
-// EPC Delete 删除执行项目类别档案
+// Delete Execution Project Category
 func (epc *EPC) Delete() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Check if the EPC is refrenced

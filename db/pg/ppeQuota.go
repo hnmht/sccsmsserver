@@ -30,8 +30,8 @@ type PPEQuota struct {
 
 // Get Position's Personal Protective Equipment Quota Params
 type PPEPositionsParams struct {
-	Period    string     `json:"period"`    //周期
-	Positions []Position `json:"positions"` //岗位列表
+	Period    string     `json:"period"`
+	Positions []Position `json:"positions"`
 }
 
 // Personal Protective Equipment Quota Row struct
