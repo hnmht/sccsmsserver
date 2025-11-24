@@ -55,6 +55,8 @@ func GetLandingPageInfo() (info LandingPageInfo, resStatus i18n.ResKey, err erro
 		if err != nil || resStatus != i18n.StatusOK {
 			return
 		}
+	} else {
+		info.File.FileUrl = "/static/img/brands/introduce.jpg"
 	}
 	// Get Modifier details
 	if info.Modifier.ID > 0 {

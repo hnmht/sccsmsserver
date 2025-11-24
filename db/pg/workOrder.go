@@ -83,10 +83,10 @@ func GetWORefer(queryString string) (wors []WorkOrderRow, resStatus i18n.ResKey,
 		zap.L().Error("GetWORefer db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 {
+	/* if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	}
+	} */
 	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
 		return

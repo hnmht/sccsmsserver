@@ -65,10 +65,10 @@ func GetUserUnReadComments(userID int32) (comments []CommentMessage, resStatus i
 		zap.L().Error("GetUserUnReadComments db.QueryRow(checkSql) failed", zap.Error(err))
 		return
 	}
-	if rowNumber == 0 {
+	/* if rowNumber == 0 {
 		resStatus = i18n.StatusResNoData
 		return
-	}
+	} */
 	// Check MaxRecord
 	if rowNumber > setting.Conf.PqConfig.MaxRecord {
 		resStatus = i18n.StatusOverRecord
