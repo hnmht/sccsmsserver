@@ -137,7 +137,7 @@ func UnconfirmPPEQuotaHandler(c *gin.Context) {
 	// Get Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pq)
+		ResponseWithMsg(c, resStatus, pq)
 		return
 	}
 	// Unconfirm

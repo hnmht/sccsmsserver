@@ -13,7 +13,7 @@ func GetUserUnReadCommentsHandler(c *gin.Context) {
 	// Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, 0)
+		ResponseWithMsg(c, resStatus, 0)
 		return
 	}
 	// Get UnRead Comments list
@@ -34,7 +34,7 @@ func GetUserReadCommentsHandler(c *gin.Context) {
 	// Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, 0)
+		ResponseWithMsg(c, resStatus, 0)
 		return
 	}
 	// Get Comments
@@ -48,7 +48,7 @@ func GetUserWORefsHandler(c *gin.Context) {
 	//Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, 0)
+		ResponseWithMsg(c, resStatus, 0)
 		return
 	}
 	// Get Work Orders
@@ -62,7 +62,7 @@ func GetUserEORefsHandler(c *gin.Context) {
 	//Get Operator ID
 	opeartorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, 0)
+		ResponseWithMsg(c, resStatus, 0)
 		return
 	}
 	// Get Execution Order list
@@ -83,7 +83,7 @@ func ReadCommentMessageHandler(c *gin.Context) {
 	//Get Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, 0)
+		ResponseWithMsg(c, resStatus, 0)
 		return
 	}
 	cm.Modifier.ID = operatorID

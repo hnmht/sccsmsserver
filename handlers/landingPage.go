@@ -28,7 +28,7 @@ func ModifyLandingPageInfoHandler(c *gin.Context) {
 	// Get current operator ID
 	modifyUserId, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, info)
+		ResponseWithMsg(c, resStatus, info)
 		return
 	}
 	info.Modifier.ID = modifyUserId

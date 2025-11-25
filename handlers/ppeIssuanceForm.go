@@ -20,7 +20,7 @@ func AddPPEIFHandler(c *gin.Context) {
 	//Get Current Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pif)
+		ResponseWithMsg(c, resStatus, pif)
 		return
 	}
 	pif.Creator.ID = operatorID
@@ -42,7 +42,7 @@ func WiardAddPPEIFHandler(c *gin.Context) {
 	// Get Current Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, lidw)
+		ResponseWithMsg(c, resStatus, lidw)
 		return
 	}
 	lidw.Params.Creator.ID = operatorID
@@ -94,7 +94,7 @@ func EditPPEIFHandler(c *gin.Context) {
 	//Get Current Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pif)
+		ResponseWithMsg(c, resStatus, pif)
 		return
 	}
 	pif.Modifier.ID = operatorID
@@ -116,7 +116,7 @@ func DeletePPEIFHandler(c *gin.Context) {
 	//Get Current Operator ID
 	operatorID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pif)
+		ResponseWithMsg(c, resStatus, pif)
 		return
 	}
 	// Delete
@@ -137,7 +137,7 @@ func ConfirmPPEIFHandler(c *gin.Context) {
 	//Get Current Operator ID
 	confirmUserID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pif)
+		ResponseWithMsg(c, resStatus, pif)
 		return
 	}
 	// Confirm
@@ -158,7 +158,7 @@ func UnconfirmPPEIFHandler(c *gin.Context) {
 	// Get Current Operator ID
 	confirmUserID, resStatus := GetOperatorID(c)
 	if resStatus != i18n.StatusOK {
-		ResponseWithMsg(c, i18n.CodeInternalError, pif)
+		ResponseWithMsg(c, resStatus, pif)
 		return
 	}
 	// Unconfirm
