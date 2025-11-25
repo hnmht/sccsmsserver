@@ -122,7 +122,7 @@ func GetRoleMenusHandler(c *gin.Context) {
 	err := c.ShouldBind(r)
 	if err != nil {
 		zap.L().Error("AddRoleHandler invalid param:", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, err)
+		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get menu list

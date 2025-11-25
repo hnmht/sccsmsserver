@@ -147,10 +147,10 @@ func LogoutHandler(c *gin.Context) {
 	var ou pg.OnlineUser
 	ou.ClientType = clientType
 	ou.User.ID = operatorID
-	_, err := ou.Del()
+	resStatus, err := ou.Del()
 	if err != nil {
 		zap.L().Error("LogoutHandler ou.Del failed", zap.Error(err))
-		ResponseWithMsg(c, i18n.CodeInternalError, err)
+		ResponseWithMsg(c, resStatus, err)
 		return
 	}
 	ResponseWithMsg(c, i18n.StatusOK, nil)
