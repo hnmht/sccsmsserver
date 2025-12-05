@@ -1,6 +1,7 @@
 package route
 
 import (
+	"sccsmsserver/handlers"
 	"sccsmsserver/logger"
 	"sccsmsserver/pub"
 	"sccsmsserver/ui"
@@ -50,8 +51,8 @@ func Setup(mode string) *gin.Engine {
 		UserRoute(superGroup)      // User
 		WORoute(superGroup)        // Work Order
 	}
-	//ping
-	// r.POST("/ping", control.PubServerPing)
+	// Client tests the server is running
+	r.POST("/ping", handlers.PubServerPing)
 	// Monolithic application
 	ui.AddRoutes(r)
 

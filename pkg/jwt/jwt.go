@@ -45,7 +45,7 @@ func ParseToken(tokenString string) (*MyClaims, i18n.ResKey) {
 	})
 
 	if err != nil {
-		return nil, i18n.CodeInternalError
+		return nil, i18n.CodeInvalidToken
 	}
 
 	if token.Valid {

@@ -3,6 +3,8 @@ package handlers
 import (
 	"sccsmsserver/db/pg"
 	"sccsmsserver/i18n"
+	"sccsmsserver/pub"
+	"sccsmsserver/setting"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -11,6 +13,14 @@ import (
 // Publish system public information handler
 func PubSystemInformationHandler(c *gin.Context) {
 	ResponseWithMsg(c, i18n.StatusOK, pg.ServerPubInfo)
+}
+
+// Client tests if the server is running
+func PubServerPing(c *gin.Context) {
+	ResponseWithMsg(c, i18n.StatusOK, gin.H{
+		"name":    setting.Conf.Name,
+		"apiPath": pub.APIPath,
+	})
 }
 
 // Generate Front-end DBID
