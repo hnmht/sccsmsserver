@@ -22,7 +22,7 @@ func GetSimpCSCListHandler(c *gin.Context) {
 
 // Get Simple CSC front-end cache handler
 func GetSimpCSCCacheHandler(c *gin.Context) {
-	scscc := new(pg.SimpSICCache)
+	scscc := new(pg.SimpCSCCache)
 	err := c.ShouldBind(scscc)
 	if err != nil {
 		zap.L().Error("GetSimpCSCCacheHandler invalid param:", zap.Error(err))

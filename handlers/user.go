@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"sccsmsserver/db/pg"
 	"sccsmsserver/i18n"
-	"sccsmsserver/pkg/minio"
+	"sccsmsserver/pkg/aws"
 	"sccsmsserver/pkg/security"
 	"time"
 
@@ -304,16 +304,16 @@ func ChangeUserAvatarHandler(c *gin.Context) {
 		return
 	}
 	// Upload the file to the MINIO server
-	_, err = minio.UploadFile(fileName, fileObj, file.Size)
+	_, err = aws.UploadFile(fileName, fileObj, file.Size)
 	if err != nil {
-		zap.L().Error("ChangeUserAvatarHandler minio.UploadFile failed:", zap.Error(err))
+		zap.L().Error("ChangeUserAvatarHandler aws.UploadFile failed:", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
 	// Get the file URL to the MINIO server
-	presignedURL, err := minio.GetFileUrl(fileName, time.Second*24*60*60)
+	presignedURL, err := aws.GetFileUrl(fileName, time.Second*24*60*60)
 	if err != nil {
-		zap.L().Error("ChangeUserAvatarHandler  minio.GetFileUrl failed:", zap.Error(err))
+		zap.L().Error("ChangeUserAvatarHandler  aws.GetFileUrl failed:", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}

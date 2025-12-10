@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"sccsmsserver/cache"
 	"sccsmsserver/i18n"
-	"sccsmsserver/pkg/minio"
+	"sccsmsserver/pkg/aws"
 	"sccsmsserver/pub"
 	"strconv"
 	"time"
@@ -90,10 +90,10 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Get File URL
-	fileUrl, err := minio.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
+	fileUrl, err := aws.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("file.getFileInfoByID minio.GetFileUrl failed", zap.Error(err))
+		zap.L().Error("file.getFileInfoByID aws.GetFileUrl failed", zap.Error(err))
 		return
 	}
 	file.FileUrl = fileUrl
@@ -136,10 +136,10 @@ func (file *File) Add() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Request Minio server to get file URL
-	fileUrl, err := minio.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
+	fileUrl, err := aws.GetFileUrl(file.MinioFileName, pub.FileURLExpireTime)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
-		zap.L().Error("file.Add minio.GetFileUrl failed", zap.Error(err))
+		zap.L().Error("file.Add aws.GetFileUrl failed", zap.Error(err))
 		return
 	}
 	file.FileUrl = fileUrl

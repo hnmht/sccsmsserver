@@ -3,7 +3,7 @@ package handlers
 import (
 	"sccsmsserver/db/pg"
 	"sccsmsserver/i18n"
-	"sccsmsserver/pkg/minio"
+	"sccsmsserver/pkg/aws"
 	"sccsmsserver/pkg/mysf"
 	"strconv"
 	"strings"
@@ -187,7 +187,7 @@ func RecieveFilesHandler(c *gin.Context) {
 			return
 		}
 		// Upload file to minio server
-		_, err = minio.UploadFile(fileInfo.MinioFileName, fileObj, file.Size)
+		_, err = aws.UploadFile(fileInfo.MinioFileName, fileObj, file.Size)
 		if err != nil {
 			zap.L().Error("RecieveFilesHandler File Upload failed:", zap.Error(err))
 			ResponseWithMsg(c, i18n.CodeInvalidParm, nil)

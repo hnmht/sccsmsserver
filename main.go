@@ -9,8 +9,8 @@ import (
 	"sccsmsserver/cache"
 	"sccsmsserver/db/pg"
 	"sccsmsserver/logger"
+	"sccsmsserver/pkg/aws"
 	"sccsmsserver/pkg/environment"
-	"sccsmsserver/pkg/minio"
 	"sccsmsserver/pkg/mysf"
 	"sccsmsserver/route"
 	"sccsmsserver/setting"
@@ -53,8 +53,14 @@ func main() {
 	}
 	defer cache.Close()
 
-	// setp 6: MINIO client initialization
-	if err := minio.Init(setting.Conf.MinioConfig.Endpoint, setting.Conf.MinioConfig.AccessKeyID, setting.Conf.MinioConfig.SecretAccessKey,
+	// // setp 6: MINIO client initialization
+	// if err := minio.Init(setting.Conf.MinioConfig.Endpoint, setting.Conf.MinioConfig.AccessKeyID, setting.Conf.MinioConfig.SecretAccessKey,
+	// 	setting.Conf.MinioConfig.Secure, setting.Conf.SelfSigned, setting.Conf.MinioConfig.DefaultBucket); err != nil {
+	// 	zap.L().Error("minio Init failed:", zap.Error(err))
+	// 	return
+	// }
+	// setp 6: aws s3 client initialization
+	if err := aws.Init(setting.Conf.MinioConfig.Endpoint, setting.Conf.MinioConfig.AccessKeyID, setting.Conf.MinioConfig.SecretAccessKey,
 		setting.Conf.MinioConfig.Secure, setting.Conf.SelfSigned, setting.Conf.MinioConfig.DefaultBucket); err != nil {
 		zap.L().Error("minio Init failed:", zap.Error(err))
 		return

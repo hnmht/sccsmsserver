@@ -42,7 +42,7 @@ type SimpCSC struct {
 }
 
 // Simple Construction Site Category Front-end Cache
-type SimpSICCache struct {
+type SimpCSCCache struct {
 	QueryTs      time.Time `json:"queryTs"`
 	ResultNumber int32     `json:"resultNumber"`
 	DelItems     []SimpCSC `json:"delItems"`
@@ -208,7 +208,7 @@ func GetSimpCSCList() (scscs []SimpCSC, resStatus i18n.ResKey, err error) {
 }
 
 // Get latest Simple CSC master data for front-end cache
-func (scscc *SimpSICCache) GetSimpCSCCache() (resStatus i18n.ResKey, err error) {
+func (scscc *SimpCSCCache) GetSimpCSCCache() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	scscc.DelItems = make([]SimpCSC, 0)
 	scscc.NewItems = make([]SimpCSC, 0)
