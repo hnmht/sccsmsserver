@@ -6,12 +6,3 @@ When I brought up my idea to the boss, he didn't have high expectations, but he 
 ## Why open source?
 Three years after I left the mining company, from 2022 to 2023, I developed a "Field Management System". This system is a suite of application including server-side, browser-based, and mobile components, designed for private deployment. After nearly two years of promotion, I was disheartened to find that I couldn't sell the software in China. 
 But I firmly believe this system has value. Perhaps somewhere in this vast world, someone needs it. Perhaps at some point in the furture, it could prevent a tragedy. That's why I've decided to open source it.
-
-## Minio
-minio:
-  endpoint: "192.168.3.125:9000"
-  accesskeyid: "minioadmin"
-  secretaccesskey: "mht1977yeah"
-  secure: false
-  selfsigned: false
-  defaultbucket: "seacloud"

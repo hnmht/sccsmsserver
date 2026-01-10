@@ -76,7 +76,7 @@ func (file *File) GetFileInfoByID() (resStatus i18n.ResKey, err error) {
 	from filelist where id=$1`
 	err = db.QueryRow(sqlStr, file.ID).Scan(&file.MinioFileName, &file.OriginFileName, &file.FileKey, &file.FileType, &file.IsImage,
 		&file.Model, &file.Longitude, &file.Latitude, &file.Size, &file.DateTimeOriginal,
-		&file.UpLoadDate, &file.CreatorName, &file.Hash, &file.Source, &file.Ts)
+		&file.UpLoadDate, &file.CreatorID, &file.Hash, &file.Source, &file.Ts)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			zap.L().Error("file.getFileInfoByID db.QueryRow failed, file not find, the file ID is:" + strconv.Itoa(int(file.ID)))

@@ -19,11 +19,10 @@ var (
 	s3Client      *s3.Client
 	presignClient *s3.PresignClient
 	currentBucket string
-	location      = "cn-north-1"
 )
 
 // Init initializes the S3-compatible client
-func Init(endpoint string, accessKey string, secretKey string, secure bool, selfSigned bool, defaultBucket string) error {
+func Init(endpoint string, accessKey string, secretKey string, secure bool, selfSigned bool, defaultBucket string, location string) error {
 	// Build HTTP transport with optional insecure TLS
 	customTransport := http.DefaultTransport.(*http.Transport).Clone()
 	if secure && selfSigned {

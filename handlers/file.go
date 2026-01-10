@@ -190,7 +190,7 @@ func RecieveFilesHandler(c *gin.Context) {
 		_, err = aws.UploadFile(fileInfo.MinioFileName, fileObj, file.Size)
 		if err != nil {
 			zap.L().Error("RecieveFilesHandler File Upload failed:", zap.Error(err))
-			ResponseWithMsg(c, i18n.CodeInvalidParm, nil)
+			ResponseWithMsg(c, i18n.StatusFileUploadFailed, nil) // Error
 			return
 		}
 		// Write file information to database

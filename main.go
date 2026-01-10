@@ -53,16 +53,10 @@ func main() {
 	}
 	defer cache.Close()
 
-	// // setp 6: MINIO client initialization
-	// if err := minio.Init(setting.Conf.MinioConfig.Endpoint, setting.Conf.MinioConfig.AccessKeyID, setting.Conf.MinioConfig.SecretAccessKey,
-	// 	setting.Conf.MinioConfig.Secure, setting.Conf.SelfSigned, setting.Conf.MinioConfig.DefaultBucket); err != nil {
-	// 	zap.L().Error("minio Init failed:", zap.Error(err))
-	// 	return
-	// }
 	// setp 6: aws s3 client initialization
-	if err := aws.Init(setting.Conf.MinioConfig.Endpoint, setting.Conf.MinioConfig.AccessKeyID, setting.Conf.MinioConfig.SecretAccessKey,
-		setting.Conf.MinioConfig.Secure, setting.Conf.SelfSigned, setting.Conf.MinioConfig.DefaultBucket); err != nil {
-		zap.L().Error("minio Init failed:", zap.Error(err))
+	if err := aws.Init(setting.Conf.S3Storage.Endpoint, setting.Conf.S3Storage.AccessKeyID, setting.Conf.S3Storage.SecretAccessKey,
+		setting.Conf.S3Storage.Secure, setting.Conf.SelfSigned, setting.Conf.S3Storage.DefaultBucket, setting.Conf.S3Storage.Location); err != nil {
+		zap.L().Error("S3 Object Storage Init failed:", zap.Error(err))
 		return
 	}
 

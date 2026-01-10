@@ -25,7 +25,7 @@ type AppConfig struct {
 	IpLockedMinutes int32                                         `mapstructure:"iplockedminutes" json:"ipLockedMinutes"` // Duration of IP address lock (in minutes)
 	*LogConfig      `mapstructure:"log" json:"log"`               // Application log configuration
 	*PqConfig       `mapstructure:"postgresql" json:"postgresql"` // Application PostgreSQL database configuration
-	*MinioConfig    `mapstructure:"minio" json:"minio"`           // Minio object storage server configuration
+	*S3Storage      `mapstructure:"s3storage" json:"s3storage"`   // AWS s3 object storage server configuration
 	*RedisConfig    `mapstructure:"redis" json:"redis"`           // Redis cache configuration
 }
 
@@ -51,13 +51,14 @@ type PqConfig struct {
 }
 
 // Minio Object Storage Configuration
-type MinioConfig struct {
+type S3Storage struct {
 	Endpoint        string `mapstructure:"endpoint" json:"endpoint"`
 	AccessKeyID     string `mapstructure:"accesskeyid" json:"accessKeyID"`
 	SecretAccessKey string `mapstructure:"secretaccesskey" json:"secretAccessKey"`
 	Secure          bool   `mapstructure:"secure" json:"secure"`
 	SelfSigned      bool   `mapstructure:"selfsigned" json:"selfSigned"`
 	DefaultBucket   string `mapstructure:"defaultbucket" json:"defaultBucket"`
+	Location        string `mapstructure:"location" json:"location"`
 }
 
 // Redis cache configuration

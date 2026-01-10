@@ -116,7 +116,7 @@ func ModifyProfileHandler(c *gin.Context) {
 	u := new(pg.User)
 	err := c.ShouldBind(u)
 	if err != nil {
-		zap.L().Error("ModifyProfileHandler  invalid param", zap.Error(err))
+		zap.L().Error("ModifyProfileHandler invalid param", zap.Error(err))
 		ResponseWithMsg(c, i18n.CodeInvalidParm, err)
 		return
 	}
