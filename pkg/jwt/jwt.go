@@ -40,6 +40,7 @@ func GenToken(userID int32, usercode string, tokenID string) (tokenString string
 // Parse Token
 func ParseToken(tokenString string) (*MyClaims, i18n.ResKey) {
 	var mc = new(MyClaims)
+
 	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (i interface{}, err error) {
 		return pub.TokenSecret, nil
 	})

@@ -439,7 +439,9 @@ func (user *User) ModifyProfile() (resStatus i18n.ResKey, err error) {
 	}
 	// Delete from the local cache
 	user.DelFromLocalCache()
-	return i18n.StatusOK, nil
+	// Update Person
+	resStatus, err = user.Person.GetPersonInfoByID()
+	return
 }
 
 // Get user list

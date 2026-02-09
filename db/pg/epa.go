@@ -65,6 +65,7 @@ func GetEPList() (epList []ExecutionProject, resStatus i18n.ResKey, err error) {
 	ts,dr 
 	from epa 
 	where dr=0 order by ts desc`
+
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		zap.L().Error("GetEPList db.Query() failed", zap.Error(err))
@@ -275,7 +276,7 @@ func (ep *ExecutionProject) Edit() (resStatus i18n.ResKey, err error) {
 	if resStatus != i18n.StatusOK || err != nil {
 		return
 	}
-	// Check if the EP id is refrenced
+	// Check if the EP id is referenced
 	var isUsed bool = false
 	statusIsUsed, err := ep.CheckUsed()
 	if err != nil {
@@ -391,7 +392,7 @@ func (ep *ExecutionProject) Delete() (resStatus i18n.ResKey, err error) {
 		return
 	}
 	// Check the number of rows affected by SQL udpate operation
-	affetced, err := res.RowsAffected()
+	affected, err := res.RowsAffected()
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("ExecutionProject.Delete res.RowsAffected failed", zap.Error(err))
@@ -399,7 +400,7 @@ func (ep *ExecutionProject) Delete() (resStatus i18n.ResKey, err error) {
 	}
 	// If the number of affected rows if less than 1,
 	// it means sonmeone else already modified this record.
-	if affetced < 1 {
+	if affected < 1 {
 		resStatus = i18n.StatusOtherEdit
 		zap.L().Info("ExectiveItemClass.Delete Other user edit")
 		return
@@ -460,7 +461,7 @@ func DeleteEPs(epas *[]ExecutionProject, modifyUserID int32) (resStatus i18n.Res
 		// it means that someone else has already modified this record.
 		if affectedRows < 1 {
 			resStatus = i18n.StatusOtherEdit
-			zap.L().Info("DeleteEPs" + ep.Name + "has alreday modified by other.")
+			zap.L().Info("DeleteEPs" + ep.Name + "has already been modified by other.")
 			tx.Rollback()
 			return resStatus, nil
 		}
@@ -561,7 +562,7 @@ func (ep *ExecutionProject) CheckUsed() (resStatus i18n.ResKey, err error) {
 			UsedReturnCode: i18n.StatusEPAUsed,
 		},
 		{
-			Description:    "Referecnced by Execution Order",
+			Description:    "Referenced by Execution Order",
 			SqlStr:         `select count(id) as usednumber from executionorder_b where dr=0 and epaid=$1`,
 			UsedReturnCode: i18n.StatusEOUsed,
 		},

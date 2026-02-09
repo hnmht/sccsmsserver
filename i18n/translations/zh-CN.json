@@ -27,6 +27,11 @@
             "message": "登录凭据已经过期."
         },
         {
+            "key": "CodeAboutToExpireToken",
+            "type": "string",
+            "message": "登录凭据即将过期."
+        },
+        {
             "key": "CodeNeedLogin",
             "type": "string",
             "message": "需要登录."

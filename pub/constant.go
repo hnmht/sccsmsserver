@@ -112,3 +112,6 @@ const TokenIssuer = "SeaCloud"
 
 // Event Background Colors
 var EventBackgroundColors = [4]string{"orange", "blue", "green", "grey"}
+
+// Token About to Expire seconds
+const TokenAboutToExpirtSeconds = float64(60)

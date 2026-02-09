@@ -12,12 +12,13 @@ func AuthRoute(g *gin.RouterGroup) {
 	{
 		//Rsa public key
 		authGroup.POST("/publickey", handlers.GetPublicKeyHandler)
+		// Validate token
+		authGroup.POST("/validatetoken", middleware.JWTAuthMiddleware(), handlers.ValidateToken)
 		// User Login
 		authGroup.POST("/login", handlers.LoginHandler)
 		// Change user password
 		authGroup.POST("/changepwd", middleware.JWTAuthMiddleware(), handlers.ChangeUserPasswordHandler)
 		// Logout
 		authGroup.POST("/logout", middleware.JWTAuthMiddleware(), handlers.LogoutHandler)
-
 	}
 }

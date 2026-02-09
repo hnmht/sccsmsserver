@@ -27,6 +27,11 @@
             "message": "Login credentials have expired."
         },
         {
+            "key": "CodeAboutToExpireToken",
+            "type": "string",
+            "message": "Token is about to expire."
+        },
+        {
             "key": "CodeNeedLogin",
             "type": "string",
             "message": "Login required."
