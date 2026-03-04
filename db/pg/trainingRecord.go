@@ -146,7 +146,7 @@ func (tr *TrainingRecord) Add() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 	// Get the latest serial number
-	billNo, resStatus, err := GetLatestSerialNo(tx, "TR", tr.BillDate.Format("060102"))
+	billNo, resStatus, err := GetLatestSerialNo(tx, "TR")
 	if resStatus != i18n.StatusOK || err != nil {
 		tx.Rollback()
 		return

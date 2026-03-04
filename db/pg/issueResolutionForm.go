@@ -60,7 +60,7 @@ func (irf *IssueResolutionForm) Add() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 	// Get the latest serial number
-	irf.BillNumber, resStatus, err = GetLatestSerialNo(tx, "IRF", irf.BillDate.Format("060102"))
+	irf.BillNumber, resStatus, err = GetLatestSerialNo(tx, "IRF")
 	if resStatus != i18n.StatusOK || err != nil {
 		tx.Rollback()
 		return

@@ -126,12 +126,14 @@ func (f *FrontDBInfo) GetInfo() (resStatus i18n.ResKey, err error) {
 }
 
 // Get the latest voucher sequence number
-func GetLatestSerialNo(tx *sql.Tx, voucherType string, voucherDate string) (serialno string, resStatus i18n.ResKey, err error) {
+func GetLatestSerialNo(tx *sql.Tx, voucherType string) (serialno string, resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	// Query the latest sequence for the current voucher type
 	var sn int32
-	sqlString := "select serialno from serialno where vouchertype=$1 and datestring=$2"
-	err = tx.QueryRow(sqlString, voucherType, voucherDate).Scan(&sn)
+	var currentDate string
+	// To ensure consistency,the current date string is now retrieved directly from the database server
+	sqlString := "select serialno,to_char(CURRENT_DATE,'YYMMDD') as currentdate from serialno where vouchertype=$1 and datestring=to_char(CURRENT_DATE,'YYMMDD')"
+	err = tx.QueryRow(sqlString, voucherType).Scan(&sn, &currentDate)
 	if err != nil && err != sql.ErrNoRows {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GetLatestSerialNo db.QueryRow failed", zap.Error(err))
@@ -141,7 +143,7 @@ func GetLatestSerialNo(tx *sql.Tx, voucherType string, voucherDate string) (seri
 	// and insert it into the database
 	if err == sql.ErrNoRows {
 		sqlString = `insert into serialno(datestring,vouchertype) values($1,$2)`
-		_, err = tx.Exec(sqlString, voucherDate, voucherType)
+		_, err = tx.Exec(sqlString, currentDate, voucherType)
 		if err != nil {
 			resStatus = i18n.StatusInternalError
 			zap.L().Error("GetLatestSerial db.exec Insert failed", zap.Error(err))
@@ -150,13 +152,13 @@ func GetLatestSerialNo(tx *sql.Tx, voucherType string, voucherDate string) (seri
 	}
 	// Update the serial number for the current voucher type in the database
 	sqlString = `update serialno set serialno = serialno + 1 where datestring = $1 and vouchertype = $2`
-	_, err = tx.Exec(sqlString, voucherDate, voucherType)
+	_, err = tx.Exec(sqlString, currentDate, voucherType)
 	if err != nil {
 		resStatus = i18n.StatusInternalError
 		zap.L().Error("GetLatestSerial db.Exec Update failed", zap.Error(err))
 		return
 	}
-	serialno = fmt.Sprintf("%v%v%04d", voucherType, voucherDate, sn+1)
+	serialno = fmt.Sprintf("%v%v%04d", voucherType, currentDate, sn+1)
 
 	return
 }

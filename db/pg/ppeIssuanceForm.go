@@ -274,7 +274,7 @@ func (pif *PPEIssuanceForm) Add() (resStatus i18n.ResKey, err error) {
 	}
 	defer tx.Commit()
 	// Get the latest Serial Number
-	billNo, resStatus, err := GetLatestSerialNo(tx, "PIF", pif.BillDate.Format("060102"))
+	billNo, resStatus, err := GetLatestSerialNo(tx, "PIF")
 	if resStatus != i18n.StatusOK || err != nil {
 		tx.Rollback()
 		return
