@@ -142,11 +142,18 @@ func GetLatestSerialNo(tx *sql.Tx, voucherType string) (serialno string, resStat
 	// If no data is queried, then create a new record for the current voucher type
 	// and insert it into the database
 	if err == sql.ErrNoRows {
-		sqlString = `insert into serialno(datestring,vouchertype) values($1,$2)`
-		_, err = tx.Exec(sqlString, currentDate, voucherType)
-		if err != nil {
+		sqlString = "select to_char(CURRENT_DATE,'YYMMDD')"
+		err1 := tx.QueryRow(sqlString).Scan(&currentDate)
+		if err1 != nil {
 			resStatus = i18n.StatusInternalError
-			zap.L().Error("GetLatestSerial db.exec Insert failed", zap.Error(err))
+			zap.L().Error("GetLatestSerialNo db.QueryRow failed", zap.Error(err1))
+			return
+		}
+		sqlString = `insert into serialno(datestring,vouchertype) values($1,$2)`
+		_, err2 := tx.Exec(sqlString, currentDate, voucherType)
+		if err2 != nil {
+			resStatus = i18n.StatusInternalError
+			zap.L().Error("GetLatestSerial db.exec Insert failed", zap.Error(err2))
 			return
 		}
 	}
