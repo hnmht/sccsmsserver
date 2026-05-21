@@ -34,6 +34,7 @@ type Event struct {
 // User Event Params
 type UserEvents struct {
 	ID           int32     `json:"userID"`
+	Person       Person    `json:"person"`
 	Start        time.Time `json:"start"`
 	End          time.Time `json:"end"`
 	ResultNumber int32     `json:"resultNumber"`
@@ -44,6 +45,13 @@ type UserEvents struct {
 func (ue *UserEvents) GetEvents() (resStatus i18n.ResKey, err error) {
 	resStatus = i18n.StatusOK
 	ue.Events = make([]Event, 0)
+	ue.Person.ID = ue.ID
+	if ue.Person.ID > 0 {
+		resStatus, err = ue.Person.GetPersonInfoByID()
+		if resStatus != i18n.StatusOK || err != nil {
+			return
+		}
+	}
 	// Retrieve Events from Work Order
 	sqlStr := `select 
 	b.id as bid,
@@ -94,6 +102,7 @@ func (ue *UserEvents) GetEvents() (resStatus i18n.ResKey, err error) {
 				return
 			}
 		}
+
 		// Get Creator Details
 		if e.Creator.ID > 0 {
 			resStatus, err = e.Creator.GetPersonInfoByID()
