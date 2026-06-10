@@ -32,7 +32,7 @@ type ExecutionOrder struct {
 	AllowAddRow      int16               `db:"allowaddrow" json:"allowAddRow"`
 	AllowDelRow      int16               `db:"allowdelrow" json:"allowDelRow"`
 	Body             []ExecutionOrderRow `json:"body"`
-	IssueNumber      int32               `json:"IssueNumber"`
+	IssueNumber      int32               `json:"issueNumber"`
 	ReviewedNumber   int16               `json:"reviewedNumber"`
 	ReviewedSeconds  int32               `json:"reviewedSeconds"`
 	CreateDate       time.Time           `db:"createtime" json:"createDate"`
