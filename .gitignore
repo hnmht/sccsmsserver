@@ -1,5 +1,6 @@
 config.yaml
 *.log
 *.exe
+sccsmsserver
 ui/out
 ui/dist
